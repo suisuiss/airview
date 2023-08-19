@@ -1,10 +1,13 @@
 import React from 'react';
 import WeatherInfo from './weather/weatherInfo';
+import AqiInfo from './AQI/aqiInfo';
+import HumidityInfo from './emrontech/humidity';
 
 function App() {
   return (
     <div className="App">
-      <h1>Weather App</h1>
+      <AqiInfo />
+      <HumidityInfo/>
       <WeatherInfo />
     </div>
   );

@@ -14,6 +14,17 @@ function WeatherInfo() {
             })
     }, []);
 
+    const renderHourlyWeather = () => {
+        return weatherData.hourly.data.slice(1, 7).map((data, index) => (
+            <div key={index}>
+                Time: {data.date}<br />
+                Temperature: {data.temperature}°C<br />
+                Weather: {data.weather}
+                <br /><br />
+            </div>
+        ));
+    };
+
     return (
         <div>
             {weatherData ? (
@@ -21,19 +32,7 @@ function WeatherInfo() {
                     <h2>Weather Forcast</h2>
                     <p>Temperature: {weatherData.current.temperature}°C</p>
                     <p>Windspeed: {weatherData.current.wind.speed}</p>
-                    {weatherData.hourly.data.map(function (data, i) {
-
-                        if (i > 0 && i < 6) {
-                            i++;
-                            return <div>
-                                Time: {data.date}<br />
-                                Hourly Temperature: {data.temperature}°C<br />
-                                Weather: {data.weather}
-                                <br /><br />
-                            </div>
-                        }
-
-                    })}
+                    {renderHourlyWeather()}
                 </div>
             ) : (
                 <p>Loading weather data...</p>

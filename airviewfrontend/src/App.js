@@ -5,11 +5,14 @@ import HumidityInfo from './emrontech/humidity';
 
 function App() {
   return (
+
     <div className="App">
       <AqiInfo />
-      <HumidityInfo/>
+      <HumidityInfo />
       <WeatherInfo />
     </div>
+
+
   );
 }
 

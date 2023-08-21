@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
-function HumidityInfo() {
+function LGHumidityInfo() {
     const [humidityData, setHumidityData] = useState(null);
     const [error, setError] = useState(null);
     const fetchDataWithRetry = () => {
-        // Fetch data from the airvisual API
-        fetch('https://emtrontech.com/KMUTT_MET/data/get_data.php')
+        fetch('https://e5f1-119-76-183-133.ngrok-free.app/test', {
+            headers: new Headers({
+                "ngrok-skip-browser-warning": "69420",
+            })
+        })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
@@ -13,7 +16,8 @@ function HumidityInfo() {
                 return response.json();
             })
             .then((data) => {
-                setHumidityData(data);
+                const filteredData = data.filter((item) => item.id === "1");
+                setHumidityData(filteredData);
             })
             .catch((error) => {
                 console.error('Error fetching Humidity data:', error);
@@ -34,8 +38,8 @@ function HumidityInfo() {
         <div>
             {humidityData ? (<div>
                 {humidityData.map(function (a) {
-                    return <div>
-                        Humidity: {a.data.humid.value}
+                    return <div key={a.id}>
+                        Humidity: {a.data.humid.value}%
                     </div>
                 })}
             </div>) : error ? (
@@ -51,4 +55,4 @@ function HumidityInfo() {
 
 
 
-export default HumidityInfo;
+export default LGHumidityInfo;

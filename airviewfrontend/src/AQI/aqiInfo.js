@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-function AqiInfo() {
+function CurrentAqiInfo() {
     const [aqiData, setAqiData] = useState(null);
     const [error, setError] = useState(null);
 
     const fetchDataWithRetry = () => {
         // Fetch data from the airvisual API
-        fetch('http://api.airvisual.com/v2/nearest_city?lat=13.651502404577384&lon=100.49644279537901&key=c931c788-4515-48dc-8c74-1fd47b9817f7')
+        fetch('https://api.airvisual.com/v2/nearest_city?lat=13.651502404577384&lon=100.49644279537901&key=c931c788-4515-48dc-8c74-1fd47b9817f7')
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
@@ -29,6 +29,8 @@ function AqiInfo() {
 
     useEffect(() => {
         fetchDataWithRetry(); // Initial fetch
+        const intervalId = setInterval(fetchDataWithRetry, 60000); // Set up an interval to fetch data every minute
+        return () => clearInterval(intervalId);
     }, []);
 
     return (
@@ -46,4 +48,4 @@ function AqiInfo() {
     );
 }
 
-export default AqiInfo;
+export default CurrentAqiInfo;

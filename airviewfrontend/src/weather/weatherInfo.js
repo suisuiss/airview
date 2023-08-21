@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function WeatherInfo() {
+function WeatherForecastInfo() {
     const [weatherData, setWeatherData] = useState(null);
     useEffect(() => {
         // Fetch data from the meteosource API
@@ -45,4 +45,4 @@ function WeatherInfo() {
 
 
 
-export default WeatherInfo;
+export default WeatherForecastInfo;

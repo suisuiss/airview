@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function CurrentAqiInfo() {
+function AqiWord() {
     const [aqiData, setAqiData] = useState(null);
     const [error, setError] = useState(null);
 
@@ -27,6 +27,23 @@ function CurrentAqiInfo() {
             });
     };
 
+    // Function to calculate the AQI word based on the AQI value
+    const calculateAqiWord = (aqiValue) => {
+        if (aqiValue >= 0 && aqiValue <= 50) {
+            return "Good";
+        } else if (aqiValue <= 100) {
+            return "Moderate";
+        } else if (aqiValue <= 150) {
+            return "Unhealthy for sensitive group";
+        } else if (aqiValue <= 200) {
+            return "Unhealthy";
+        } else if (aqiValue <= 300) {
+            return "Very unhealthy";
+        } else {
+            return "Hazardous";
+        }
+    };
+
     useEffect(() => {
         fetchDataWithRetry(); // Initial fetch
         const intervalId = setInterval(fetchDataWithRetry, 60000); // Set up an interval to fetch data every minute
@@ -37,7 +54,12 @@ function CurrentAqiInfo() {
         <div>
             {aqiData ? (
                 <div>
-                    current AQI: {aqiData.data.current.pollution.aqius}
+                    <div>
+                        current AQI: {aqiData.data.current.pollution.aqius}
+                    </div>
+                    <div>
+                        AQI Word: {calculateAqiWord(aqiData.data.current.pollution.aqius)}
+                    </div>
                 </div>
             ) : error ? (
                 <p>Loading AQI data...</p>
@@ -48,4 +70,4 @@ function CurrentAqiInfo() {
     );
 }
 
-export default CurrentAqiInfo;
+export default AqiWord;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import Box from '@mui/material/Box';
 
-function CurrentAqiInfo() {
+function AqiCircle() {
     const [aqiData, setAqiData] = useState(null);
     const [error, setError] = useState(null);
 
@@ -33,11 +34,33 @@ function CurrentAqiInfo() {
         return () => clearInterval(intervalId);
     }, []);
 
+    // Determine the background color based on the AQI value
+    let circleColor = '';
+    if (aqiData && aqiData.data.current.pollution.aqius >= 0 && aqiData.data.current.pollution.aqius <= 50) {
+        circleColor = '#ABD162'; // Green
+    } else if (aqiData && aqiData.data.current.pollution.aqius <= 100) {
+        circleColor = '#F7D460'; // Yellow
+    } else if (aqiData && aqiData.data.current.pollution.aqius <= 150) {
+        circleColor = '#FC9956'; // Orange
+    } else if (aqiData && aqiData.data.current.pollution.aqius <= 200) {
+        circleColor = '#F6676B'; // Red
+    } else if (aqiData && aqiData.data.current.pollution.aqius <= 300) {
+        circleColor = '#A37DB8'; // Purple
+    } else {
+        circleColor = '#A07684'; // Gray
+    }
+
     return (
         <div>
             {aqiData ? (
                 <div>
-                    current AQI: {aqiData.data.current.pollution.aqius}
+                    <Box
+                        width="22px"
+                        height="22px"
+                        borderRadius="50%"
+                        bgcolor={circleColor}
+                    />
+                    {/* Current AQI: {aqiData.data.current.pollution.aqius} */}
                 </div>
             ) : error ? (
                 <p>Loading AQI data...</p>
@@ -48,4 +71,4 @@ function CurrentAqiInfo() {
     );
 }
 
-export default CurrentAqiInfo;
+export default AqiCircle;

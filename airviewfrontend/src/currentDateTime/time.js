@@ -33,6 +33,7 @@ function CurrentTime() {
     return (
         <div>
             <p>{formattedTime}</p>
+            
         </div>
     );
 }

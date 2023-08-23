@@ -5,8 +5,7 @@ import CurrentTime from './currentDateTime/time';
 import LGHumidityInfo from './emrontech/learningGarden/humidity';
 import LGStation from './emrontech/learningGarden/station';
 import WeatherForecastInfo from './weather/weatherInfo';
-import AqiCircle from './AQI/aqiCircle';
-import AqiWord from './AQI/aqiWord';
+
 
 
 
@@ -16,13 +15,12 @@ function App() {
 
     <div className="App">
       <AqiInfo />
-      <CurrentDate />
+      {/* <CurrentDate />
       <CurrentTime />
       <LGHumidityInfo />
       <LGStation />
-      <WeatherForecastInfo />
-      <AqiCircle/>
-      <AqiWord/>
+      <WeatherForecastInfo /> */}
+      
 
     </div>
 

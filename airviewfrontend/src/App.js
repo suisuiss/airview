@@ -17,10 +17,10 @@ function App() {
       <AqiInfo />
       {/* <CurrentDate />
       <CurrentTime />
-      <LGHumidityInfo />
+      
       <LGStation />
       <WeatherForecastInfo /> */}
-      
+      {/* <LGHumidityInfo /> */}
 
     </div>
 

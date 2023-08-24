@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import good501Image from '../assetAQI/good501.png';
-
+import good501 from '../assetAQI/good501.png';
+import good502 from '../assetAQI/good502.png';
+import moderate1001 from '../assetAQI/moderate1001.png';
+import moderate1002 from '../assetAQI/moderate1002.png';
+import unhealthy2001 from '../assetAQI/unhealthy2001.png';
+import unhealthy2002 from '../assetAQI/unhealthy2002.png';
+import uns1501 from '../assetAQI/uns1501.png'
+import uns1502 from '../assetAQI/uns1502.png'
+import LGPMInfo from '../emrontech/learningGarden/pm';
 
 function CurrentAqiInfo() {
     const [aqiData, setAqiData] = useState(null);
@@ -62,6 +70,74 @@ function CurrentAqiInfo() {
         circleColor = '#A07684'; // Gray
     }
 
+    const getImageSource1 = (aqiValue) => {
+        if (aqiValue >= 0 && aqiValue <= 50) {
+            return good501; // Return the image path
+        } else if (aqiValue <= 100) {
+            return moderate1001; // Return the image path
+        } else if (aqiValue <= 150) {
+            return uns1501;
+        } else if (aqiValue <= 200) {
+            return unhealthy2001;
+        } else if (aqiValue <= 300) {
+            return unhealthy2001;
+        } else {
+            return unhealthy2001;
+        }
+    };
+
+    const getDesImg1 = (aqiValue) => {
+        if (aqiValue >= 0 && aqiValue <= 50) {
+            return "Enjoy outdoor activities"; // Return the image path
+        } else if (aqiValue <= 100) {
+            return "Sensitive group should avoid outdoor acitivities"; // Return the image path
+        } else if (aqiValue <= 150) {
+            return "Reduce out";
+        } else if (aqiValue <= 200) {
+            return "Wear Mask";
+        } else if (aqiValue <= 300) {
+            return "Wear Mask";
+        } else {
+            return "Wear Mask";
+        }
+    };
+
+    const getDesImg2 = (aqiValue) => {
+        if (aqiValue >= 0 && aqiValue <= 50) {
+            return "Open Windows for fresh air"; // Return the image path
+        } else if (aqiValue <= 100) {
+            return "Sensitive group should wear a mask"; // Return the image path
+        } else if (aqiValue <= 150) {
+            return "Sensitive group should wear a mask";
+        } else if (aqiValue <= 200) {
+            return "Wear a mask";
+        } else if (aqiValue <= 300) {
+            return "Wear a mask";
+        } else {
+            return "Wear a mask";
+        }
+    };
+
+    const getImageSource2 = (aqiValue) => {
+        if (aqiValue >= 0 && aqiValue <= 50) {
+            return good502; // Return the image path
+        } else if (aqiValue <= 100) {
+            return moderate1002; // Return the image path
+        } else if (aqiValue <= 150) {
+            return uns1502;
+        } else if (aqiValue <= 200) {
+            return unhealthy2002;
+        } else if (aqiValue <= 300) {
+            return unhealthy2002;
+        } else {
+            return unhealthy2002;
+        }
+    };
+
+    // Get the image source based on the AQI value
+    const imageSource1 = getImageSource1(aqiData ? aqiData.data.current.pollution.aqius : null);
+    const imageSource2 = getImageSource2(aqiData ? aqiData.data.current.pollution.aqius : null);
+
     useEffect(() => {
         fetchDataWithRetry(); // Initial fetch
         const intervalId = setInterval(fetchDataWithRetry, 60000); // Set up an interval to fetch data every minute
@@ -69,21 +145,35 @@ function CurrentAqiInfo() {
     }, []);
 
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" bgcolor="#FFFF" width='10%' >
-            <Box display="flex" flexDirection="row" alignItems="center" bgcolor="#FFFF" >
-                <Box
-                    width="15px"
-                    height="15px"
-                    borderRadius="50%"
-                    bgcolor={circleColor}
-                />
-                <Box display="flex" flexDirection="column" alignItems="center" bgcolor="#FFFF" >
-                    <Typography variant="h6" fontWeight="500">AQI</Typography>
-                    <Typography variant="h5" fontWeight="500">{aqiData ? aqiData.data.current.pollution.aqius : 'Loading AQI data...'}</Typography>
-                    <Typography variant="body1">{aqiData ? calculateAqiWord(aqiData.data.current.pollution.aqius) : ''}</Typography>
-                    
-                </Box>
-            </Box><img src={good501Image}/>
+        <Box display="flex" flexDirection="row" alignItems="center" bgcolor="#FFFF" width='400px' marginTop='20px' marginLeft='20px' paddingTop='10px' paddingLeft='20px' borderRadius="25px">
+            <Box display="flex" flexDirection="column" alignItems="center" bgcolor="#FFFF" marginLeft='20px' >
+                <Box display="flex" flexDirection="row" alignItems="center" bgcolor="#FFFF" >
+                    <Box
+                        width="15px"
+                        height="15px"
+                        borderRadius="50%"
+                        marginRight="15px"
+
+                        bgcolor={circleColor}
+                    />
+                    <Box display="flex" flexDirection="column" alignItems="center" bgcolor="#FFFF" marginRight='20px'  >
+                        <Typography variant="h6" fontWeight="500">AQI</Typography>
+
+                        <Typography variant="h5" fontWeight="500">{aqiData ? aqiData.data.current.pollution.aqius : 'Loading AQI data...'}</Typography>
+
+                        <Typography variant="body1">{aqiData ? calculateAqiWord(aqiData.data.current.pollution.aqius) : 'Loading AQI data...'}</Typography>
+
+                    </Box></Box>
+                <img src={imageSource1} alt="Image1" width='80px' />
+                <Typography variant="body1">{aqiData ? getDesImg1(aqiData.data.current.pollution.aqius) : 'Loading Image Description'}</Typography>
+            </Box>
+            <Divider orientation="vertical" flexItem style={{ marginTop: '8px', border: '0.1px solid #000', height: '70px', marginLeft: '30px' }} />
+            <Box display="flex" flexDirection="column" alignItems="center" bgcolor="#FFFF" marginLeft='20px' >
+                <LGPMInfo />
+                <img src={imageSource2} alt="Image2" width='80px' />
+                <Typography variant="body1">{aqiData ? getDesImg2(aqiData.data.current.pollution.aqius) : 'Loading Image Description'}</Typography>
+            </Box>
+            <Box />
         </Box>
     );
 }

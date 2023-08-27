@@ -90,9 +90,9 @@ function CurrentAqiInfo() {
         if (aqiValue >= 0 && aqiValue <= 50) {
             return "Enjoy outdoor activities"; // Return the image path
         } else if (aqiValue <= 100) {
-            return "Sensitive group should avoid outdoor acitivities"; // Return the image path
+            return "Avoid outdoor acitivities"; // Return the image path
         } else if (aqiValue <= 150) {
-            return "Reduce out";
+            return "Reduce outdoor activities";
         } else if (aqiValue <= 200) {
             return "Wear Mask";
         } else if (aqiValue <= 300) {
@@ -106,9 +106,9 @@ function CurrentAqiInfo() {
         if (aqiValue >= 0 && aqiValue <= 50) {
             return "Open Windows for fresh air"; // Return the image path
         } else if (aqiValue <= 100) {
-            return "Sensitive group should wear a mask"; // Return the image path
+            return "Wear a mask"; // Return the image path
         } else if (aqiValue <= 150) {
-            return "Sensitive group should wear a mask";
+            return "Wear a mask";
         } else if (aqiValue <= 200) {
             return "Wear a mask";
         } else if (aqiValue <= 300) {
@@ -145,9 +145,9 @@ function CurrentAqiInfo() {
     }, []);
 
     return (
-        <Box display="flex" flexDirection="row" alignItems="center" bgcolor="#FFFF" width='445px' marginTop='20px' marginLeft='20px' paddingTop='10px' paddingLeft='20px' borderRadius="25px">
-            <Box display="flex" flexDirection="column" alignItems="center" bgcolor="#FFFF" marginLeft='20px' marginBottom='15px'>
-                <Box display="flex" flexDirection="row" alignItems="center" bgcolor="#FFFF" marginBottom="15px">
+        <Box display="flex" flexDirection="row" alignItems="center" bgcolor="#FFFF" width='420px' marginTop='20px' marginLeft='20px' paddingTop='10px' paddingLeft='40px' borderRadius="25px">
+            <Box display="flex" flexDirection="column" alignItems="center"  marginBottom='15px'>
+                <Box display="flex" flexDirection="row" alignItems="center"marginBottom="15px">
                     <Box
                         width="15px"
                         height="15px"
@@ -156,19 +156,19 @@ function CurrentAqiInfo() {
 
                         bgcolor={circleColor}
                     />
-                    <Box display="flex" flexDirection="column" alignItems="center" bgcolor="#FFFF" marginRight='20px'  >
+                    <Box display="flex" flexDirection="column" alignItems="center" paddingRight='20px'  >
                         <Typography variant="h6" fontWeight="500">AQI</Typography>
 
-                        <Typography variant="h5" fontWeight="500">{aqiData ? aqiData.data.current.pollution.aqius : 'Loading AQI data...'}</Typography>
+                        <Typography variant="h5" fontWeight="500">{aqiData ? aqiData.data.current.pollution.aqius : 'AQI...'}</Typography>
 
-                        <Typography variant="body1">{aqiData ? calculateAqiWord(aqiData.data.current.pollution.aqius) : 'Loading AQI data...'}</Typography>
+                        <Typography variant="body1">{aqiData ? calculateAqiWord(aqiData.data.current.pollution.aqius) : 'AQI...'}</Typography>
                     </Box>
                 </Box>
                 <img src={imageSource1} alt="Image1" width='80px' />
                 <Typography fontSize='12px'>{aqiData ? getDesImg1(aqiData.data.current.pollution.aqius) : 'Loading Image Description'}</Typography>
             </Box>
             <Divider orientation="vertical" flexItem style={{ marginTop: '10px', border: '0.1px solid #000', height: '70px', marginLeft: '30px' }} />
-            <Box display="flex" flexDirection="column" alignItems="center" bgcolor="#FFFF" marginLeft='60px' marginBottom='15px' >
+            <Box display="flex" flexDirection="column" alignItems="center"  paddingLeft='60px' marginBottom='15px' >
                 <br /><LGPMInfo /><br />
                 <img src={imageSource2} alt="Image2" width='80px' />
                 <Typography fontSize='12px'>{aqiData ? getDesImg2(aqiData.data.current.pollution.aqius) : 'Loading Image Description'}</Typography>

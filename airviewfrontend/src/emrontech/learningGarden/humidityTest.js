@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import humidityIcon from '../../assetIcon/humidity.png';
 import LinearProgress from '@mui/material/LinearProgress';
 
-function LGHumidityInfo() {
+function LGHumidityInfoTest() {
     const [humidityData, setHumidityData] = useState(null);
     const [error, setError] = useState(null);
     const fetchDataWithRetry = () => {
@@ -51,7 +51,7 @@ function LGHumidityInfo() {
                 (
                     <p>Loading Humidity data...</p>
                 )} */}
-            <Box display="flex" flexDirection="row" paddingTop='10px' paddingLeft='20px'alignItems="center" >
+            <Box display="flex" flexDirection="row" paddingTop='10px' paddingLeft='20px'  alignItems="center">
                 <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px'>
                     <Box display="flex" flexDirection="row" >
                         <Typography variant="h6" fontWeight="500">
@@ -70,7 +70,7 @@ function LGHumidityInfo() {
                     <LinearProgress sx={{
                         width: '100%',
                         height: '10px',
-                        borderRadius:'25px', // Adjust the height of the progress bar
+                        borderRadius: '25px', // Adjust the height of the progress bar
                         backgroundColor: '#ccc', // Set the background color
                         '& .MuiLinearProgress-bar': {
                             backgroundColor: '#90D02F', // Set the progress bar color (green)
@@ -85,4 +85,4 @@ function LGHumidityInfo() {
 
 
 
-export default LGHumidityInfo;
+export default LGHumidityInfoTest;

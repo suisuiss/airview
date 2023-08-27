@@ -145,9 +145,9 @@ function CurrentAqiInfo() {
     }, []);
 
     return (
-        <Box display="flex" flexDirection="row" alignItems="center" bgcolor="#FFFF" width='400px' marginTop='20px' marginLeft='20px' paddingTop='10px' paddingLeft='20px' borderRadius="25px">
-            <Box display="flex" flexDirection="column" alignItems="center" bgcolor="#FFFF" marginLeft='20px' >
-                <Box display="flex" flexDirection="row" alignItems="center" bgcolor="#FFFF" >
+        <Box display="flex" flexDirection="row" alignItems="center" bgcolor="#FFFF" width='445px' marginTop='20px' marginLeft='20px' paddingTop='10px' paddingLeft='20px' borderRadius="25px">
+            <Box display="flex" flexDirection="column" alignItems="center" bgcolor="#FFFF" marginLeft='20px' marginBottom='15px'>
+                <Box display="flex" flexDirection="row" alignItems="center" bgcolor="#FFFF" marginBottom="15px">
                     <Box
                         width="15px"
                         height="15px"
@@ -162,16 +162,16 @@ function CurrentAqiInfo() {
                         <Typography variant="h5" fontWeight="500">{aqiData ? aqiData.data.current.pollution.aqius : 'Loading AQI data...'}</Typography>
 
                         <Typography variant="body1">{aqiData ? calculateAqiWord(aqiData.data.current.pollution.aqius) : 'Loading AQI data...'}</Typography>
-
-                    </Box></Box>
+                    </Box>
+                </Box>
                 <img src={imageSource1} alt="Image1" width='80px' />
-                <Typography variant="body1">{aqiData ? getDesImg1(aqiData.data.current.pollution.aqius) : 'Loading Image Description'}</Typography>
+                <Typography fontSize='12px'>{aqiData ? getDesImg1(aqiData.data.current.pollution.aqius) : 'Loading Image Description'}</Typography>
             </Box>
-            <Divider orientation="vertical" flexItem style={{ marginTop: '8px', border: '0.1px solid #000', height: '70px', marginLeft: '30px' }} />
-            <Box display="flex" flexDirection="column" alignItems="center" bgcolor="#FFFF" marginLeft='20px' >
-                <LGPMInfo />
+            <Divider orientation="vertical" flexItem style={{ marginTop: '10px', border: '0.1px solid #000', height: '70px', marginLeft: '30px' }} />
+            <Box display="flex" flexDirection="column" alignItems="center" bgcolor="#FFFF" marginLeft='60px' marginBottom='15px' >
+                <br /><LGPMInfo /><br />
                 <img src={imageSource2} alt="Image2" width='80px' />
-                <Typography variant="body1">{aqiData ? getDesImg2(aqiData.data.current.pollution.aqius) : 'Loading Image Description'}</Typography>
+                <Typography fontSize='12px'>{aqiData ? getDesImg2(aqiData.data.current.pollution.aqius) : 'Loading Image Description'}</Typography>
             </Box>
             <Box />
         </Box>

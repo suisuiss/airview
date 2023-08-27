@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
 function LGPMInfo() {
@@ -50,8 +51,9 @@ function LGPMInfo() {
                 (
                     <p>Loading PM data...</p>
                 )} */}
-            PM 2.5 : 4.5 µg/m <br />
-            PM 10 : 4.5 µg/m
+            <Typography fontSize='18px'>
+                PM 2.5 : 4.5 µg/m <br />
+                PM 10 : 4.5 µg/m</Typography>
         </div>
     );
 

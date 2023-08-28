@@ -6,11 +6,7 @@ function LGStation() {
 
     const fetchDataWithRetry = () => {
         // Fetch data from the airvisual API
-        fetch('https://e5f1-119-76-183-133.ngrok-free.app/test', {
-            headers: new Headers({
-                "ngrok-skip-browser-warning": "69420",
-            })
-        })
+        fetch('https://asia-southeast1-hypnotic-spider-397306.cloudfunctions.net/function-2')
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch station');

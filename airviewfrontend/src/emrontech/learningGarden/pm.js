@@ -5,11 +5,7 @@ function LGPMInfo() {
     const [pmData, setPMData] = useState(null);
     const [error, setError] = useState(null);
     const fetchDataWithRetry = () => {
-        fetch('https://e5f1-119-76-183-133.ngrok-free.app/test', {
-            headers: new Headers({
-                "ngrok-skip-browser-warning": "69420",
-            })
-        })
+        fetch('https://asia-southeast1-hypnotic-spider-397306.cloudfunctions.net/function-2')
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
@@ -21,7 +17,7 @@ function LGPMInfo() {
                 setPMData(filteredData);
             })
             .catch((error) => {
-                console.error('Error fetching Humidity data:', error);
+                console.error('Error fetching PM data:', error);
                 setError(error);
 
                 // Retry the request after a delay (e.g., 5 seconds)
@@ -36,11 +32,11 @@ function LGPMInfo() {
     }, []);
 
     return (
-        <div>
-            {/* {pmData ? (<div>
+        <div><Typography fontSize='18px'>
+            {pmData ? (<div>
                 {pmData.map(function (a) {
                     return <div key={a.id}>
-                        PM 2.5 : {a.data.pm25.value} µg/m
+                        PM 2.5 : {a.data.pm25.value} µg/m<br />
                         PM 10 : {a.data.pm10.value} µg/m
                        
                     </div>
@@ -50,10 +46,9 @@ function LGPMInfo() {
             ) :
                 (
                     <p>Loading PM data...</p>
-                )} */}
-            <Typography fontSize='18px'>
-                PM 2.5 : 4.5 µg/m <br />
-                PM 10 : 4.5 µg/m</Typography>
+                )}
+            
+                </Typography>
         </div>
     );
 

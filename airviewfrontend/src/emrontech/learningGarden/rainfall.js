@@ -1,10 +1,10 @@
 import { Box, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import humidityIcon from '../../assetIcon/humidity.png';
+import rainIcon from '../../assetIcon/rainfall.png';
 import LinearProgress from '@mui/material/LinearProgress';
 
-function LGHumidityInfo() {
-    const [humidityData, setHumidityData] = useState(null);
+function LGHumidityInfoTest() {
+    const [rainData, setRainData] = useState(null);
     const [error, setError] = useState(null);
     const fetchDataWithRetry = () => {
         fetch('https://asia-southeast1-hypnotic-spider-397306.cloudfunctions.net/function-2')
@@ -16,10 +16,10 @@ function LGHumidityInfo() {
             })
             .then((data) => {
                 const filteredData = data.filter((item) => item.id === "1");
-                setHumidityData(filteredData);
+                setRainData(filteredData);
             })
             .catch((error) => {
-                console.error('Error fetching Humidity data:', error);
+                console.error('Error fetching rain data:', error);
                 setError(error);
 
                 // Retry the request after a delay (e.g., 5 seconds)
@@ -29,13 +29,20 @@ function LGHumidityInfo() {
             });
     };
 
-    const humidityWord = (humidityValue) => {
-        if (humidityValue < 30) {
-            return "Too Low";
-        } else if (humidityValue <= 50) {
-            return "Ideal";
-        } else if (humidityValue > 50) {
-            return "Too High";
+    const rainWord = (rainValue) => {
+        if (rainValue == 0) {
+            return "No Rain";
+        }
+        else if (rainValue < 2.5) {
+            return "Light";
+        } else if (rainValue <= 7.5) {
+            return "Moderate";
+        } else if (rainValue <= 15) {
+            return "Heavy";
+        } else if (rainValue <= 30) {
+            return "Intense";
+        } else if (rainValue > 30) {
+            return "Torrential";
         };
     }
 
@@ -45,49 +52,39 @@ function LGHumidityInfo() {
 
     return (
         <Box width="220px" bgcolor="#FFFF" borderRadius="25px" marginTop='20px' marginLeft='20px' display="flex" flexDirection="column">
-
-            <Box display="flex" flexDirection="row" paddingTop='10px' paddingLeft='20px' alignItems="center" >
+            <Box display="flex" flexDirection="row" paddingTop='10px' paddingLeft='20px' alignItems="center">
                 <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px'>
                     <Box display="flex" flexDirection="row" >
                         <Typography variant="h6" fontWeight="500">
-                            Humidity
+                            Rain Fall
                         </Typography>
                         <Box marginLeft="80px">
-                            <img src={humidityIcon} alt="Image2" width='15px' />
+                            <img src={rainIcon} alt="Image2" width='20px' />
                         </Box>
                     </Box>
                     <Typography variant="h5" marginTop="10px">
-                        {humidityData ? (<div>
-                            {humidityData.map(function (a) {
+                        {rainData ? (<div>
+                            {rainData.map(function (a) {
                                 return <div key={a.id}>
-                                    {a.data.humid.value}%
+                                    {a.data.rain_fall.value} mm
                                 </div>
                             })}
                         </div>) : error ? (
-                                <p>Humidity...</p>
+                            <p>Rain...</p>
                         ) :
                             (
-                                    <p>Humidity...</p>
+                                <p>Rain...</p>
                             )}
                     </Typography>
                     <Typography variant="h7" marginBottom="10px">
-                        {humidityData ? (
+                        {rainData ? (
                             <div>
-                                {humidityWord(humidityData[0].data.humid.value)}
+                                {rainWord(rainData[0].data.rain_fall.value)}
                             </div>
                         ) : (
-                            <p>Humidity...</p>
+                            <p>Rain...</p>
                         )}
                     </Typography>
-                    <LinearProgress sx={{
-                        width: '100%',
-                        height: '10px',
-                        borderRadius: '25px', // Adjust the height of the progress bar
-                        backgroundColor: '#ccc', // Set the background color
-                        '& .MuiLinearProgress-bar': {
-                            backgroundColor: '#90D02F', // Set the progress bar color (green)
-                        },
-                    }} variant="determinate" value={humidityData ? humidityData[0].data.humid.value : 0}  />
                 </Box>
             </Box>
         </Box>
@@ -97,4 +94,4 @@ function LGHumidityInfo() {
 
 
 
-export default LGHumidityInfo;
+export default LGHumidityInfoTest;

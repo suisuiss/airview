@@ -1,9 +1,8 @@
 import { Box, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import rainIcon from '../../assetIcon/rainfall.png';
-
-function LGRainInfo() {
-    const [rainData, setRainData] = useState(null);
+import windIcon from '../../assetIcon/wind.png';
+function LGWindInfo() {
+    const [windData, setWindData] = useState(null);
     const [error, setError] = useState(null);
     const fetchDataWithRetry = () => {
         const delayBetweenRequests = 5000; // 5 seconds
@@ -17,10 +16,10 @@ function LGRainInfo() {
             })
             .then((data) => {
                 const filteredData = data.filter((item) => item.id === "1");
-                setRainData(filteredData);
+                setWindData(filteredData);
             })
             .catch((error) => {
-                console.error('Error fetching rain data:', error);
+                console.error('Error fetching Wind data:', error);
                 setError(error);
 
                 // Retry the request after a delay
@@ -30,22 +29,7 @@ function LGRainInfo() {
             });
     };
 
-    const rainWord = (rainValue) => {
-        if (rainValue === 0) {
-            return "No Rain";
-        }
-        else if (rainValue < 2.5) {
-            return "Light";
-        } else if (rainValue <= 7.5) {
-            return "Moderate";
-        } else if (rainValue <= 15) {
-            return "Heavy";
-        } else if (rainValue <= 30) {
-            return "Intense";
-        } else if (rainValue > 30) {
-            return "Torrential";
-        };
-    }
+    
 
     useEffect(() => {
         fetchDataWithRetry(); // Initial fetch
@@ -57,35 +41,39 @@ function LGRainInfo() {
                 <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px'>
                     <Box display="flex" flexDirection="row" >
                         <Typography variant="h6" fontWeight="500">
-                            Rain Fall
+                            Wind
                         </Typography>
-                        <Box marginLeft="80px">
-                            <img src={rainIcon} alt="Image2" width='20px' />
+                        <Box marginLeft="110px">
+                            <img src={windIcon} alt="Image2" width='20px' />
                         </Box>
                     </Box>
-                    <Typography variant="h5" marginTop="10px">
-                        {rainData ? (<div>
-                            {rainData.map(function (a) {
+                    <Typography fontSize="15px" marginTop="10px">
+                        {windData ? (<div>
+                            {windData.map(function (a) {
                                 return <div key={a.id}>
-                                    {a.data.rain_fall.value} mm
+                                Speed: {a.data.wind_speed.value} m/s
                                 </div>
                             })}
                         </div>) : error ? (
-                            <p>Rain...</p>
+                            <p>Wind...</p>
                         ) :
                             (
-                                <p>Rain...</p>
+                                <p>Wind...</p>
+                            )}
+                        {windData ? (<div>
+                            {windData.map(function (a) {
+                                return <div key={a.id}>
+                                    Direction: {a.data.wind_direction.value} degree
+                                </div>
+                            })}
+                        </div>) : error ? (
+                            <p>Wind...</p>
+                        ) :
+                            (
+                                <p>Wind...</p>
                             )}
                     </Typography>
-                    <Typography variant="h7" marginBottom="10px">
-                        {rainData ? (
-                            <div>
-                                {rainWord(rainData[0].data.rain_fall.value)}
-                            </div>
-                        ) : (
-                            <p>Rain...</p>
-                        )}
-                    </Typography>
+                    
                 </Box>
             </Box>
         </Box>
@@ -95,4 +83,4 @@ function LGRainInfo() {
 
 
 
-export default LGRainInfo;
+export default LGWindInfo;

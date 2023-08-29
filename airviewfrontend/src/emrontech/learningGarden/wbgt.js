@@ -1,9 +1,9 @@
 import { Box, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import rainIcon from '../../assetIcon/rainfall.png';
+import wbgtIcon from '../../assetIcon/WBGT.png';
 
-function LGRainInfo() {
-    const [rainData, setRainData] = useState(null);
+function LGWBGTInfo() {
+    const [wbgtData, setWbgtData] = useState(null);
     const [error, setError] = useState(null);
     const fetchDataWithRetry = () => {
         const delayBetweenRequests = 5000; // 5 seconds
@@ -17,10 +17,10 @@ function LGRainInfo() {
             })
             .then((data) => {
                 const filteredData = data.filter((item) => item.id === "1");
-                setRainData(filteredData);
+                setWbgtData(filteredData);
             })
             .catch((error) => {
-                console.error('Error fetching rain data:', error);
+                console.error('Error fetching WBGT data:', error);
                 setError(error);
 
                 // Retry the request after a delay
@@ -30,21 +30,17 @@ function LGRainInfo() {
             });
     };
 
-    const rainWord = (rainValue) => {
-        if (rainValue === 0) {
-            return "No Rain";
+    const wbgtWord = (wbgtValue) => {
+        if (wbgtValue < 25) {
+            return "Comfortable";
         }
-        else if (rainValue < 2.5) {
-            return "Light";
-        } else if (rainValue <= 7.5) {
+        else if (wbgtValue <=29.9 ) {
             return "Moderate";
-        } else if (rainValue <= 15) {
-            return "Heavy";
-        } else if (rainValue <= 30) {
-            return "Intense";
-        } else if (rainValue > 30) {
-            return "Torrential";
-        };
+        } else if (wbgtValue <= 34.9) {
+            return "Uncomfortable";
+        } else if (wbgtValue > 35) {
+            return "Severe";
+        }
     }
 
     useEffect(() => {
@@ -57,33 +53,33 @@ function LGRainInfo() {
                 <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px'>
                     <Box display="flex" flexDirection="row" >
                         <Typography variant="h6" fontWeight="500">
-                            Rain Fall
+                            WBGT
                         </Typography>
-                        <Box marginLeft="80px">
-                            <img src={rainIcon} alt="Image2" width='20px' />
+                        <Box marginLeft="95px">
+                            <img src={wbgtIcon} alt="Image2" width='20px' />
                         </Box>
                     </Box>
                     <Typography variant="h5" marginTop="10px">
-                        {rainData ? (<div>
-                            {rainData.map(function (a) {
+                        {wbgtData ? (<div>
+                            {wbgtData.map(function (a) {
                                 return <div key={a.id}>
-                                    {a.data.rain_fall.value} mm
+                                    {a.data.wbgt.value} °C
                                 </div>
                             })}
                         </div>) : error ? (
-                            <p>Rain...</p>
+                            <p>WBGT...</p>
                         ) :
                             (
-                                <p>Rain...</p>
+                                <p>WBGT...</p>
                             )}
                     </Typography>
                     <Typography variant="h7" marginBottom="10px">
-                        {rainData ? (
+                        {wbgtData ? (
                             <div>
-                                {rainWord(rainData[0].data.rain_fall.value)}
+                                {wbgtWord(wbgtData[0].data.wbgt.value)}
                             </div>
                         ) : (
-                            <p>Rain...</p>
+                            <p>WBGT...</p>
                         )}
                     </Typography>
                 </Box>
@@ -95,4 +91,4 @@ function LGRainInfo() {
 
 
 
-export default LGRainInfo;
+export default LGWBGTInfo;

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const aqiDataSchema = new mongoose.Schema({
-    timestamp: String,
     aqi: Number,
     current_time: {
         type: Date,

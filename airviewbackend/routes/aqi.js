@@ -10,12 +10,11 @@ const retryDelay = 5000; // 5 seconds
 const fetchAndStoreAQI = async (retryCount = 0) => {
     try {
         const response = await axios.get(
-            'http://api.airvisual.com/v2/nearest_city?lat=13.651502404577384&lon=100.49644279537901&key=c931c788-4515-48dc-8c74-1fd47b9817f7'
+            'http://api.waqi.info/feed/bangkok/?token=93251e1c93612cabd3b0bd3214148bb64039c4ec'
         );
 
         const aqiData = {
-            timestamp: response.data.data.current.pollution.ts,
-            aqi: response.data.data.current.pollution.aqius,
+            aqi: response.data.data.aqi,
         };
 
         const newAqiData = new AqiData(aqiData);

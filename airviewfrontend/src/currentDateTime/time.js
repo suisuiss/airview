@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
 function CurrentTime() {
@@ -31,10 +32,10 @@ function CurrentTime() {
     });
 
     return (
-        <div>
-            <p>{formattedTime}</p>
+        <Box>
+            {formattedTime}
             
-        </div>
+        </Box>
     );
 }
 

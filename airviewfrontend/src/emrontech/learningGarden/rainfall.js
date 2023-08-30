@@ -31,7 +31,7 @@ function LGRainInfo() {
     };
 
     const rainWord = (rainValue) => {
-        if (rainValue === 0) {
+        if (rainValue == 0) {
             return "No Rain";
         }
         else if (rainValue < 2.5) {

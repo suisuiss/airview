@@ -39,15 +39,15 @@ function LGStation() {
                 <div>
                     {station.map(function (a) {
                         return <div key={a.id}>
-                            Station: {a.station}
+                            {a.station}
                         </div>
                     })}
                 </div>
             ) : error ? (
-                <p>Loading station...</p>
+                <p>station...</p>
             ) :
                 (
-                    <p>Loading station...</p>
+                    <p>station...</p>
                 )}
         </div>
     );

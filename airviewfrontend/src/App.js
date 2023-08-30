@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import LGRainInfo from './emrontech/learningGarden/rainfall';
 import LGWBGTInfo from './emrontech/learningGarden/wbgt';
 import LGWindInfo from './emrontech/learningGarden/windspeed';
+import LGDateTime from './Combined/LGDateTime';
 
 
 
@@ -13,9 +14,9 @@ function App() {
   return (
 
     <div className="App">
-      <Box display="flex" flexDirection="column">
+      {/* <Box display="flex" flexDirection="column">
         <AqiInfo />
-        <Box display="flex" flexDirection="row" > 
+        <Box color="#363E64"> 
           <LGHumidityInfo /> 
           <LGRainInfo />
         </Box>
@@ -23,7 +24,8 @@ function App() {
           <LGWBGTInfo /> 
           <LGWindInfo/> 
         </Box>
-      </Box>
+      </Box> */}
+      <LGDateTime/>
     </div>
 
 

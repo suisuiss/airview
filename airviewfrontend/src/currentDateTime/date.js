@@ -1,3 +1,4 @@
+import { Box } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
 function CurrentDate() {
@@ -60,9 +61,9 @@ function CurrentDate() {
     const formattedDate = `${dayOfWeek} ${dayOfMonth} ${month} ${year}`;
 
     return (
-        <div>
-            <p>{formattedDate}</p>
-        </div>
+        <Box>
+            {formattedDate}
+        </Box>
     );
 }
 

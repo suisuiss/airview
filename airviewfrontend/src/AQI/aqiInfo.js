@@ -18,7 +18,7 @@ function CurrentAqiInfo() {
 
     const fetchDataWithRetry = () => {
         // Fetch data from the airvisual API
-        fetch('https://api.airvisual.com/v2/nearest_city?lat=13.651502404577384&lon=100.49644279537901&key=c931c788-4515-48dc-8c74-1fd47b9817f7')
+        fetch('http://api.waqi.info/feed/bangkok/?token=93251e1c93612cabd3b0bd3214148bb64039c4ec')
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch AQI');
@@ -56,15 +56,15 @@ function CurrentAqiInfo() {
     };
 
     let circleColor = '';
-    if (aqiData && aqiData.data.current.pollution.aqius >= 0 && aqiData.data.current.pollution.aqius <= 50) {
+    if (aqiData && aqiData.data.aqi >= 0 && aqiData.data.aqi <= 50) {
         circleColor = '#ABD162'; // Green
-    } else if (aqiData && aqiData.data.current.pollution.aqius <= 100) {
+    } else if (aqiData && aqiData.data.aqi <= 100) {
         circleColor = '#F7D460'; // Yellow
-    } else if (aqiData && aqiData.data.current.pollution.aqius <= 150) {
+    } else if (aqiData && aqiData.data.aqi <= 150) {
         circleColor = '#FC9956'; // Orange
-    } else if (aqiData && aqiData.data.current.pollution.aqius <= 200) {
+    } else if (aqiData && aqiData.data.aqi <= 200) {
         circleColor = '#F6676B'; // Red
-    } else if (aqiData && aqiData.data.current.pollution.aqius <= 300) {
+    } else if (aqiData && aqiData.data.aqi <= 300) {
         circleColor = '#A37DB8'; // Purple
     } else {
         circleColor = '#A07684'; // Gray
@@ -135,8 +135,8 @@ function CurrentAqiInfo() {
     };
 
     // Get the image source based on the AQI value
-    const imageSource1 = getImageSource1(aqiData ? aqiData.data.current.pollution.aqius : null);
-    const imageSource2 = getImageSource2(aqiData ? aqiData.data.current.pollution.aqius : null);
+    const imageSource1 = getImageSource1(aqiData ? aqiData.data.aqi : null);
+    const imageSource2 = getImageSource2(aqiData ? aqiData.data.aqi : null);
 
     useEffect(() => {
         fetchDataWithRetry(); // Initial fetch
@@ -156,22 +156,22 @@ function CurrentAqiInfo() {
 
                         bgcolor={circleColor}
                     />
-                    <Box display="flex" flexDirection="column" alignItems="center" paddingRight='20px'  >
+                    <Box borderRadius="25px" alignItems="center" paddingRight='20px'  >
                         <Typography variant="h6" fontWeight="500">AQI</Typography>
 
-                        <Typography variant="h5" fontWeight="500">{aqiData ? aqiData.data.current.pollution.aqius : 'AQI...'}</Typography>
+                        <Typography variant="h5" fontWeight="500">{aqiData ? aqiData.data.aqi : 'AQI...'}</Typography>
 
-                        <Typography variant="body1">{aqiData ? calculateAqiWord(aqiData.data.current.pollution.aqius) : 'AQI...'}</Typography>
+                        <Typography variant="body1">{aqiData ? calculateAqiWord(aqiData.data.aqi) : 'AQI...'}</Typography>
                     </Box>
                 </Box>
                 <img src={imageSource1} alt="Image1" width='80px' />
-                <Typography fontSize='12px'>{aqiData ? getDesImg1(aqiData.data.current.pollution.aqius) : 'Loading Image Description'}</Typography>
+                <Typography fontSize='12px'>{aqiData ? getDesImg1(aqiData.data.aqi) : 'Loading Image Description'}</Typography>
             </Box>
             <Divider orientation="vertical" flexItem style={{ marginTop: '10px', border: '0.1px solid #000', height: '70px', marginLeft: '30px' }} />
             <Box display="flex" flexDirection="column" alignItems="center"  paddingLeft='60px' marginBottom='15px' >
                 <br /><LGPMInfo /><br />
                 <img src={imageSource2} alt="Image2" width='80px' />
-                <Typography fontSize='12px'>{aqiData ? getDesImg2(aqiData.data.current.pollution.aqius) : 'Loading Image Description'}</Typography>
+                <Typography fontSize='12px'>{aqiData ? getDesImg2(aqiData.data.aqi) : 'Loading Image Description'}</Typography>
             </Box>
             <Box />
         </Box>

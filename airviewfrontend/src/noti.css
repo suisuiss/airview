@@ -1,0 +1,22 @@
+.noti{
+    background-color: var(--bgcolor);
+    color: #363E64;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    font-size: 30px;
+    gap: 10px;
+    font-weight: 500;
+}
+.noti-btn{
+    background-color: white;
+    color: #363E64;
+    font-size: larger;
+    border-radius: 50px;
+    padding: 12px 30px;
+    border: 0px;
+    box-shadow: 1px black;
+}

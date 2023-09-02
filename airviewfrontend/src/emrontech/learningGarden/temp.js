@@ -1,11 +1,13 @@
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
-function LGPMInfo() {
-    const [pmData, setPMData] = useState(null);
+function CurrentTemp() {
+    const [tempData, setTempData] = useState(null);
     const [error, setError] = useState(null);
 
     const fetchData = () => {
+        const delayBetweenRequests = 300000; // 5 minutes in milliseconds
+
         fetch('https://asia-southeast1-hypnotic-spider-397306.cloudfunctions.net/function-2')
             .then((response) => {
                 if (!response.ok) {
@@ -15,11 +17,16 @@ function LGPMInfo() {
             })
             .then((data) => {
                 const filteredData = data.filter((item) => item.id === "1");
-                setPMData(filteredData);
+                setTempData(filteredData);
             })
             .catch((error) => {
-                console.error('Error fetching PM data:', error);
+                console.error('Error fetching Temp data:', error);
                 setError(error);
+
+                // Retry the request after a delay
+                setTimeout(() => {
+                    fetchData();
+                }, delayBetweenRequests);
             });
     };
 
@@ -34,24 +41,21 @@ function LGPMInfo() {
     }, []);
 
     return (
-        <div>
-            <Typography fontSize='18px'>
-                {pmData ? (<div>
-                    {pmData.map(function (a) {
-                        return <div key={a.id}>
-                            PM 2.5 : {a.data.pm25.value} µg/m<br />
-                            PM 10 : {a.data.pm10.value} µg/m
-                        </div>
-                    })}
-                </div>) : error ? (
-                    <p>Loading PM data...</p>
-                ) :
-                    (
-                        <p>Loading PM data...</p>
-                    )}
-            </Typography>
-        </div>
+        <Box>
+            {tempData ? (<Box>
+                {tempData.map(function (a) {
+                    return <Box key={a.id} marginLeft='20px'>
+                        <Typography variant='h2'>{a.data.temp.value}°C</Typography>
+                    </Box>
+                })}
+            </Box>) : error ? (
+                <p>Temp...</p>
+            ) :
+                (
+                    <p>Temp...</p>
+                )}
+        </Box>
     );
 }
 
-export default LGPMInfo;
+export default CurrentTemp;

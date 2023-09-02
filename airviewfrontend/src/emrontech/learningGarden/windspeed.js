@@ -1,11 +1,13 @@
 import { Box, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import windIcon from '../../assetIcon/wind.png';
+
 function LGWindInfo() {
     const [windData, setWindData] = useState(null);
     const [error, setError] = useState(null);
-    const fetchDataWithRetry = () => {
-        const delayBetweenRequests = 5000; // 5 seconds
+
+    const fetchData = () => {
+        const delayBetweenRequests = 300000; // 5 minutes in milliseconds
 
         fetch('https://asia-southeast1-hypnotic-spider-397306.cloudfunctions.net/function-2')
             .then((response) => {
@@ -24,15 +26,19 @@ function LGWindInfo() {
 
                 // Retry the request after a delay
                 setTimeout(() => {
-                    fetchDataWithRetry();
+                    fetchData();
                 }, delayBetweenRequests);
             });
     };
 
-    
-
     useEffect(() => {
-        fetchDataWithRetry(); // Initial fetch
+        fetchData(); // Initial fetch
+
+        // Fetch data every 5 minutes (300,000 milliseconds)
+        const intervalId = setInterval(fetchData, 300000);
+
+        // Clean up the interval when the component unmounts
+        return () => clearInterval(intervalId);
     }, []);
 
     return (
@@ -51,7 +57,7 @@ function LGWindInfo() {
                         {windData ? (<div>
                             {windData.map(function (a) {
                                 return <div key={a.id}>
-                                Speed: {a.data.wind_speed.value} m/s
+                                    Speed: {a.data.wind_speed.value} m/s
                                 </div>
                             })}
                         </div>) : error ? (
@@ -73,14 +79,11 @@ function LGWindInfo() {
                                 <p>Wind...</p>
                             )}
                     </Typography>
-                    
+
                 </Box>
             </Box>
         </Box>
     );
-
 }
-
-
 
 export default LGWindInfo;

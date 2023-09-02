@@ -1,8 +1,8 @@
-import { Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
-function LGPMInfo() {
-    const [pmData, setPMData] = useState(null);
+function HeatIndex() {
+    const [heatData, setHeatData] = useState(null);
     const [error, setError] = useState(null);
 
     const fetchData = () => {
@@ -15,10 +15,10 @@ function LGPMInfo() {
             })
             .then((data) => {
                 const filteredData = data.filter((item) => item.id === "1");
-                setPMData(filteredData);
+                setHeatData(filteredData);
             })
             .catch((error) => {
-                console.error('Error fetching PM data:', error);
+                console.error('Error fetching HI data:', error);
                 setError(error);
             });
     };
@@ -34,24 +34,28 @@ function LGPMInfo() {
     }, []);
 
     return (
-        <div>
-            <Typography fontSize='18px'>
-                {pmData ? (<div>
-                    {pmData.map(function (a) {
-                        return <div key={a.id}>
-                            PM 2.5 : {a.data.pm25.value} µg/m<br />
-                            PM 10 : {a.data.pm10.value} µg/m
-                        </div>
+        <Box>
+            {heatData ? (
+                <div>
+                    {heatData.map(function (a) {
+                        const T = (parseFloat(a.data.temp.value) * 9 / 5) + 32;
+                        const RH = parseFloat(a.data.humid.value);
+                        const HI = 0.5 * (T + 61.0 + ((T - 68.0) * 1.2) + (RH * 0.094));
+
+                        return (
+                            <div key={a.id}>
+                                Feels like {((HI - 32) * (5 / 9)).toFixed(2)}°C
+                            </div>
+                        );
                     })}
-                </div>) : error ? (
-                    <p>Loading PM data...</p>
-                ) :
-                    (
-                        <p>Loading PM data...</p>
-                    )}
-            </Typography>
-        </div>
+                </div>
+            ) : error ? (
+                <p>HI...</p>
+            ) : (
+                <p>HI...</p>
+            )}
+        </Box>
     );
 }
 
-export default LGPMInfo;
+export default HeatIndex;

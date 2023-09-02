@@ -6,7 +6,8 @@ import LinearProgress from '@mui/material/LinearProgress';
 function LGHumidityInfo() {
     const [humidityData, setHumidityData] = useState(null);
     const [error, setError] = useState(null);
-    const fetchDataWithRetry = () => {
+
+    const fetchData = () => {
         fetch('https://asia-southeast1-hypnotic-spider-397306.cloudfunctions.net/function-2')
             .then((response) => {
                 if (!response.ok) {
@@ -21,11 +22,6 @@ function LGHumidityInfo() {
             .catch((error) => {
                 console.error('Error fetching Humidity data:', error);
                 setError(error);
-
-                // Retry the request after a delay (e.g., 5 seconds)
-                setTimeout(() => {
-                    fetchDataWithRetry();
-                }, 5000); // 5 seconds
             });
     };
 
@@ -40,15 +36,20 @@ function LGHumidityInfo() {
     }
 
     useEffect(() => {
-        fetchDataWithRetry(); // Initial fetch
+        fetchData(); // Initial fetch
+
+        // Fetch data every 5 minutes (300,000 milliseconds)
+        const intervalId = setInterval(fetchData, 300000);
+
+        // Clean up the interval when the component unmounts
+        return () => clearInterval(intervalId);
     }, []);
 
     return (
         <Box width="220px" bgcolor="#FFFF" borderRadius="25px" marginTop='20px' marginLeft='20px' display="flex" flexDirection="column">
-
-            <Box display="flex" flexDirection="row" paddingTop='10px' paddingLeft='20px' alignItems="center" >
+            <Box display="flex" flexDirection="row" paddingTop='10px' paddingLeft='20px' alignItems="center">
                 <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px'>
-                    <Box display="flex" flexDirection="row" >
+                    <Box display="flex" flexDirection="row">
                         <Typography variant="h6" fontWeight="500">
                             Humidity
                         </Typography>
@@ -64,10 +65,10 @@ function LGHumidityInfo() {
                                 </div>
                             })}
                         </div>) : error ? (
-                                <p>Humidity...</p>
+                            <p>Humidity...</p>
                         ) :
                             (
-                                    <p>Humidity...</p>
+                                <p>Humidity...</p>
                             )}
                     </Typography>
                     <Typography variant="h7" marginBottom="10px">
@@ -87,14 +88,11 @@ function LGHumidityInfo() {
                         '& .MuiLinearProgress-bar': {
                             backgroundColor: '#90D02F', // Set the progress bar color (green)
                         },
-                    }} variant="determinate" value={humidityData ? humidityData[0].data.humid.value : 0}  />
+                    }} variant="determinate" value={humidityData ? humidityData[0].data.humid.value : 0} />
                 </Box>
             </Box>
         </Box>
     );
-
 }
-
-
 
 export default LGHumidityInfo;

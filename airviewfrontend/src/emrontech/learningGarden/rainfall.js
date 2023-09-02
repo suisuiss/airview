@@ -5,8 +5,9 @@ import rainIcon from '../../assetIcon/rainfall.png';
 function LGRainInfo() {
     const [rainData, setRainData] = useState(null);
     const [error, setError] = useState(null);
-    const fetchDataWithRetry = () => {
-        const delayBetweenRequests = 5000; // 5 seconds
+
+    const fetchData = () => {
+        const delayBetweenRequests = 300000; // 5 minutes in milliseconds
 
         fetch('https://asia-southeast1-hypnotic-spider-397306.cloudfunctions.net/function-2')
             .then((response) => {
@@ -25,7 +26,7 @@ function LGRainInfo() {
 
                 // Retry the request after a delay
                 setTimeout(() => {
-                    fetchDataWithRetry();
+                    fetchData();
                 }, delayBetweenRequests);
             });
     };
@@ -48,7 +49,13 @@ function LGRainInfo() {
     }
 
     useEffect(() => {
-        fetchDataWithRetry(); // Initial fetch
+        fetchData(); // Initial fetch
+
+        // Fetch data every 5 minutes (300,000 milliseconds)
+        const intervalId = setInterval(fetchData, 300000);
+
+        // Clean up the interval when the component unmounts
+        return () => clearInterval(intervalId);
     }, []);
 
     return (
@@ -90,9 +97,6 @@ function LGRainInfo() {
             </Box>
         </Box>
     );
-
 }
-
-
 
 export default LGRainInfo;

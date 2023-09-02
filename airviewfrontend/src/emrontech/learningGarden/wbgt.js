@@ -5,8 +5,9 @@ import wbgtIcon from '../../assetIcon/WBGT.png';
 function LGWBGTInfo() {
     const [wbgtData, setWbgtData] = useState(null);
     const [error, setError] = useState(null);
-    const fetchDataWithRetry = () => {
-        const delayBetweenRequests = 5000; // 5 seconds
+
+    const fetchData = () => {
+        const delayBetweenRequests = 300000; // 5 minutes in milliseconds
 
         fetch('https://asia-southeast1-hypnotic-spider-397306.cloudfunctions.net/function-2')
             .then((response) => {
@@ -25,7 +26,7 @@ function LGWBGTInfo() {
 
                 // Retry the request after a delay
                 setTimeout(() => {
-                    fetchDataWithRetry();
+                    fetchData();
                 }, delayBetweenRequests);
             });
     };
@@ -34,7 +35,7 @@ function LGWBGTInfo() {
         if (wbgtValue < 25) {
             return "Comfortable";
         }
-        else if (wbgtValue <=29.9 ) {
+        else if (wbgtValue <= 29.9) {
             return "Moderate";
         } else if (wbgtValue <= 34.9) {
             return "Uncomfortable";
@@ -44,7 +45,13 @@ function LGWBGTInfo() {
     }
 
     useEffect(() => {
-        fetchDataWithRetry(); // Initial fetch
+        fetchData(); // Initial fetch
+
+        // Fetch data every 5 minutes (300,000 milliseconds)
+        const intervalId = setInterval(fetchData, 300000);
+
+        // Clean up the interval when the component unmounts
+        return () => clearInterval(intervalId);
     }, []);
 
     return (
@@ -86,9 +93,6 @@ function LGWBGTInfo() {
             </Box>
         </Box>
     );
-
 }
-
-
 
 export default LGWBGTInfo;

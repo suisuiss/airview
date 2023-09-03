@@ -42,45 +42,56 @@ function LGWindInfo() {
     }, []);
 
     return (
-        <Box width="220px" bgcolor="#FFFF" borderRadius="25px" marginTop='20px' marginLeft='20px' display="flex" flexDirection="column">
-            <Box display="flex" flexDirection="row" paddingTop='10px' paddingLeft='20px' alignItems="center">
-                <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px'>
-                    <Box display="flex" flexDirection="row" >
-                        <Typography variant="h6" fontWeight="500">
-                            Wind
-                        </Typography>
-                        <Box marginLeft="110px">
-                            <img src={windIcon} alt="Image2" width='20px' />
-                        </Box>
+        <Box
+            height="165px"
+            width="260px"
+            bgcolor="#FFFF"
+            borderRadius="25px"
+            marginTop='10px'
+            marginLeft='20px'
+            display="flex"
+            flexDirection="column"
+            alignItems="center" // Center content horizontally
+            justifyContent="center" // Center content vertically
+        >
+            <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px' marginTop='15px'>
+                <Box display="flex" flexDirection="row" >
+                    <Typography variant="h5" fontWeight="500">
+                        Wind
+                    </Typography>
+                    <Box marginLeft="110px">
+                        <img src={windIcon} alt="Image2" width='30px' />
                     </Box>
-                    <Typography fontSize="15px" marginTop="10px">
-                        {windData ? (<div>
+                </Box>
+                <Typography fontSize="18px" marginTop="10px">
+                    {windData ? (
+                        <div>
                             {windData.map(function (a) {
                                 return <div key={a.id}>
                                     Speed: {a.data.wind_speed.value} m/s
                                 </div>
                             })}
-                        </div>) : error ? (
-                            <p>Wind...</p>
-                        ) :
-                            (
-                                <p>Wind...</p>
-                            )}
-                        {windData ? (<div>
+                        </div>
+                    ) : error ? (
+                        <p>Wind...</p>
+                    ) : (
+                        <p>Wind...</p>
+                    )}
+                    {windData ? (
+                        <div>
+                       
                             {windData.map(function (a) {
                                 return <div key={a.id}>
                                     Direction: {a.data.wind_direction.value} degree
                                 </div>
                             })}
-                        </div>) : error ? (
-                            <p>Wind...</p>
-                        ) :
-                            (
-                                <p>Wind...</p>
-                            )}
-                    </Typography>
-
-                </Box>
+                        </div>
+                    ) : error ? (
+                        <p>Wind...</p>
+                    ) : (
+                        <p>Wind...</p>
+                    )}
+                </Typography>
             </Box>
         </Box>
     );

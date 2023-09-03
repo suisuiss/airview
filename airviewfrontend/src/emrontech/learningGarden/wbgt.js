@@ -55,41 +55,52 @@ function LGWBGTInfo() {
     }, []);
 
     return (
-        <Box width="220px" bgcolor="#FFFF" borderRadius="25px" marginTop='20px' marginLeft='20px' display="flex" flexDirection="column">
-            <Box display="flex" flexDirection="row" paddingTop='10px' paddingLeft='20px' alignItems="center">
-                <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px'>
-                    <Box display="flex" flexDirection="row" >
-                        <Typography variant="h6" fontWeight="500">
-                            WBGT
-                        </Typography>
-                        <Box marginLeft="95px">
-                            <img src={wbgtIcon} alt="Image2" width='20px' />
-                        </Box>
+        <Box
+            height="165px"
+            width="260px"
+            bgcolor="#FFFF"
+            borderRadius="25px"
+            marginTop='10px'
+            marginLeft='20px'
+            display="flex"
+            flexDirection="column"
+            alignItems="center" // Center content horizontally
+            justifyContent="center" // Center content vertically
+        >
+            <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px' marginTop='15px'>
+                <Box display="flex" flexDirection="row" >
+                    <Typography variant="h5" fontWeight="500">
+                        WBGT
+                    </Typography>
+                    <Box marginLeft="95px">
+                        <img src={wbgtIcon} alt="Image2" width='30px' />
                     </Box>
-                    <Typography variant="h5" marginTop="10px">
-                        {wbgtData ? (<div>
+                </Box>
+                <Typography variant="h4" marginTop="10px">
+                    {wbgtData ? (
+                        <div>
                             {wbgtData.map(function (a) {
                                 return <div key={a.id}>
                                     {a.data.wbgt.value} °C
                                 </div>
                             })}
-                        </div>) : error ? (
-                            <p>WBGT...</p>
-                        ) :
-                            (
-                                <p>WBGT...</p>
-                            )}
-                    </Typography>
-                    <Typography variant="h7" marginBottom="10px">
-                        {wbgtData ? (
-                            <div>
-                                {wbgtWord(wbgtData[0].data.wbgt.value)}
-                            </div>
-                        ) : (
-                            <p>WBGT...</p>
-                        )}
-                    </Typography>
-                </Box>
+                        </div>
+                    ) : error ? (
+                        <p>WBGT...</p>
+                    ) : (
+                        <p>WBGT...</p>
+                    )}
+                </Typography>
+                <Typography variant="h7" marginBottom="10px">
+                    {wbgtData ? (
+                        <div>
+                            {wbgtWord(wbgtData[0].data.wbgt.value)}
+                        </div>
+                    ) : (
+                        <p>WBGT...</p>
+                    )}
+                </Typography>
+              
             </Box>
         </Box>
     );

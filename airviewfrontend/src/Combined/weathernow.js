@@ -6,7 +6,7 @@ import { Box, Typography } from '@mui/material';
 
 function WeatherNow() {
     return (
-        <Box bgcolor='#6F9FFF' marginLeft="30px" width='510px' borderRadius='25px' paddingLeft="30px" paddingTop='20px' paddingBottom='20px'>
+        <Box bgcolor='#6F9FFF' width='510px' borderRadius='25px' paddingLeft="30px" paddingTop='10px' paddingBottom='10px'>
 
             <Typography color='#FFFF'><Box display="flex" flexDirection="row" >
                 <Box display="flex" flexDirection="column" marginRight="170px">

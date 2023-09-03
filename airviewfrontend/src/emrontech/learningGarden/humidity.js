@@ -46,41 +46,49 @@ function LGHumidityInfo() {
     }, []);
 
     return (
-        <Box width="220px" bgcolor="#FFFF" borderRadius="25px" marginTop='20px' marginLeft='20px' display="flex" flexDirection="column">
-            <Box display="flex" flexDirection="row" paddingTop='10px' paddingLeft='20px' alignItems="center">
-                <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px'>
-                    <Box display="flex" flexDirection="row">
-                        <Typography variant="h6" fontWeight="500">
-                            Humidity
-                        </Typography>
-                        <Box marginLeft="80px">
-                            <img src={humidityIcon} alt="Image2" width='15px' />
-                        </Box>
+        <Box
+            height="165px"
+            width="260px"
+            bgcolor="#FFFF"
+            borderRadius="25px"
+            marginTop='10px'
+            marginLeft='20px'
+            display="flex"
+            flexDirection="column"
+            alignItems="center" // Center content horizontally
+            justifyContent="center" // Center content vertically
+        >
+            <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px' marginTop='15px'>
+                <Box display="flex" flexDirection="row">
+                    <Typography variant="h5" fontWeight="500">
+                        Humidity
+                    </Typography>
+                    <Box marginLeft="80px">
+                        <img src={humidityIcon} alt="Image2" width='15px' />
                     </Box>
-                    <Typography variant="h5" marginTop="10px">
-                        {humidityData ? (<div>
+                </Box>
+                <Typography variant="h4" marginTop="10px">
+                    {humidityData ? (
+                        <div>
                             {humidityData.map(function (a) {
-                                return <div key={a.id}>
-                                    {a.data.humid.value}%
-                                </div>
+                                return <div key={a.id}>{a.data.humid.value}%</div>
                             })}
-                        </div>) : error ? (
-                            <p>Humidity...</p>
-                        ) :
-                            (
-                                <p>Humidity...</p>
-                            )}
-                    </Typography>
-                    <Typography variant="h7" marginBottom="10px">
-                        {humidityData ? (
-                            <div>
-                                {humidityWord(humidityData[0].data.humid.value)}
-                            </div>
-                        ) : (
-                            <p>Humidity...</p>
-                        )}
-                    </Typography>
-                    <LinearProgress sx={{
+                        </div>
+                    ) : error ? (
+                        <p>Humidity...</p>
+                    ) : (
+                        <p>Humidity...</p>
+                    )}
+                </Typography>
+                <Typography variant="h7" marginBottom="10px">
+                    {humidityData ? (
+                        <div>{humidityWord(humidityData[0].data.humid.value)}</div>
+                    ) : (
+                        <p>Humidity...</p>
+                    )}
+                </Typography>
+                <LinearProgress
+                    sx={{
                         width: '100%',
                         height: '10px',
                         borderRadius: '25px', // Adjust the height of the progress bar
@@ -88,8 +96,10 @@ function LGHumidityInfo() {
                         '& .MuiLinearProgress-bar': {
                             backgroundColor: '#90D02F', // Set the progress bar color (green)
                         },
-                    }} variant="determinate" value={humidityData ? humidityData[0].data.humid.value : 0} />
-                </Box>
+                    }}
+                    variant="determinate"
+                    value={humidityData ? humidityData[0].data.humid.value : 0}
+                />
             </Box>
         </Box>
     );

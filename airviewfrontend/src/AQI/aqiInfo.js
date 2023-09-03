@@ -145,9 +145,9 @@ function CurrentAqiInfo() {
     }, []);
 
     return (
-        <Box display="flex" flexDirection="row" alignItems="center" bgcolor="#FFFF" width='420px' marginTop='20px' marginLeft='20px' paddingTop='10px' paddingLeft='40px' borderRadius="25px">
-            <Box display="flex" flexDirection="column" alignItems="center"  marginBottom='15px'>
-                <Box display="flex" flexDirection="row" alignItems="center"marginBottom="15px">
+        <Box display="flex" flexDirection="row" alignItems="center" bgcolor="#FFFF" width='540px' marginLeft='40px' paddingTop='15px'  borderRadius="25px">
+            <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px' paddingLeft="80px">
+                <Box display="flex" flexDirection="row" alignItems="center" marginBottom="15px">
                     <Box
                         width="15px"
                         height="15px"
@@ -156,21 +156,21 @@ function CurrentAqiInfo() {
 
                         bgcolor={circleColor}
                     />
-                    <Box borderRadius="25px" alignItems="center" paddingRight='20px'  >
-                        <Typography variant="h6" fontWeight="500">AQI</Typography>
-
-                        <Typography variant="h5" fontWeight="500">{aqiData ? aqiData.data.aqi : 'AQI...'}</Typography>
-
-                        <Typography variant="body1">{aqiData ? calculateAqiWord(aqiData.data.aqi) : 'AQI...'}</Typography>
+                    <Box borderRadius="25px" display="flex" flexDirection="column" alignItems="center" justifyContent="center">
+                        <Typography variant="h5" fontWeight="500">AQI</Typography>
+                        <Typography variant="h4" fontWeight="500">{aqiData ? aqiData.data.aqi : 'AQI...'}</Typography>
+                        
+                        <Typography variant="h6">{aqiData ? calculateAqiWord(aqiData.data.aqi) : 'AQI...'}</Typography>
                     </Box>
+
                 </Box>
-                <img src={imageSource1} alt="Image1" width='80px' />
+                <img src={imageSource1} alt="Image1" width='100px' />
                 <Typography fontSize='12px'>{aqiData ? getDesImg1(aqiData.data.aqi) : 'Loading Image Description'}</Typography>
             </Box>
-            <Divider orientation="vertical" flexItem style={{ marginTop: '10px', border: '0.1px solid #000', height: '70px', marginLeft: '30px' }} />
-            <Box display="flex" flexDirection="column" alignItems="center"  paddingLeft='60px' marginBottom='15px' >
-                <br /><LGPMInfo /><br />
-                <img src={imageSource2} alt="Image2" width='80px' />
+            <Divider orientation="vertical" flexItem style={{ marginTop: '10px', border: '0.1px solid #000', height: '100px', marginLeft: '30px' }} />
+            <Box display="flex" flexDirection="column" alignItems="center" paddingLeft='60px' marginBottom='15px' >
+                <br /><LGPMInfo /><br /><br/>
+                <img src={imageSource2} alt="Image2" width='100px'/>
                 <Typography fontSize='12px'>{aqiData ? getDesImg2(aqiData.data.aqi) : 'Loading Image Description'}</Typography>
             </Box>
             <Box />

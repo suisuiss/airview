@@ -59,41 +59,47 @@ function LGRainInfo() {
     }, []);
 
     return (
-        <Box width="220px" bgcolor="#FFFF" borderRadius="25px" marginTop='20px' marginLeft='20px' display="flex" flexDirection="column">
-            <Box display="flex" flexDirection="row" paddingTop='10px' paddingLeft='20px' alignItems="center">
-                <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px'>
-                    <Box display="flex" flexDirection="row" >
-                        <Typography variant="h6" fontWeight="500">
-                            Rain Fall
-                        </Typography>
-                        <Box marginLeft="80px">
-                            <img src={rainIcon} alt="Image2" width='20px' />
-                        </Box>
+        <Box
+        height="165px"
+            width="260px"
+            bgcolor="#FFFF"
+            borderRadius="25px"
+            marginTop='10px'
+            marginLeft='20px'
+            display="flex"
+            flexDirection="column"
+            alignItems="center" // Center content horizontally
+            justifyContent="center" // Center content vertically
+        >
+            <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px' marginTop='15px'>
+                <Box display="flex" flexDirection="row" >
+                    <Typography variant="h5" fontWeight="500">
+                        Rain Fall
+                    </Typography>
+                    <Box marginLeft="80px">
+                        <img src={rainIcon} alt="Image2" width='20px' />
                     </Box>
-                    <Typography variant="h5" marginTop="10px">
-                        {rainData ? (<div>
-                            {rainData.map(function (a) {
-                                return <div key={a.id}>
-                                    {a.data.rain_fall.value} mm
-                                </div>
-                            })}
-                        </div>) : error ? (
-                            <p>Rain...</p>
-                        ) :
-                            (
-                                <p>Rain...</p>
-                            )}
-                    </Typography>
-                    <Typography variant="h7" marginBottom="10px">
-                        {rainData ? (
-                            <div>
-                                {rainWord(rainData[0].data.rain_fall.value)}
-                            </div>
-                        ) : (
-                            <p>Rain...</p>
-                        )}
-                    </Typography>
                 </Box>
+                <Typography variant="h4" marginTop="10px">
+                    {rainData ? (
+                        <div>
+                            {rainData.map(function (a) {
+                                return <div key={a.id}>{a.data.rain_fall.value} mm</div>
+                            })}
+                        </div>
+                    ) : error ? (
+                        <p>Rain...</p>
+                    ) : (
+                        <p>Rain...</p>
+                    )}
+                </Typography>
+                <Typography variant="h7" marginBottom="10px">
+                    {rainData ? (
+                        <div>{rainWord(rainData[0].data.rain_fall.value)}</div>
+                    ) : (
+                        <p>Rain...</p>
+                    )}
+                </Typography>
             </Box>
         </Box>
     );

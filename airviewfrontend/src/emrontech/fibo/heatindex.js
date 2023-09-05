@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
-function LGHeatIndex() {
+function FBHeatIndex() {
     const [heatData, setHeatData] = useState(null);
     const [error, setError] = useState(null);
 
@@ -14,7 +14,7 @@ function LGHeatIndex() {
                 return response.json();
             })
             .then((data) => {
-                const filteredData = data.filter((item) => item.id === "1");
+                const filteredData = data.filter((item) => item.id === "2");
                 setHeatData(filteredData);
             })
             .catch((error) => {
@@ -58,4 +58,4 @@ function LGHeatIndex() {
     );
 }
 
-export default LGHeatIndex;
+export default FBHeatIndex;

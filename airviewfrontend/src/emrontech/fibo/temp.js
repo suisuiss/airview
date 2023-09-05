@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 
-function LGCurrentTemp() {
+function FBCurrentTemp() {
     const [tempData, setTempData] = useState(null);
     const [error, setError] = useState(null);
 
@@ -58,4 +58,4 @@ function LGCurrentTemp() {
     );
 }
 
-export default LGCurrentTemp;
+export default FBCurrentTemp;

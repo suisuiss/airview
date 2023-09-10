@@ -1,32 +1,35 @@
 import React from 'react';
-import LGDateTime from './LGDateTime';
-import WeatherNow from './weathernow';
-import WeatherForecastInfo from '../weather/weatherInfo';
 import { Box } from '@mui/material';
+import FBHumidityInfo from '../emrontech/fibo/humidity';
 import CurrentAqiInfo from '../AQI/aqiInfo';
-import LGHumidityInfo from '../emrontech/learningGarden/humidity';
-import LGRainInfo from '../emrontech/learningGarden/rainfall';
-import LGWBGTInfo from '../emrontech/learningGarden/wbgt';
-import LGWindInfo from '../emrontech/learningGarden/windspeed';
+import WeatherForecastInfo from '../weather/weatherInfo';
+import WeatherNow from '../Combined/weathernow';
+import FBRainInfo from '../emrontech/fibo/rainfall';
+import FBWBGTInfo from '../emrontech/fibo/wbgt';
+import FBWindInfo from '../emrontech/fibo/windspeed';
+import FiboDateTime from '../Combined/FiboDateTime';
 
-function Dashboard() {
+
+
+
+function FBDashboard() {
     return (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
             <Box marginTop="80px" display="flex" flexDirection="row">
                 <Box display="flex" flexDirection="column">
-                    <LGDateTime />
+                    <FiboDateTime />
                     <WeatherNow />
                     <WeatherForecastInfo />
                 </Box>
                 <Box display="flex" flexDirection="column" marginLeft="100px">
                     <CurrentAqiInfo />
                     <Box display="flex" flexDirection="row" marginLeft="20px">
-                        <LGHumidityInfo />
-                        <LGRainInfo />
+                        <FBHumidityInfo />
+                        <FBRainInfo />
                     </Box>
                     <Box display="flex" flexDirection="row" marginLeft="20px">
-                        <LGWBGTInfo />
-                        <LGWindInfo />
+                        <FBWBGTInfo />
+                        <FBWindInfo />
                     </Box>
                 </Box>
             </Box>
@@ -34,4 +37,4 @@ function Dashboard() {
     );
 }
 
-export default Dashboard;
+export default FBDashboard;

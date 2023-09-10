@@ -17,7 +17,7 @@ function FBWindInfo() {
                 return response.json();
             })
             .then((data) => {
-                const filteredData = data.filter((item) => item.id === "1");
+                const filteredData = data.filter((item) => item.id === "2");
                 setWindData(filteredData);
             })
             .catch((error) => {

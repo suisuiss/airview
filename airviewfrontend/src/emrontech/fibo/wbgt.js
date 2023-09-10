@@ -17,7 +17,7 @@ function FBWBGTInfo() {
                 return response.json();
             })
             .then((data) => {
-                const filteredData = data.filter((item) => item.id === "1");
+                const filteredData = data.filter((item) => item.id === "2");
                 setWbgtData(filteredData);
             })
             .catch((error) => {

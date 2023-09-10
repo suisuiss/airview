@@ -9,8 +9,8 @@ import LGStation from '../emrontech/learningGarden/station';
 import FiboStation from '../emrontech/fibo/station';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
-function LGLocation() {
-    const [selectedStation, setSelectedStation] = useState('LGStation');
+function FBLocation() {
+    const [selectedStation, setSelectedStation] = useState('FiboStation');
     const [selectedTime, setSelectedTime] = useState('none');
     const navigate = useNavigate(); // Use useNavigate for navigation
 
@@ -18,7 +18,7 @@ function LGLocation() {
         setSelectedStation(event.target.value);
         if (event.target.value === 'FiboStation') {
             navigate('/fbdashboard'); // Use navigate to go to the '/fbdashboard' route
-        } else if (event.target.value === 'LGStation'){
+        } else if (event.target.value === 'LGStation') {
             navigate('/');
         }
 
@@ -26,6 +26,9 @@ function LGLocation() {
 
     const handleChangeTime = (event) => {
         setSelectedTime(event.target.value);
+        if (event.target.value === '10mins') {
+            navigate('/fbfull'); // Use navigate to go to the '/fbdashboard' route
+        }
     };
 
     return (
@@ -93,4 +96,4 @@ function LGLocation() {
     );
 }
 
-export default LGLocation;
+export default FBLocation;

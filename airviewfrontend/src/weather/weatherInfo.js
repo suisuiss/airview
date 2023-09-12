@@ -12,7 +12,6 @@ function WeatherForecastInfo() {
     const [iconImages, setIconImages] = useState([]);
 
     const fetchData = () => {
-        // Fetch data from the meteosource API
         fetch('https://www.meteosource.com/api/v1/free/point?place_id=postal-th-10140&sections=current%2Chourly&language=en&units=auto&key=t66kz0c4o4d1oi27t84scaz7kiiof5id124hfdx9')
             .then((response) => response.json())
             .then((data) => {
@@ -24,18 +23,12 @@ function WeatherForecastInfo() {
     };
 
     useEffect(() => {
-        // Initial fetch
         fetchData();
-
-        // Fetch data every 5 minutes
-        const intervalId = setInterval(fetchData, 5 * 60 * 1000); // 5 minutes in milliseconds
-
-        // Clean up the interval on component unmount
+        const intervalId = setInterval(fetchData, 5 * 60 * 1000);
         return () => clearInterval(intervalId);
     }, []);
 
     useEffect(() => {
-        // Dynamically import icon images from 1.png to 36.png
         const importIconImages = async () => {
             const imports = [];
             for (let i = 1; i <= 36; i++) {
@@ -49,14 +42,11 @@ function WeatherForecastInfo() {
     }, []);
 
     const renderHourlyWeather1 = () => {
-        // Find the index of the current hour
         const currentHourIndex = weatherData?.hourly?.data.findIndex((data) => {
             const currentHour = new Date().getHours();
             const dataHour = new Date(data.date).getHours();
             return dataHour === currentHour + 1;
         });
-
-        // Render from the next hour if found, else render all
         const startIndex = currentHourIndex !== -1 ? currentHourIndex : 0;
 
         return (
@@ -67,7 +57,6 @@ function WeatherForecastInfo() {
                         {formatTime(data.date)}<br />
                         <img src={iconImages[data.icon - 1]} alt="Weather Icon" width='70px' />
                         {data.temperature}°C
-                        {/* AQI box add here */}
                         <Box borderRadius="10px" bgcolor="#90D02F" width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
                             <Typography fontSize='11px' color='#FFFF' style={{ textAlign: 'center' }}>AQI<br />
                                 0-50</Typography>
@@ -79,14 +68,11 @@ function WeatherForecastInfo() {
         );
     };
     const renderHourlyWeather2 = () => {
-        // Find the index of the current hour
         const currentHourIndex = weatherData?.hourly?.data.findIndex((data) => {
             const currentHour = new Date().getHours();
             const dataHour = new Date(data.date).getHours();
             return dataHour === currentHour + 1;
         });
-
-        // Render from the next hour if found, else render all
         const startIndex = currentHourIndex !== -1 ? currentHourIndex : 0;
 
         return (
@@ -96,7 +82,6 @@ function WeatherForecastInfo() {
                         {formatTime(data.date)}<br />
                         <img src={iconImages[data.icon - 1]} alt="Weather Icon" width='70px' />
                         {data.temperature}°C
-                        {/* AQI box add here */}
                         <Box borderRadius="10px" bgcolor="#90D02F" width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
                             <Typography fontSize='11px' color='#FFFF' style={{ textAlign: 'center' }}>
                                 AQI<br />
@@ -110,18 +95,22 @@ function WeatherForecastInfo() {
     };
 
     const renderHourlyWeatherRain = () => {
-        const isRaining = weatherData?.hourly?.data?.slice(1, 7).some(data => data.summary.includes("rain"));
+        const rainData = weatherData?.hourly?.data.find(data => data.summary.includes("rain") || data.summary.includes("thunderstorm"));
 
-        return (
-            <Box display="flex" justifyContent="center" alignItems="center" marginBottom="10px">
-                {isRaining && <img src={warning} alt="Warning Icon" width="20px" style={{ marginRight: '5px', }} />}
-                <Typography fontSize="14px">
-                    {isRaining ? "Raining expected around " : ""}
-                    {isRaining ? formatTime(weatherData?.hourly?.data[1].date) : ""}
-                </Typography>
-            </Box>
-        );
+        if (rainData) {
+            return (
+                <Box display="flex" justifyContent="center" alignItems="center" marginBottom="10px">
+                    <img src={warning} alt="Warning Icon" width="20px" style={{ marginRight: '5px', }} />
+                    <Typography fontSize="14px">
+                        Raining expected around {formatTime(rainData.date)}
+                    </Typography>
+                </Box>
+            );
+        } else {
+            return null;
+        }
     };
+
 
 
 
@@ -131,11 +120,11 @@ function WeatherForecastInfo() {
                 <Box>
                     {renderHourlyWeatherRain()}
                     {renderHourlyWeather1()}
-                    <Box height='10px'/>
+                    <Box height='10px' />
                     {renderHourlyWeather2()}
                 </Box>
             ) : (
-                <p>Loading weather data...</p>
+                <>Loading weather data...</>
             )}
         </Box>
     );

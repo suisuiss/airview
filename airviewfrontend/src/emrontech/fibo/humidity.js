@@ -36,12 +36,10 @@ function FBHumidityInfo() {
     }
 
     useEffect(() => {
-        fetchData(); // Initial fetch
+        fetchData();
 
-        // Fetch data every 5 minutes (300,000 milliseconds)
         const intervalId = setInterval(fetchData, 300000);
 
-        // Clean up the interval when the component unmounts
         return () => clearInterval(intervalId);
     }, []);
 
@@ -55,8 +53,8 @@ function FBHumidityInfo() {
             marginLeft='20px'
             display="flex"
             flexDirection="column"
-            alignItems="center" // Center content horizontally
-            justifyContent="center" // Center content vertically
+            alignItems="center"
+            justifyContent="center"
         >
             <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px' marginTop='15px'>
                 <Box display="flex" flexDirection="row">
@@ -75,26 +73,26 @@ function FBHumidityInfo() {
                             })}
                         </div>
                     ) : error ? (
-                        <p>Humidity...</p>
+                        <>Humidity...</>
                     ) : (
-                        <p>Humidity...</p>
+                        <>Humidity...</>
                     )}
                 </Typography>
                 <Typography variant="h7" marginBottom="10px">
                     {humidityData ? (
                         <div>{humidityWord(humidityData[0].data.humid.value)}</div>
                     ) : (
-                        <p>Humidity...</p>
+                        <>Humidity...</>
                     )}
                 </Typography>
                 <LinearProgress
                     sx={{
                         width: '100%',
                         height: '10px',
-                        borderRadius: '25px', // Adjust the height of the progress bar
-                        backgroundColor: '#ccc', // Set the background color
+                        borderRadius: '25px',
+                        backgroundColor: '#ccc',
                         '& .MuiLinearProgress-bar': {
-                            backgroundColor: '#90D02F', // Set the progress bar color (green)
+                            backgroundColor: '#90D02F',
                         },
                     }}
                     variant="determinate"

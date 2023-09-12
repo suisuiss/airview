@@ -24,40 +24,35 @@ function CurrentDate() {
     const year = date.getUTCFullYear();
 
     useEffect(() => {
-        // Function to update the date and time every midnight (GMT+7)
         const updateDate = () => {
             const now = new Date();
-            // Adjust the time zone offset for Bangkok (GMT+7)
-            const bangkokOffset = 7 * 60 * 60 * 1000; // 7 hours in milliseconds
+            const bangkokOffset = 7 * 60 * 60 * 1000;
             const bangkokTime = new Date(now.getTime() + bangkokOffset);
             setDate(bangkokTime);
         };
 
-        // Calculate the milliseconds until the next midnight in Bangkok
+
         const now = new Date();
-        const bangkokOffset = 7 * 60 * 60 * 1000; // 7 hours in milliseconds
+        const bangkokOffset = 7 * 60 * 60 * 1000; 
         const midnightBangkok = new Date(
             now.getFullYear(),
             now.getMonth(),
-            now.getDate() + 1, // Next day at midnight
-            0, // Hours
-            0, // Minutes
-            0, // Seconds
-            0 // Milliseconds
+            now.getDate() + 1, 
+            0, 
+            0, 
+            0,
+            0
         );
         const millisecondsUntilMidnight = midnightBangkok.getTime() - (now.getTime() + bangkokOffset);
 
-        // Initial call to set the date and time
         updateDate();
 
-        // Set up an interval to update the date at midnight in Bangkok
         const intervalId = setInterval(updateDate, millisecondsUntilMidnight);
 
-        // Clean up the interval when the component unmounts
+        
         return () => clearInterval(intervalId);
     }, []);
 
-    // Format the date and time as a string
     const formattedDate = `${dayOfWeek} ${dayOfMonth} ${month} ${year}`;
 
     return (

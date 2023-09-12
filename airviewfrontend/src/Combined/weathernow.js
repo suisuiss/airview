@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import HeatIndex from '../emrontech/learningGarden/heatIndex';
 import CurrentTemp from '../emrontech/learningGarden/temp';
 import WeatherInfo from '../weather/currentInfo';

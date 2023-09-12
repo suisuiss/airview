@@ -7,7 +7,7 @@ function LGWBGTInfo() {
     const [error, setError] = useState(null);
 
     const fetchData = () => {
-        const delayBetweenRequests = 300000; // 5 minutes in milliseconds
+        const delayBetweenRequests = 300000;
 
         fetch('https://asia-southeast1-hypnotic-spider-397306.cloudfunctions.net/function-2')
             .then((response) => {
@@ -23,8 +23,6 @@ function LGWBGTInfo() {
             .catch((error) => {
                 console.error('Error fetching WBGT data:', error);
                 setError(error);
-
-                // Retry the request after a delay
                 setTimeout(() => {
                     fetchData();
                 }, delayBetweenRequests);
@@ -45,12 +43,10 @@ function LGWBGTInfo() {
     }
 
     useEffect(() => {
-        fetchData(); // Initial fetch
+        fetchData();
 
-        // Fetch data every 5 minutes (300,000 milliseconds)
         const intervalId = setInterval(fetchData, 300000);
 
-        // Clean up the interval when the component unmounts
         return () => clearInterval(intervalId);
     }, []);
 
@@ -64,8 +60,8 @@ function LGWBGTInfo() {
             marginLeft='20px'
             display="flex"
             flexDirection="column"
-            alignItems="center" // Center content horizontally
-            justifyContent="center" // Center content vertically
+            alignItems="center"
+            justifyContent="center"
         >
             <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px' marginTop='15px'>
                 <Box display="flex" flexDirection="row" >
@@ -86,9 +82,9 @@ function LGWBGTInfo() {
                             })}
                         </div>
                     ) : error ? (
-                        <p>WBGT...</p>
+                        <>WBGT...</>
                     ) : (
-                        <p>WBGT...</p>
+                        <>WBGT...</>
                     )}
                 </Typography>
                 <Typography variant="h7" marginBottom="10px">
@@ -97,10 +93,10 @@ function LGWBGTInfo() {
                             {wbgtWord(wbgtData[0].data.wbgt.value)}
                         </div>
                     ) : (
-                        <p>WBGT...</p>
+                        <>WBGT...</>
                     )}
                 </Typography>
-              
+
             </Box>
         </Box>
     );

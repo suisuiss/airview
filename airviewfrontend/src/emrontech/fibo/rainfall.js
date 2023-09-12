@@ -7,7 +7,7 @@ function FBRainInfo() {
     const [error, setError] = useState(null);
 
     const fetchData = () => {
-        const delayBetweenRequests = 300000; // 5 minutes in milliseconds
+        const delayBetweenRequests = 300000;
 
         fetch('https://asia-southeast1-hypnotic-spider-397306.cloudfunctions.net/function-2')
             .then((response) => {
@@ -24,7 +24,6 @@ function FBRainInfo() {
                 console.error('Error fetching rain data:', error);
                 setError(error);
 
-                // Retry the request after a delay
                 setTimeout(() => {
                     fetchData();
                 }, delayBetweenRequests);
@@ -49,12 +48,10 @@ function FBRainInfo() {
     }
 
     useEffect(() => {
-        fetchData(); // Initial fetch
+        fetchData();
 
-        // Fetch data every 5 minutes (300,000 milliseconds)
         const intervalId = setInterval(fetchData, 300000);
 
-        // Clean up the interval when the component unmounts
         return () => clearInterval(intervalId);
     }, []);
 
@@ -68,8 +65,8 @@ function FBRainInfo() {
             marginLeft='20px'
             display="flex"
             flexDirection="column"
-            alignItems="center" // Center content horizontally
-            justifyContent="center" // Center content vertically
+            alignItems="center"
+            justifyContent="center"
         >
             <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px' marginTop='15px'>
                 <Box display="flex" flexDirection="row" >
@@ -88,16 +85,16 @@ function FBRainInfo() {
                             })}
                         </div>
                     ) : error ? (
-                        <p>Rain...</p>
+                        <>Rain...</>
                     ) : (
-                        <p>Rain...</p>
+                        <>Rain...</>
                     )}
                 </Typography>
                 <Typography variant="h7" marginBottom="10px">
                     {rainData ? (
                         <div>{rainWord(rainData[0].data.rain_fall.value)}</div>
                     ) : (
-                        <p>Rain...</p>
+                        <>Rain...</>
                     )}
                 </Typography>
             </Box>

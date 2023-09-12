@@ -1,39 +1,91 @@
-import React from 'react';
-import { Box } from '@mui/material';
-import FBHumidityInfo from '../emrontech/fibo/humidity';
-import CurrentAqiInfo from '../AQI/aqiInfo';
-import WeatherForecastInfo from '../weather/weatherInfo';
-import WeatherNow from '../Combined/weathernow';
-import FBRainInfo from '../emrontech/fibo/rainfall';
-import FBWBGTInfo from '../emrontech/fibo/wbgt';
-import FBWindInfo from '../emrontech/fibo/windspeed';
-import FiboDateTime from '../Combined/FiboDateTime';
-
-
-
+import React, { useState, useEffect } from 'react';
+import { Box, IconButton } from '@mui/material';
+import FullscreenIcon from '../assetIcon/tdesign_fullscreen-2.png';
+import FullscreenContent from './content/FBfull';
+import NormalContent from './content/FBnormal';
 
 function FBDashboard() {
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const iconStyle = {
+        position: 'fixed',
+        top: '10px',
+        right: '10px',
+        zIndex: 1000,
+    };
+
+    const toggleFullscreen = () => {
+        if (!isFullscreen) {
+            enterFullscreen();
+        } else {
+            exitFullscreen();
+        }
+    };
+
+    const enterFullscreen = () => {
+        const element = document.documentElement;
+
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.mozRequestFullScreen) { 
+            element.mozRequestFullScreen();
+        } else if (element.webkitRequestFullscreen) { 
+            element.webkitRequestFullscreen();
+        } else if (element.msRequestFullscreen) { 
+            element.msRequestFullscreen();
+        }
+
+        setIsFullscreen(true);
+    };
+
+    const exitFullscreen = () => {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.mozCancelFullScreen) { 
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) { 
+            document.webkitExitFullscreen();
+        } else if (document.msExitFullscreen) { 
+            document.msExitFullscreen();
+        }
+
+        setIsFullscreen(false);
+    };
+
+    useEffect(() => {
+        const handleFullscreenChange = () => {
+            if (document.fullscreenElement) {
+            
+                setIsFullscreen(true);
+            } else {
+            
+                setIsFullscreen(false);
+            }
+        };
+
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange); 
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange); 
+        document.addEventListener('MSFullscreenChange', handleFullscreenChange); 
+
+        return () => {
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+            document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+            document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+            document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
+        };
+    }, []);
+
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
-            <Box marginTop="80px" display="flex" flexDirection="row">
-                <Box display="flex" flexDirection="column">
-                    <FiboDateTime />
-                    <WeatherNow />
-                    <WeatherForecastInfo />
+        <Box>
+            {!isFullscreen && (
+                <Box style={iconStyle}>
+                    <IconButton onClick={toggleFullscreen}>
+                        <img src={FullscreenIcon} alt="Fullscreen Icon" width="40px" />
+                    </IconButton>
                 </Box>
-                <Box display="flex" flexDirection="column" marginLeft="100px">
-                    <CurrentAqiInfo />
-                    <Box display="flex" flexDirection="row" marginLeft="20px">
-                        <FBHumidityInfo />
-                        <FBRainInfo />
-                    </Box>
-                    <Box display="flex" flexDirection="row" marginLeft="20px">
-                        <FBWBGTInfo />
-                        <FBWindInfo />
-                    </Box>
-                </Box>
-            </Box>
-        </div>
+            )}
+            {isFullscreen ? <FullscreenContent /> : <NormalContent />}
+        </Box>
     );
 }
 

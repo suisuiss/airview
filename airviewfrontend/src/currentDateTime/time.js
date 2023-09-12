@@ -11,19 +11,17 @@ function CurrentTime() {
             const options = {
                 hour: 'numeric',
                 minute: '2-digit',
-                hour12: true, // Use AM/PM format
+                hour12: true,
                 timeZone: 'Asia/Bangkok',
             };
             const formattedBangkokTime = bangkokTime.toLocaleString('en-US', options);
             setFormattedTime(formattedBangkokTime);
         };
 
-        updateTime(); // Initial call to set the time
+        updateTime(); 
 
-        // Set up an interval to update the time every second for more accurate updates
         const intervalId = setInterval(updateTime, 1000);
 
-        // Clean up the interval when the component unmounts
         return () => clearInterval(intervalId);
     }, []);
 

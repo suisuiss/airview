@@ -24,12 +24,8 @@ function LGHeatIndex() {
     };
 
     useEffect(() => {
-        fetchData(); // Initial fetch
-
-        // Fetch data every 5 minutes (300,000 milliseconds)
+        fetchData();
         const intervalId = setInterval(fetchData, 300000);
-
-        // Clean up the interval when the component unmounts
         return () => clearInterval(intervalId);
     }, []);
 
@@ -50,9 +46,9 @@ function LGHeatIndex() {
                     })}
                 </div>
             ) : error ? (
-                <p>HI...</p>
+                <>HI...</>
             ) : (
-                <p>HI...</p>
+                <>HI...</>
             )}
         </Box>
     );

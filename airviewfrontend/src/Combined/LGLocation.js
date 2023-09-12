@@ -7,17 +7,17 @@ import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 import LGStation from '../emrontech/learningGarden/station';
 import FiboStation from '../emrontech/fibo/station';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 function LGLocation() {
     const [selectedStation, setSelectedStation] = useState('LGStation');
     const [selectedTime, setSelectedTime] = useState('none');
-    const navigate = useNavigate(); // Use useNavigate for navigation
+    const navigate = useNavigate();
 
     const handleChangeStation = (event) => {
         setSelectedStation(event.target.value);
         if (event.target.value === 'FiboStation') {
-            navigate('/fbdashboard'); // Use navigate to go to the '/fbdashboard' route
+            navigate('/fbdashboard');
         } else if (event.target.value === 'LGStation'){
             navigate('/');
         }
@@ -33,7 +33,7 @@ function LGLocation() {
             display="flex"
             flexDirection="column"
             alignItems="center"
-            width="270px" /* Adjust the width as needed */
+            width="270px"
         >
             <FormControl variant="outlined" fullWidth>
                 <Select
@@ -44,7 +44,7 @@ function LGLocation() {
                         PaperProps: {
                             style: {
                                 borderRadius: '15px',
-                                backgroundColor: '#F0F5FF' // Apply border radius to the menu
+                                backgroundColor: '#F0F5FF'
                             },
                         },
                     }}
@@ -65,7 +65,7 @@ function LGLocation() {
                                         PaperProps: {
                                             style: {
                                                 borderRadius: '15px',
-                                                backgroundColor: '#FFFFF' // Apply border radius to the menu
+                                                backgroundColor: '#FFFFF'
                                             },
                                         },
                                     }}
@@ -84,7 +84,7 @@ function LGLocation() {
                 borderRadius="25px"
                 paddingTop="10px"
                 paddingLeft="30px"
-                width="100%" /* Adjust the width as needed */
+                width="100%"
             >
                 <Typography variant="h5" fontWeight="600" color="#363E64">KMUTT, Bangkok</Typography>
                 <Box mt={2}></Box>

@@ -24,12 +24,10 @@ function FBHeatIndex() {
     };
 
     useEffect(() => {
-        fetchData(); // Initial fetch
+        fetchData();
 
-        // Fetch data every 5 minutes (300,000 milliseconds)
         const intervalId = setInterval(fetchData, 300000);
 
-        // Clean up the interval when the component unmounts
         return () => clearInterval(intervalId);
     }, []);
 
@@ -50,9 +48,9 @@ function FBHeatIndex() {
                     })}
                 </div>
             ) : error ? (
-                <p>HI...</p>
+                <>HI...</>
             ) : (
-                <p>HI...</p>
+                <>HI...</>
             )}
         </Box>
     );

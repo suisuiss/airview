@@ -6,7 +6,7 @@ function FBCurrentTemp() {
     const [error, setError] = useState(null);
 
     const fetchData = () => {
-        const delayBetweenRequests = 300000; // 5 minutes in milliseconds
+        const delayBetweenRequests = 300000;
 
         fetch('https://asia-southeast1-hypnotic-spider-397306.cloudfunctions.net/function-2')
             .then((response) => {
@@ -23,7 +23,6 @@ function FBCurrentTemp() {
                 console.error('Error fetching Temp data:', error);
                 setError(error);
 
-                // Retry the request after a delay
                 setTimeout(() => {
                     fetchData();
                 }, delayBetweenRequests);
@@ -31,12 +30,10 @@ function FBCurrentTemp() {
     };
 
     useEffect(() => {
-        fetchData(); // Initial fetch
+        fetchData();
 
-        // Fetch data every 5 minutes (300,000 milliseconds)
         const intervalId = setInterval(fetchData, 300000);
 
-        // Clean up the interval when the component unmounts
         return () => clearInterval(intervalId);
     }, []);
 
@@ -49,10 +46,10 @@ function FBCurrentTemp() {
                     </Box>
                 })}
             </Box>) : error ? (
-                <p>Temp...</p>
+                <>Temp...</>
             ) :
                 (
-                    <p>Temp...</p>
+                    <>Temp...</>
                 )}
         </Box>
     );

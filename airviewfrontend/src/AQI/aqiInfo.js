@@ -17,7 +17,6 @@ function CurrentAqiInfo() {
     const [error, setError] = useState(null);
 
     const fetchDataWithRetry = () => {
-        // Fetch data from the airvisual API
         fetch('http://api.waqi.info/feed/bangkok/?token=93251e1c93612cabd3b0bd3214148bb64039c4ec')
             .then((response) => {
                 if (!response.ok) {
@@ -31,11 +30,9 @@ function CurrentAqiInfo() {
             .catch((error) => {
                 console.error('Error fetching AQI data:', error);
                 setError(error);
-
-                // Retry the request after a delay (e.g., 5 seconds)
                 setTimeout(() => {
                     fetchDataWithRetry();
-                }, 60000); // 5 seconds
+                }, 60000); 
             });
     };
 
@@ -57,24 +54,24 @@ function CurrentAqiInfo() {
 
     let circleColor = '';
     if (aqiData && aqiData.data.aqi >= 0 && aqiData.data.aqi <= 50) {
-        circleColor = '#ABD162'; // Green
+        circleColor = '#ABD162'; 
     } else if (aqiData && aqiData.data.aqi <= 100) {
-        circleColor = '#F7D460'; // Yellow
+        circleColor = '#F7D460'; 
     } else if (aqiData && aqiData.data.aqi <= 150) {
-        circleColor = '#FC9956'; // Orange
+        circleColor = '#FC9956'; 
     } else if (aqiData && aqiData.data.aqi <= 200) {
-        circleColor = '#F6676B'; // Red
+        circleColor = '#F6676B'; 
     } else if (aqiData && aqiData.data.aqi <= 300) {
-        circleColor = '#A37DB8'; // Purple
+        circleColor = '#A37DB8'; 
     } else {
-        circleColor = '#A07684'; // Gray
+        circleColor = '#A07684';
     }
 
     const getImageSource1 = (aqiValue) => {
         if (aqiValue >= 0 && aqiValue <= 50) {
-            return good501; // Return the image path
+            return good501; 
         } else if (aqiValue <= 100) {
-            return moderate1001; // Return the image path
+            return moderate1001; 
         } else if (aqiValue <= 150) {
             return uns1501;
         } else if (aqiValue <= 200) {
@@ -88,9 +85,9 @@ function CurrentAqiInfo() {
 
     const getDesImg1 = (aqiValue) => {
         if (aqiValue >= 0 && aqiValue <= 50) {
-            return "Enjoy outdoor activities"; // Return the image path
+            return "Enjoy outdoor activities"; 
         } else if (aqiValue <= 100) {
-            return "Avoid outdoor acitivities"; // Return the image path
+            return "Avoid outdoor acitivities"; 
         } else if (aqiValue <= 150) {
             return "Reduce outdoor activities";
         } else if (aqiValue <= 200) {
@@ -104,9 +101,9 @@ function CurrentAqiInfo() {
 
     const getDesImg2 = (aqiValue) => {
         if (aqiValue >= 0 && aqiValue <= 50) {
-            return "Open Windows for fresh air"; // Return the image path
+            return "Open Windows for fresh air";
         } else if (aqiValue <= 100) {
-            return "Wear a mask"; // Return the image path
+            return "Wear a mask"; 
         } else if (aqiValue <= 150) {
             return "Wear a mask";
         } else if (aqiValue <= 200) {
@@ -120,9 +117,9 @@ function CurrentAqiInfo() {
 
     const getImageSource2 = (aqiValue) => {
         if (aqiValue >= 0 && aqiValue <= 50) {
-            return good502; // Return the image path
+            return good502; 
         } else if (aqiValue <= 100) {
-            return moderate1002; // Return the image path
+            return moderate1002; 
         } else if (aqiValue <= 150) {
             return uns1502;
         } else if (aqiValue <= 200) {
@@ -134,13 +131,13 @@ function CurrentAqiInfo() {
         }
     };
 
-    // Get the image source based on the AQI value
+    
     const imageSource1 = getImageSource1(aqiData ? aqiData.data.aqi : null);
     const imageSource2 = getImageSource2(aqiData ? aqiData.data.aqi : null);
 
     useEffect(() => {
-        fetchDataWithRetry(); // Initial fetch
-        const intervalId = setInterval(fetchDataWithRetry, 60000); // Set up an interval to fetch data every minute
+        fetchDataWithRetry();
+        const intervalId = setInterval(fetchDataWithRetry, 60000);
         return () => clearInterval(intervalId);
     }, []);
 

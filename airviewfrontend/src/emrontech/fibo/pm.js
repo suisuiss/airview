@@ -24,12 +24,10 @@ function FBPMInfo() {
     };
 
     useEffect(() => {
-        fetchData(); // Initial fetch
+        fetchData(); 
 
-        // Fetch data every 5 minutes (300,000 milliseconds)
         const intervalId = setInterval(fetchData, 300000);
 
-        // Clean up the interval when the component unmounts
         return () => clearInterval(intervalId);
     }, []);
 
@@ -44,10 +42,10 @@ function FBPMInfo() {
                         </div>
                     })}
                 </div>) : error ? (
-                    <p>Loading PM data...</p>
+                    <>Loading PM data...</>
                 ) :
                     (
-                        <p>Loading PM data...</p>
+                        <>Loading PM data...</>
                     )}
             </Typography>
         </div>

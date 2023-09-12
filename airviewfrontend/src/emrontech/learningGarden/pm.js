@@ -24,12 +24,8 @@ function LGPMInfo() {
     };
 
     useEffect(() => {
-        fetchData(); // Initial fetch
-
-        // Fetch data every 5 minutes (300,000 milliseconds)
+        fetchData();
         const intervalId = setInterval(fetchData, 300000);
-
-        // Clean up the interval when the component unmounts
         return () => clearInterval(intervalId);
     }, []);
 
@@ -44,10 +40,10 @@ function LGPMInfo() {
                         </div>
                     })}
                 </div>) : error ? (
-                    <p>Loading PM data...</p>
+                    <>Loading PM data...</>
                 ) :
                     (
-                        <p>Loading PM data...</p>
+                        <>Loading PM data...</>
                     )}
             </Typography>
         </div>

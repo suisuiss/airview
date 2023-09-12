@@ -1,15 +1,11 @@
 import React from 'react';
-import WeatherInfo from './weather/weatherInfo';
-import AqiInfo from './AQI/aqiInfo';
-import HumidityInfo from './emrontech/humidity';
+import AnalDesk from './DesktopAnalytics/AnalDesk';
 
 function App() {
   return (
 
     <div className="App">
-      <AqiInfo />
-      <HumidityInfo />
-      <WeatherInfo />
+      <AnalDesk />
     </div>
 
 

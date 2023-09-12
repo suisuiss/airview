@@ -1,18 +1,18 @@
 import React from 'react';
-import WeatherInfo from './weather/weatherInfo';
-import AqiInfo from './AQI/aqiInfo';
-import HumidityInfo from './emrontech/humidity';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import LGDashboard from './dashboard/LGdashboard';
+import FBDashboard from './dashboard/FBdashboard';
+
 
 function App() {
   return (
-
-    <div className="App">
-      <AqiInfo />
-      <HumidityInfo />
-      <WeatherInfo />
-    </div>
-
-
+    <Router>
+      <Routes>
+        <Route path="/" element={<LGDashboard />} />
+        <Route path="fbdashboard" element={<FBDashboard />} />
+        
+      </Routes>
+    </Router>
   );
 }
 

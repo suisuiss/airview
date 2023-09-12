@@ -1,9 +1,17 @@
+import { Box, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
+import warning from '../assetIcon/warning.png'
 
-function WeatherInfo() {
+function formatTime(dateString) {
+    const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+    return new Date(dateString).toLocaleTimeString('en-US', options);
+}
+
+function WeatherForecastInfo() {
     const [weatherData, setWeatherData] = useState(null);
-    useEffect(() => {
-        // Fetch data from the meteosource API
+    const [iconImages, setIconImages] = useState([]);
+
+    const fetchData = () => {
         fetch('https://www.meteosource.com/api/v1/free/point?place_id=postal-th-10140&sections=current%2Chourly&language=en&units=auto&key=t66kz0c4o4d1oi27t84scaz7kiiof5id124hfdx9')
             .then((response) => response.json())
             .then((data) => {
@@ -11,38 +19,115 @@ function WeatherInfo() {
             })
             .catch((error) => {
                 console.error('Error fetching Meteosource data:', error);
-            })
-    }, []);
-
-    const renderHourlyWeather = () => {
-        return weatherData.hourly.data.slice(1, 7).map((data, index) => (
-            <div key={index}>
-                Time: {data.date}<br />
-                Temperature: {data.temperature}°C<br />
-                Weather: {data.weather}
-                <br /><br />
-            </div>
-        ));
+            });
     };
 
+    useEffect(() => {
+        fetchData();
+        const intervalId = setInterval(fetchData, 5 * 60 * 1000);
+        return () => clearInterval(intervalId);
+    }, []);
+
+    useEffect(() => {
+        const importIconImages = async () => {
+            const imports = [];
+            for (let i = 1; i <= 36; i++) {
+                const image = await import(`../assetWeather/${i}.png`);
+                imports.push(image.default);
+            }
+            setIconImages(imports);
+        };
+
+        importIconImages();
+    }, []);
+
+    const renderHourlyWeather1 = () => {
+        const currentHourIndex = weatherData?.hourly?.data.findIndex((data) => {
+            const currentHour = new Date().getHours();
+            const dataHour = new Date(data.date).getHours();
+            return dataHour === currentHour + 1;
+        });
+        const startIndex = currentHourIndex !== -1 ? currentHourIndex : 0;
+
+        return (
+            <Box style={{ display: "flex", flexDirection: "row" }}>
+                {weatherData?.hourly?.data?.slice(startIndex, startIndex + 3).map((data, index) => (
+                    <Box key={index} display="flex" flexDirection="column" alignItems="center" paddingLeft="40px" paddingRight="40px">
+
+                        {formatTime(data.date)}<br />
+                        <img src={iconImages[data.icon - 1]} alt="Weather Icon" width='70px' />
+                        {data.temperature}°C
+                        <Box borderRadius="10px" bgcolor="#90D02F" width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
+                            <Typography fontSize='11px' color='#FFFF' style={{ textAlign: 'center' }}>AQI<br />
+                                0-50</Typography>
+                        </Box>
+
+                    </Box>
+                ))}
+            </Box>
+        );
+    };
+    const renderHourlyWeather2 = () => {
+        const currentHourIndex = weatherData?.hourly?.data.findIndex((data) => {
+            const currentHour = new Date().getHours();
+            const dataHour = new Date(data.date).getHours();
+            return dataHour === currentHour + 1;
+        });
+        const startIndex = currentHourIndex !== -1 ? currentHourIndex : 0;
+
+        return (
+            <Box style={{ display: "flex", flexDirection: "row" }}>
+                {weatherData?.hourly?.data?.slice(startIndex + 3, startIndex + 6).map((data, index) => (
+                    <Box key={index} display="flex" flexDirection="column" alignItems="center" paddingLeft="40px" paddingRight="40px" >
+                        {formatTime(data.date)}<br />
+                        <img src={iconImages[data.icon - 1]} alt="Weather Icon" width='70px' />
+                        {data.temperature}°C
+                        <Box borderRadius="10px" bgcolor="#90D02F" width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
+                            <Typography fontSize='11px' color='#FFFF' style={{ textAlign: 'center' }}>
+                                AQI<br />
+                                0-50
+                            </Typography>
+                        </Box>
+                    </Box>
+                ))}
+            </Box>
+        );
+    };
+
+    const renderHourlyWeatherRain = () => {
+        const rainData = weatherData?.hourly?.data.find(data => data.summary.includes("rain") || data.summary.includes("thunderstorm"));
+
+        if (rainData) {
+            return (
+                <Box display="flex" justifyContent="center" alignItems="center" marginBottom="10px">
+                    <img src={warning} alt="Warning Icon" width="20px" style={{ marginRight: '5px', }} />
+                    <Typography fontSize="14px">
+                        Raining expected around {formatTime(rainData.date)}
+                    </Typography>
+                </Box>
+            );
+        } else {
+            return null;
+        }
+    };
+
+
+
+
     return (
-        <div>
+        <Box bgcolor='#FFFF' marginTop="10px" width='540px' borderRadius='25px' paddingTop='10px' paddingBottom='10px' display="flex" flexDirection="column" alignItems="center">
             {weatherData ? (
-                <div>
-                    <h2>Weather Forcast</h2>
-                    <p>Temperature: {weatherData.current.temperature}°C</p>
-                    <p>Windspeed: {weatherData.current.wind.speed}</p>
-                    {renderHourlyWeather()}
-                </div>
+                <Box>
+                    {renderHourlyWeatherRain()}
+                    {renderHourlyWeather1()}
+                    <Box height='10px' />
+                    {renderHourlyWeather2()}
+                </Box>
             ) : (
-                <p>Loading weather data...</p>
+                <>Loading weather data...</>
             )}
-
-        </div>
+        </Box>
     );
-
 }
 
-
-
-export default WeatherInfo;
+export default WeatherForecastInfo;

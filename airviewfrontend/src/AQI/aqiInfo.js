@@ -42,7 +42,7 @@ function CurrentAqiInfo() {
         } else if (aqiValue <= 100) {
             return "Moderate";
         } else if (aqiValue <= 150) {
-            return "Unhealthy for sensitive group";
+            return "Unhealthy";
         } else if (aqiValue <= 200) {
             return "Unhealthy";
         } else if (aqiValue <= 300) {

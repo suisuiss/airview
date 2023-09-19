@@ -3,20 +3,17 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid'; // Import Grid
+import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 import LGStation from '../emrontech/learningGarden/station';
 import FiboStation from '../emrontech/fibo/station';
-import { useNavigate } from 'react-router-dom';
 import FBFullscreenContent from '../dashboard/content/FBfull';
 import LGFullscreenContent from '../dashboard/content/LGfull';
 
 function FBLocation() {
     const [selectedStation, setSelectedStation] = useState('FiboStation');
     const [selectedTime, setSelectedTime] = useState('none');
-    const navigate = useNavigate();
     const [isFullScreen, setIsFullScreen] = useState(false);
-    const [isSwitching, setIsSwitching] = useState(false);
 
     const toggleFullScreen = () => {
         if (!document.fullscreenElement) {
@@ -30,39 +27,26 @@ function FBLocation() {
 
     const handleChangeStation = (event) => {
         setSelectedStation(event.target.value);
-        if (event.target.value === 'FiboStation') {
-            navigate('/fbdashboard');
-        } else if (event.target.value === 'LGStation') {
-            navigate('/');
-        }
     };
 
     const handleChangeTime = (event) => {
         setSelectedTime(event.target.value);
-        setIsSwitching(false); // Reset the switching state when changing time
+        if (event.target.value === '10mins') {
+            toggleFullScreen();
+        }
     };
 
     useEffect(() => {
-        let intervalId;
-
-        if (selectedTime === '10mins' && !isSwitching) {
-            toggleFullScreen();
-            setIsSwitching(true);
-
-            // Schedule switching between FB and LG every 5 seconds
-            intervalId = setInterval(() => {
-                // Toggle between FB and LG content
-                setIsSwitching((prevSwitch) => !prevSwitch);
+        if (isFullScreen && selectedTime === '10mins') {
+            let intervalId = setInterval(() => {
+                toggleFullScreen();
             }, 5000);
-        } else {
-            setIsFullScreen(false);
-            clearInterval(intervalId);
-        }
 
-        return () => {
-            clearInterval(intervalId);
-        };
-    }, [selectedTime, isSwitching]);
+            return () => {
+                clearInterval(intervalId);
+            };
+        }
+    }, [isFullScreen, selectedTime]);
 
     useEffect(() => {
         if (isFullScreen) {
@@ -191,8 +175,8 @@ function FBLocation() {
                 <Box mt={2}></Box>
             </Box>
 
-            {/* Conditional rendering of FBFullscreenContent or LGFullscreenContent based on isSwitching */}
-            {isSwitching ? (
+            {/* Conditional rendering of FBFullscreenContent or LGFullscreenContent based on isFullScreen */}
+            {isFullScreen ? (
                 selectedStation === 'FiboStation' ? (
                     <FBFullscreenContent />
                 ) : (

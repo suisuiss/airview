@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-function AqiInfo() {
-    const [aqiData, setAqiData] = useState(null);
+function Pm10Info(props) {
+    const [pm10Data, setPm10Data] = useState(null);
     const [error, setError] = useState(null);
-
     const fetchDataWithRetry = () => {
         // Fetch data from the airvisual API
-        fetch('http://api.airvisual.com/v2/nearest_city?lat=13.651502404577384&lon=100.49644279537901&key=c931c788-4515-48dc-8c74-1fd47b9817f7')
+        fetch('https://asia-southeast1-hypnotic-spider-397306.cloudfunctions.net/function-2')
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
@@ -14,10 +13,10 @@ function AqiInfo() {
                 return response.json();
             })
             .then((data) => {
-                setAqiData(data);
+                setPm10Data(data);
             })
             .catch((error) => {
-                console.error('Error fetching AQI data:', error);
+                console.error('Error fetching PM10 data:', error);
                 setError(error);
 
                 // Retry the request after a delay (e.g., 5 seconds)
@@ -33,18 +32,20 @@ function AqiInfo() {
 
     return (
         <div>
-            {aqiData ? (
-                <div>
-                    AQI<br /> 
-                    {aqiData.data.current.pollution.aqius}
-                </div>
-            ) : error ? (
-                <p>Loading AQI data...</p>
-            ) : (
-                <p>Loading AQI data...</p>
-            )}
+            {pm10Data ? (<div>
+                    {props.location === 'LearningGarden' && <div>PM 10 : {pm10Data[0].data.pm10.value}  &#181;g/m<sup>3</sup></div>}
+                    {props.location === 'FIBO' && <div>PM 10 : {pm10Data[1].data.pm10.value}  &#181;g/m<sup>3</sup></div>}
+            </div>) : error ? (
+                <p>Loading PM 10 data...</p>
+            ) :
+                (
+                    <p>Loading PM 10 data...</p>
+                )}
         </div>
     );
+
 }
 
-export default AqiInfo;
+
+
+export default Pm10Info;

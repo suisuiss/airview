@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
 import './AnalDesk.css'
+import AqiInfo from '../AQI/aqiInfo'
+import Pm25Info from '../emrontech/pm25';
+import Pm10Info from '../emrontech/pm10';
 const AnalDesk = () => {
-  const [isActive, setIsActive] = useState("LearningGarden");
+  const [locations, setLocation] = useState("LearningGarden");
+  const setLearningGarden = () => {
+    setLocation("LearningGarden");
+  }
+  const setFibo = () => {
+    setLocation("FIBO");
+  }
 
   return (
     <div>
@@ -10,18 +19,25 @@ const AnalDesk = () => {
       </div>
 
       <div className='StationButtonContainer'> {/* Button for choosing station graph */}
-        <button className={isActive === 'LearningGarden' ? 'StationButton' : 'StationButton StationButtonContainerNA'}>
+        <button className={locations === 'LearningGarden' ? 'StationButton' : 'StationButton StationButtonContainerNA'} onClick={setLearningGarden}>
           Learning Garden
         </button>
-        <button className={isActive === 'FIBO' ? 'StationButton' : 'StationButton StationButtonContainerNA'}>
+        <button className={locations === 'FIBO' ? 'StationButton' : 'StationButton StationButtonContainerNA'} onClick={setFibo}>
           FIBO
         </button>
       </div>
 
       <div className='GraphAndInfoContainer'>
-        <div class="grid-item item1">1</div>
-        <div class="grid-item item2">2</div>
-        <div class="grid-item item3">3</div>  
+        <div className="grid-item item1"> 
+          <div style={{fontSize: '40px', lineHeight: '1.4' }}>
+            <AqiInfo/>
+          </div>
+          <div style={{fontSize: '27px', paddingTop:'30px' }}>
+            <Pm25Info location={locations}/> <Pm10Info location={locations}/>
+          </div>
+        </div>
+        <div className="grid-item item2"></div>
+        <div className="grid-item item3">3</div>
       </div>
     </div>
   )

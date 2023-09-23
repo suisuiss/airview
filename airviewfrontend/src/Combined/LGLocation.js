@@ -7,26 +7,16 @@ import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
 import LGStation from '../emrontech/learningGarden/station';
 import FiboStation from '../emrontech/fibo/station';
-import { useNavigate } from 'react-router-dom';
 import FBFullscreenContent from '../dashboard/content/FBfull';
 import LGFullscreenContent from '../dashboard/content/LGfull';
+import { useNavigate } from 'react-router-dom';
 
 function LGLocation() {
     const [selectedStation, setSelectedStation] = useState('LGStation');
     const [selectedTime, setSelectedTime] = useState('none');
-    const navigate = useNavigate();
     const [isFullScreen, setIsFullScreen] = useState(false);
-    const [content, setContent] = useState(<LGFullscreenContent />);
-
-    const toggleFullScreen = () => {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch((err) => {
-                console.log(err.message);
-            });
-        } else {
-            document.exitFullscreen();
-        }
-    };
+    const [isSwitching, setIsSwitching] = useState(false);
+    const navigate = useNavigate();
 
     const handleChangeStation = (event) => {
         setSelectedStation(event.target.value);
@@ -39,39 +29,64 @@ function LGLocation() {
 
     const handleChangeTime = (event) => {
         setSelectedTime(event.target.value);
+        if (event.target.value === '10mins') {
+            toggleFullScreen();
+        }
+        else if (event.target.value === '20mins') {
+            toggleFullScreen();
+        }
+    };
+
+    const toggleFullScreen = () => {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch((err) => {
+                console.log(err.message);
+            });
+        } else {
+            document.exitFullscreen();
+        }
     };
 
     useEffect(() => {
-        if (selectedTime === '10mins') {
-            toggleFullScreen();
-            setIsFullScreen(true);
-            const contentSwitchInterval = setInterval(() => {
-                setContent((prevContent) =>
-                    prevContent === <FBFullscreenContent /> ? <LGFullscreenContent /> : <FBFullscreenContent />
-                );
-            }, 5000); // Switch content every 5 seconds
-            return () => {
-                clearInterval(contentSwitchInterval);
-            };
-        } else {
-            setIsFullScreen(false);
-        }
-    }, [selectedTime]);
+        const handleFullScreenChange = () => {
+            setIsFullScreen(!!document.fullscreenElement);
+        };
 
-    useEffect(() => {
         if (isFullScreen) {
             document.addEventListener('fullscreenchange', handleFullScreenChange);
         } else {
             document.removeEventListener('fullscreenchange', handleFullScreenChange);
         }
+
         return () => {
             document.removeEventListener('fullscreenchange', handleFullScreenChange);
         };
     }, [isFullScreen]);
 
-    const handleFullScreenChange = () => {
-        setIsFullScreen(!!document.fullscreenElement);
-    };
+    useEffect(() => {
+        let switchingIntervalId;
+        if (selectedTime === '10mins' && isFullScreen) {
+            switchingIntervalId = setInterval(() => {
+                setIsSwitching((prevIsSwitching) => !prevIsSwitching);
+            }, 600000);
+
+            console.log("isSwitching toggled to:", isSwitching);
+
+            return () => {
+                clearInterval(switchingIntervalId);
+            };
+        } else if (selectedTime === '20mins' && isFullScreen) {
+            switchingIntervalId = setInterval(() => {
+                setIsSwitching((prevIsSwitching) => !prevIsSwitching);
+            }, 600000 * 2);
+
+            console.log("isSwitching toggled to:", isSwitching);
+
+            return () => {
+                clearInterval(switchingIntervalId);
+            };
+        }
+    }, [selectedTime, isFullScreen]);
 
     return (
         <Box
@@ -184,8 +199,10 @@ function LGLocation() {
                 <Box mt={2}></Box>
             </Box>
 
-            {/* Conditional rendering of content based on fullscreen mode */}
-            {isFullScreen && content}
+            {/* Conditional rendering of FBFullscreenContent or LGFullscreenContent based on isFullScreen */}
+            {selectedTime === '10mins' ? (
+                isSwitching ? <FBFullscreenContent /> : <LGFullscreenContent />
+            ) : null}
         </Box>
     );
 }

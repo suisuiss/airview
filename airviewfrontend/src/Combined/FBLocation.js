@@ -9,11 +9,33 @@ import LGStation from '../emrontech/learningGarden/station';
 import FiboStation from '../emrontech/fibo/station';
 import FBFullscreenContent from '../dashboard/content/FBfull';
 import LGFullscreenContent from '../dashboard/content/LGfull';
+import { useNavigate } from 'react-router-dom';
 
 function FBLocation() {
     const [selectedStation, setSelectedStation] = useState('FiboStation');
     const [selectedTime, setSelectedTime] = useState('none');
     const [isFullScreen, setIsFullScreen] = useState(false);
+    const [isSwitching, setIsSwitching] = useState(false);
+    const navigate = useNavigate();
+
+    const handleChangeStation = (event) => {
+        setSelectedStation(event.target.value);
+        if (event.target.value === 'FiboStation') {
+            navigate('/fbdashboard');
+        } else if (event.target.value === 'LGStation') {
+            navigate('/');
+        }
+    };
+
+    const handleChangeTime = (event) => {
+        setSelectedTime(event.target.value);
+        if (event.target.value === '10mins') {
+            toggleFullScreen();
+        }
+        else if (event.target.value === '20mins') {
+            toggleFullScreen();
+        }
+    };
 
     const toggleFullScreen = () => {
         if (!document.fullscreenElement) {
@@ -25,30 +47,11 @@ function FBLocation() {
         }
     };
 
-    const handleChangeStation = (event) => {
-        setSelectedStation(event.target.value);
-    };
-
-    const handleChangeTime = (event) => {
-        setSelectedTime(event.target.value);
-        if (event.target.value === '10mins') {
-            toggleFullScreen();
-        }
-    };
-
     useEffect(() => {
-        if (isFullScreen && selectedTime === '10mins') {
-            let intervalId = setInterval(() => {
-                toggleFullScreen();
-            }, 5000);
+        const handleFullScreenChange = () => {
+            setIsFullScreen(!!document.fullscreenElement);
+        };
 
-            return () => {
-                clearInterval(intervalId);
-            };
-        }
-    }, [isFullScreen, selectedTime]);
-
-    useEffect(() => {
         if (isFullScreen) {
             document.addEventListener('fullscreenchange', handleFullScreenChange);
         } else {
@@ -60,9 +63,30 @@ function FBLocation() {
         };
     }, [isFullScreen]);
 
-    const handleFullScreenChange = () => {
-        setIsFullScreen(!!document.fullscreenElement);
-    };
+    useEffect(() => {
+        let switchingIntervalId;
+        if (selectedTime === '10mins' && isFullScreen) {
+            switchingIntervalId = setInterval(() => {
+                setIsSwitching((prevIsSwitching) => !prevIsSwitching);
+            }, 600000);
+
+            console.log("isSwitching toggled to:", isSwitching);
+
+            return () => {
+                clearInterval(switchingIntervalId);
+            };
+        } else if (selectedTime === '20mins' && isFullScreen) {
+            switchingIntervalId = setInterval(() => {
+                setIsSwitching((prevIsSwitching) => !prevIsSwitching);
+            }, 600000*2);
+
+            console.log("isSwitching toggled to:", isSwitching);
+
+            return () => {
+                clearInterval(switchingIntervalId);
+            };
+        }
+    }, [selectedTime, isFullScreen]);
 
     return (
         <Box
@@ -176,12 +200,8 @@ function FBLocation() {
             </Box>
 
             {/* Conditional rendering of FBFullscreenContent or LGFullscreenContent based on isFullScreen */}
-            {isFullScreen ? (
-                selectedStation === 'FiboStation' ? (
-                    <FBFullscreenContent />
-                ) : (
-                    <LGFullscreenContent />
-                )
+            {selectedTime === '10mins' ? (
+                isSwitching ? <FBFullscreenContent /> : <LGFullscreenContent />
             ) : null}
         </Box>
     );

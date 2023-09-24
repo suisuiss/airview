@@ -179,7 +179,7 @@ return (
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
-                marginBottom={isMobile ? '0px' : '15px'}
+                marginBottom={isMobile ? '0px' : '10px'}
                 paddingLeft={isMobile ? '30px' : '80px'} 
             >
                 <Box
@@ -202,13 +202,13 @@ return (
                         alignItems="center"
                         justifyContent="center"
                     >
-                        <Typography variant={isMobile ? 'body2' : 'h5'}paddingTop="10px" fontWeight="500">
+                        <Typography variant={isMobile ? 'body2' : 'h5'}paddingTop="0px" fontWeight="500">
                             AQI
                         </Typography>
                         <Typography variant={isMobile ? 'body1' : 'h4'} fontWeight="500">
                             {aqiData ? aqiData.data.aqi : 'AQI...'}
                         </Typography>
-                        <Typography variant={isMobile ? 'body2' : 'h6'} marginBottom='20px'>
+                        <Typography variant={isMobile ? 'body2' : 'h6'} marginBottom={isMobile ? '30px' : '0px'}>
                             {aqiData ? calculateAqiWord(aqiData.data.aqi) : 'AQI...'}
                         </Typography>
                     </Box>
@@ -222,7 +222,7 @@ return (
                 orientation={isMobile ? 'vertical' : 'vertical'}
                 flexItem
                 style={{
-                    marginTop: isMobile ? '5px' : '10px', 
+                    marginTop: isMobile ? '5px' : '0px', 
                     border: '0.1px solid #000',
                     height: isMobile ? '70px' : '100px',
                     marginLeft: isMobile ? '10px' : '30px', 
@@ -235,12 +235,11 @@ return (
                 flexDirection="column"
                 alignItems="center"
                 paddingLeft={isMobile ? '20px' : '60px'} 
-                marginBottom={isMobile ? '0px' : '15px'} 
             >
                 <br />
                 <LGPMInfo />
                 <br />
-                <br />
+                <Box height={isMobile ? '15px' : '10px'} />
                 <img src={imageSource2} alt="Image2" width={isMobile ? '60px' : '100px'} />
                 <Typography fontSize={isMobile ? '8px' : '12px'}>
                     {aqiData ? getDesImg2(aqiData.data.aqi) : 'Loading Image Description'}

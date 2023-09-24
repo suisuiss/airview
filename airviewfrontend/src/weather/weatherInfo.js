@@ -1,6 +1,6 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React, { useState, useEffect } from 'react';
-import warning from '../assetIcon/warning.png'
+import warning from '../assetIcon/warning.png';
 
 function formatTime(dateString) {
     const options = { hour: 'numeric', minute: 'numeric', hour12: true };
@@ -8,8 +8,28 @@ function formatTime(dateString) {
 }
 
 function WeatherForecastInfo() {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [weatherData, setWeatherData] = useState(null);
     const [iconImages, setIconImages] = useState([]);
+    const mobileStyles = {
+        width: '350px',
+        paddingTop: '10px', 
+        paddingBottom: '10px', 
+        fontSize: '12px', 
+        borderRadius: '25px',
+        marginBottom: '10px',
+        
+        
+    };
+
+    const desktopStyles = {
+        width: '540px', 
+        borderRadius: '25px',
+        
+        paddingTop: '10px',
+        paddingBottom: '10px',
+    };
 
     const fetchData = () => {
         fetch('https://www.meteosource.com/api/v1/free/point?place_id=postal-th-10140&sections=current%2Chourly&language=en&units=auto&key=t66kz0c4o4d1oi27t84scaz7kiiof5id124hfdx9')
@@ -52,7 +72,10 @@ function WeatherForecastInfo() {
         return (
             <Box style={{ display: "flex", flexDirection: "row" }}>
                 {weatherData?.hourly?.data?.slice(startIndex, startIndex + 3).map((data, index) => (
-                    <Box key={index} display="flex" flexDirection="column" alignItems="center" paddingLeft="40px" paddingRight="40px">
+                    <Box key={index} display="flex" flexDirection="column" alignItems="center" {...(isMobile
+                        ? { paddingLeft: '25px', paddingRight: '20px' }
+                        : { paddingLeft: '60px', paddingRight: '40px' }
+                    )}>
 
                         {formatTime(data.date)}<br />
                         <img src={iconImages[data.icon - 1]} alt="Weather Icon" width='70px' />
@@ -78,7 +101,10 @@ function WeatherForecastInfo() {
         return (
             <Box style={{ display: "flex", flexDirection: "row" }}>
                 {weatherData?.hourly?.data?.slice(startIndex + 3, startIndex + 6).map((data, index) => (
-                    <Box key={index} display="flex" flexDirection="column" alignItems="center" paddingLeft="40px" paddingRight="40px" >
+                    <Box key={index} display="flex" flexDirection="column" alignItems="center" {...(isMobile
+                        ? { paddingLeft: '25px', paddingRight: '20px' } 
+                        : { paddingLeft: '60px', paddingRight: '40px' } 
+                    )} >
                         {formatTime(data.date)}<br />
                         <img src={iconImages[data.icon - 1]} alt="Weather Icon" width='70px' />
                         {data.temperature}°C
@@ -115,7 +141,11 @@ function WeatherForecastInfo() {
 
 
     return (
-        <Box bgcolor='#FFFF' marginTop="10px" width='540px' borderRadius='25px' paddingTop='10px' paddingBottom='10px' display="flex" flexDirection="column" alignItems="center">
+        <Box
+            bgcolor='#FFFF'
+            marginTop="10px"
+            {...(isMobile ? mobileStyles : desktopStyles)} 
+        >
             {weatherData ? (
                 <Box>
                     {renderHourlyWeatherRain()}

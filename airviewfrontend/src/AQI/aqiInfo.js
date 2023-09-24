@@ -15,24 +15,25 @@ import { useMediaQuery, useTheme } from '@mui/material';
 
 function CurrentAqiInfo() {
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Check for mobile screen
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [aqiData, setAqiData] = useState(null);
     const [error, setError] = useState(null);
 
-    // Define different styles for mobile and desktop
     const mobileStyles = {
-        width: '350px', // Make the box full width on mobile
+        width: '350px', 
         paddingTop: '20px',
-        paddingBottom: '20px', // Reduce padding on mobile// Reduce padding on mobile
-        fontSize: '10px', // Reduce font size on mobile
+        paddingBottom: '20px', 
+        fontSize: '10px', 
         borderRadius: '25px',
+        marginBottom:'10px'
 };
 
 const desktopStyles = {
     width: '540px',
     borderRadius: '25px',
-    paddingLeft: '40px',
+    paddingLeft: '0px',
     paddingTop: '15px',
+    marginLeft: '15px'
 };
 
 const fetchDataWithRetry = () => {
@@ -163,36 +164,35 @@ useEffect(() => {
 return (
     <Box
         display="flex"
-        flexDirection="column" // Center vertically and horizontally
-        alignItems="center" // Center horizontally
-        justifyContent="center" // Center vertically
-    // Set container height to viewport height for centering
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
     >
         <Box
             display="flex"
             flexDirection="row"
             alignItems="center"
             bgcolor="#FFFF"
-            {...(isMobile ? mobileStyles : desktopStyles)} // Apply styles conditionally
+            {...(isMobile ? mobileStyles : desktopStyles)}
         >
             <Box
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
-                marginBottom={isMobile ? '0px' : '15px'} // Adjust margin for mobile
-                paddingLeft={isMobile ? '30px' : '80px'} // Adjust padding for mobile
+                marginBottom={isMobile ? '0px' : '15px'}
+                paddingLeft={isMobile ? '30px' : '80px'} 
             >
                 <Box
                     display="flex"
                     flexDirection="row"
                     alignItems="center"
-                    marginBottom={isMobile ? '0px' : '15px'} // Adjust margin for mobile
+                    marginBottom={isMobile ? '0px' : '15px'} 
                 >
                     <Box
-                        width={isMobile ? '10px' : '15px'} // Adjust circle size for mobile
-                        height={isMobile ? '10px' : '15px'} // Adjust circle size for mobile
+                        width={isMobile ? '10px' : '15px'} 
+                        height={isMobile ? '10px' : '15px'} 
                         borderRadius="50%"
-                        marginRight={isMobile ? '10px' : '15px'} // Adjust margin for mobile
+                        marginRight={isMobile ? '10px' : '15px'} 
                         bgcolor={circleColor}
                     />
                     <Box
@@ -222,11 +222,11 @@ return (
                 orientation={isMobile ? 'vertical' : 'vertical'}
                 flexItem
                 style={{
-                    marginTop: isMobile ? '5px' : '10px', // Adjust margin for mobile
+                    marginTop: isMobile ? '5px' : '10px', 
                     border: '0.1px solid #000',
-                    height: isMobile ? '70px' : '100px', // Adjust height for mobile
-                    marginLeft: isMobile ? '10px' : '30px', // Adjust margin for mobile
-                    marginRight: isMobile ? '10px' : '', // Adjust margin for mobile
+                    height: isMobile ? '70px' : '100px',
+                    marginLeft: isMobile ? '10px' : '30px', 
+                    marginRight: isMobile ? '10px' : '', 
 
                 }}
             />
@@ -234,8 +234,8 @@ return (
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
-                paddingLeft={isMobile ? '20px' : '60px'} // Adjust padding for mobile
-                marginBottom={isMobile ? '0px' : '15px'} // Adjust margin for mobile
+                paddingLeft={isMobile ? '20px' : '60px'} 
+                marginBottom={isMobile ? '0px' : '15px'} 
             >
                 <br />
                 <LGPMInfo />

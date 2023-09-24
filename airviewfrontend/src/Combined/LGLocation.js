@@ -199,7 +199,6 @@ function LGLocation() {
                 <Box mt={2}></Box>
             </Box>
 
-            {/* Conditional rendering of FBFullscreenContent or LGFullscreenContent based on isFullScreen */}
             {selectedTime === '10mins' ? (
                 isSwitching ? <FBFullscreenContent /> : <LGFullscreenContent />
             ) : null}

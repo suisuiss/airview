@@ -1,8 +1,10 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import wbgtIcon from '../../assetIcon/WBGT.png';
 
 function FBWBGTInfo() {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm')); 
     const [wbgtData, setWbgtData] = useState(null);
     const [error, setError] = useState(null);
 
@@ -45,39 +47,39 @@ function FBWBGTInfo() {
 
     useEffect(() => {
         fetchData();
+
         const intervalId = setInterval(fetchData, 300000);
+
         return () => clearInterval(intervalId);
     }, []);
 
     return (
         <Box
-            height="165px"
-            width="260px"
+            height={isMobile ? '110px' : '165px'} 
+            width={isMobile ? '170px' : '260px'}
             bgcolor="#FFFF"
             borderRadius="25px"
-            marginTop='10px'
-            marginLeft='20px'
+            marginTop={isMobile ? '5px' : '10px'} 
+            marginLeft={isMobile ? '0px' : '20px'} 
             display="flex"
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
         >
-            <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px' marginTop='15px'>
+            <Box display="flex" flexDirection="column" alignItems="center" marginBottom={isMobile ? '5px' : '10px'} marginTop={isMobile ? '5px' : '10px'}>
                 <Box display="flex" flexDirection="row" >
-                    <Typography variant="h5" fontWeight="500">
+                    <Typography variant={isMobile ? 'body2' : 'h6'} fontWeight="500"> 
                         WBGT
                     </Typography>
-                    <Box marginLeft="95px">
-                        <img src={wbgtIcon} alt="Image2" width='30px' />
+                    <Box marginLeft={isMobile ? '20px' : '40px'}> 
+                        <img src={wbgtIcon} alt="Image2" width={isMobile ? '12px' : '30px'} />
                     </Box>
                 </Box>
-                <Typography variant="h4" marginTop="10px">
+                <Typography variant={isMobile ? 'body1' : 'h4'} marginTop={isMobile ? '5px' : '10px'}>
                     {wbgtData ? (
                         <div>
                             {wbgtData.map(function (a) {
-                                return <div key={a.id}>
-                                    {a.data.wbgt.value} °C
-                                </div>
+                                return <div key={a.id}>{a.data.wbgt.value} °C</div>
                             })}
                         </div>
                     ) : error ? (
@@ -86,7 +88,7 @@ function FBWBGTInfo() {
                         <>WBGT...</>
                     )}
                 </Typography>
-                <Typography variant="h7" marginBottom="10px">
+                <Typography variant={isMobile ? 'body2' : 'body1'} marginBottom={isMobile ? '5px' : '10px'}> 
                     {wbgtData ? (
                         <div>
                             {wbgtWord(wbgtData[0].data.wbgt.value)}
@@ -95,7 +97,6 @@ function FBWBGTInfo() {
                         <>WBGT...</>
                     )}
                 </Typography>
-
             </Box>
         </Box>
     );

@@ -1,8 +1,11 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import windIcon from '../../assetIcon/wind.png';
 
 function FBWindInfo() {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm')); 
+
     const [windData, setWindData] = useState(null);
     const [error, setError] = useState(null);
 
@@ -32,33 +35,34 @@ function FBWindInfo() {
 
     useEffect(() => {
         fetchData();
+
         const intervalId = setInterval(fetchData, 300000);
+
         return () => clearInterval(intervalId);
     }, []);
 
     return (
         <Box
-            height="165px"
-            width="260px"
+            height={isMobile ? '110px' : '165px'} 
+            width={isMobile ? '170px' : '260px'}
             bgcolor="#FFFF"
             borderRadius="25px"
-            marginTop='10px'
-            marginLeft='20px'
+            marginTop={isMobile ? '5px' : '10px'}
+            marginLeft={isMobile ? '10px' : '20px'} 
             display="flex"
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
         >
-            <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px' marginTop='15px'>
+            <Box display="flex" flexDirection="column" alignItems="center" marginBottom={isMobile ? '10px' : '35px'} marginTop={isMobile ? '0px' : '10px'}>
                 <Box display="flex" flexDirection="row" >
-                    <Typography variant="h5" fontWeight="500">
-                        Wind
+                    <Typography variant={isMobile ? 'body2' : 'h6'} fontWeight="500">                         Wind
                     </Typography>
-                    <Box marginLeft="110px">
-                        <img src={windIcon} alt="Image2" width='30px' />
+                    <Box marginLeft={isMobile ? '20px' : '40px'}>
+                        <img src={windIcon} alt="Image2" width={isMobile ? '12px' : '30px'} /> 
                     </Box>
                 </Box>
-                <Typography fontSize="18px" marginTop="10px">
+                <Typography variant={isMobile ? 'body2' : '18px'} marginTop={isMobile ? '0px' : '10px'}> 
                     {windData ? (
                         <div>
                             {windData.map(function (a) {
@@ -66,15 +70,6 @@ function FBWindInfo() {
                                     Speed: {a.data.wind_speed.value} m/s
                                 </div>
                             })}
-                        </div>
-                    ) : error ? (
-                        <>Wind...</>
-                    ) : (
-                        <>Wind...</>
-                    )}
-                    {windData ? (
-                        <div>
-
                             {windData.map(function (a) {
                                 return <div key={a.id}>
                                     Direction: {a.data.wind_direction.value} degree

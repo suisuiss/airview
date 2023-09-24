@@ -93,7 +93,7 @@ function FiboLocation() {
             display="flex"
             flexDirection="column"
             alignItems="center"
-            justifyContent="center" // Center content horizontally
+            justifyContent="center"
             width="270px"
         >
             <FormControl variant="outlined" fullWidth>
@@ -124,67 +124,6 @@ function FiboLocation() {
                             <FiboStation />
                         </Typography>
                     </MenuItem>
-                    <Grid container alignItems="center">
-                        <Grid item>
-                            <MenuItem value="Switch">
-                                <Typography
-                                    variant="h7"
-                                    color="#363E64"
-                                    fontWeight="600"
-                                >
-                                    Switch Location
-                                </Typography>
-                            </MenuItem>
-                        </Grid>
-                        <Grid item>
-                            <FormControl>
-                                <Select
-                                    value={selectedTime}
-                                    onChange={handleChangeTime}
-                                    style={{
-                                        borderRadius: '25px',
-                                        backgroundColor: '#FFFFF',
-                                    }}
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                borderRadius: '15px',
-                                                backgroundColor: '#FFFFF',
-                                            },
-                                        },
-                                    }}
-                                >
-                                    <MenuItem value="none">
-                                        <Typography
-                                            variant="h7"
-                                            color="#363E64"
-                                            fontWeight="600"
-                                        >
-                                            None
-                                        </Typography>
-                                    </MenuItem>
-                                    <MenuItem value="10mins">
-                                        <Typography
-                                            variant="h7"
-                                            color="#363E64"
-                                            fontWeight="600"
-                                        >
-                                            every 10 mins
-                                        </Typography>
-                                    </MenuItem>
-                                    <MenuItem value="20mins">
-                                        <Typography
-                                            variant="h7"
-                                            color="#363E64"
-                                            fontWeight="600"
-                                        >
-                                            every 20 mins
-                                        </Typography>
-                                    </MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                    </Grid>
                 </Select>
             </FormControl>
 
@@ -193,14 +132,13 @@ function FiboLocation() {
                 paddingTop="10px"
                 paddingLeft="30px"
                 width="100%"
+                margin="0 auto"
             >
                 <Typography variant="h5" fontWeight="600" color="#363E64">
                     KMUTT, Bangkok
                 </Typography>
                 <Box mt={2}></Box>
             </Box>
-
-            {/* Conditional rendering of FBFullscreenContent or LGFullscreenContent based on isFullScreen */}
             {selectedTime === '10mins' ? (
                 isSwitching ? <FBFullscreenContent /> : <LGFullscreenContent />
             ) : null}

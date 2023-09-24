@@ -13,7 +13,7 @@ import FBDateTime from '../../Combined/FiboDateTime';
 
 function NormalContent() {
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Check for mobile screen
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm')); 
 
     const containerStyle = {
         display: 'flex',
@@ -24,22 +24,23 @@ function NormalContent() {
     const contentContainerStyle = {
         marginTop: '80px',
         display: 'flex',
-        flexDirection: isMobile ? 'column' : 'row', // Use column layout for mobile, row for desktop
+        flexDirection: isMobile ? 'column' : 'row', 
     };
 
     const columnStyle = {
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center', // Center align for mobile
+        alignItems: 'center', 
     };
 
     const rowStyle = {
         display: 'flex',
         flexDirection: 'row',
+        marginBottom: isMobile ? '10px' : '0px',
     };
 
     const rightColumnStyle = {
-        marginLeft: isMobile ? '0' : '100px', // No margin for mobile, margin for desktop
+        marginLeft: isMobile ? '0' : '100px',
     };
 
     return (
@@ -48,14 +49,14 @@ function NormalContent() {
                 <Box style={columnStyle}>
                     {isMobile ? (
                         <>
-                            <FiboLocation /> {/* Show FiboLocation on mobile */}
-                            <FiboDateTime /> {/* Show FiboDateTime on mobile */}
+                            <FiboLocation />
+                            <FiboDateTime />
                         </>
                     ) : (
                         <FBDateTime /> 
                     )}
                     <WeatherNow />
-                    {!isMobile && <WeatherForecastInfo />} {/* Only show WeatherForecastInfo on desktop */}
+                    <WeatherForecastInfo />
                 </Box>
                 <Box style={{ ...columnStyle, ...rightColumnStyle }}>
                     <CurrentAqiInfo />

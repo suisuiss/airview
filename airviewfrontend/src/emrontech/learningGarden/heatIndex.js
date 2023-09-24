@@ -40,7 +40,7 @@ function LGHeatIndex() {
 
                         return (
                             <div key={a.id}>
-                                Feels like {((HI - 32) * (5 / 9)).toFixed(2)}°C
+                                Feels like {((HI - 32) * (5 / 9)).toFixed(1)}°C
                             </div>
                         );
                     })}

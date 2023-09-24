@@ -6,19 +6,20 @@ import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 
 function WeatherNow() {
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Check for mobile screen
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-    // Define different styles for mobile and desktop
     const mobileStyles = {
-        width: '60%', // Make the box full width on mobile
-        padding: '10px', // Reduce padding on mobile
-        fontSize: '12px', // Reduce font size on mobile
+        width: '350px', 
+        paddingTop: '20px',
+        paddingBottom: '20px', 
+        fontSize: '12px',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center', // Center horizontally
+        alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: '25px', // Center vertically
+        borderRadius: '25px',
         marginBottom: '10px'
+
     };
 
     const desktopStyles = {
@@ -32,7 +33,7 @@ function WeatherNow() {
     return (
         <Box
             bgcolor='#6F9FFF'
-            {...(isMobile ? mobileStyles : desktopStyles)} // Apply styles conditionally
+            {...(isMobile ? mobileStyles : desktopStyles)} 
         >
             <Typography color='#FFFF'>
                 <Box display="flex" flexDirection="row">

@@ -9,7 +9,7 @@ function FBDashboard() {
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Adjust breakpoint as needed
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm')); 
 
     const iconStyle = {
         position: 'fixed',

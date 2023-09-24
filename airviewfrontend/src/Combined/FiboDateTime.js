@@ -5,7 +5,7 @@ import CurrentDate from '../currentDateTime/date';
 import FBLocation from './FBLocation';
 
 
-function FiboDateTime() {
+function FBDateTime() {
     return (
         <Box display="flex" flexDirection="row"   >
             <FBLocation />
@@ -20,5 +20,5 @@ function FiboDateTime() {
     );
 }
 
-export default FiboDateTime;
+export default FBDateTime;
 

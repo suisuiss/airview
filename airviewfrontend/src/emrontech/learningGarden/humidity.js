@@ -1,12 +1,13 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import humidityIcon from '../../assetIcon/humidity.png';
 import LinearProgress from '@mui/material/LinearProgress';
 
-function LGHumidityInfo() {
+function FBHumidityInfo() {
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [humidityData, setHumidityData] = useState(null);
     const [error, setError] = useState(null);
-
     const fetchData = () => {
         fetch('https://asia-southeast1-hypnotic-spider-397306.cloudfunctions.net/function-2')
             .then((response) => {
@@ -36,34 +37,36 @@ function LGHumidityInfo() {
     }
 
     useEffect(() => {
-        fetchData(); // Initial fetch
+        fetchData();
+
         const intervalId = setInterval(fetchData, 300000);
+
         return () => clearInterval(intervalId);
     }, []);
 
     return (
         <Box
-            height="165px"
-            width="260px"
+            height={isMobile ? '110px' : '165px'}
+            width={isMobile ? '170px' : '260px'}
             bgcolor="#FFFF"
             borderRadius="25px"
-            marginTop='10px'
-            marginLeft='20px'
+            marginTop={isMobile ? '5px' : '10px'}
+            marginLeft={isMobile ? '0px' : '20px'}
             display="flex"
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
         >
-            <Box display="flex" flexDirection="column" alignItems="center" marginBottom='15px' marginTop='15px'>
+            <Box display="flex" flexDirection="column" alignItems="center" marginBottom={isMobile ? '5px' : '10px'} marginTop={isMobile ? '5px' : '10px'}>
                 <Box display="flex" flexDirection="row">
-                    <Typography variant="h5" fontWeight="500">
+                    <Typography variant={isMobile ? 'body2' : 'h6'} fontWeight="500">
                         Humidity
                     </Typography>
-                    <Box marginLeft="80px">
-                        <img src={humidityIcon} alt="Image2" width='15px' />
+                    <Box marginLeft={isMobile ? '20px' : '40px'}>
+                        <img src={humidityIcon} alt="Image2" width={isMobile ? '12px' : '15px'} />
                     </Box>
                 </Box>
-                <Typography variant="h4" marginTop="10px">
+                <Typography variant={isMobile ? 'body1' : 'h4'} marginTop={isMobile ? '5px' : '10px'}>
                     {humidityData ? (
                         <div>
                             {humidityData.map(function (a) {
@@ -76,7 +79,7 @@ function LGHumidityInfo() {
                         <>Humidity...</>
                     )}
                 </Typography>
-                <Typography variant="h7" marginBottom="10px">
+                <Typography variant={isMobile ? 'body2' : 'body1'} marginBottom={isMobile ? '5px' : '10px'}>
                     {humidityData ? (
                         <div>{humidityWord(humidityData[0].data.humid.value)}</div>
                     ) : (
@@ -86,8 +89,8 @@ function LGHumidityInfo() {
                 <LinearProgress
                     sx={{
                         width: '100%',
-                        height: '10px',
-                        borderRadius: '25px',
+                        height: '8px',
+                        borderRadius: '15px',
                         backgroundColor: '#ccc',
                         '& .MuiLinearProgress-bar': {
                             backgroundColor: '#90D02F',
@@ -101,4 +104,4 @@ function LGHumidityInfo() {
     );
 }
 
-export default LGHumidityInfo;
+export default FBHumidityInfo;

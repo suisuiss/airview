@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Box, IconButton } from '@mui/material';
+import { Box, IconButton, Menu, MenuItem, useMediaQuery, useTheme } from '@mui/material';
 import FullscreenIcon from '../assetIcon/tdesign_fullscreen-2.png';
 import LGFullscreenContent from './content/LGfull';
 import LGNormalContent from './content/LGnormal';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 function LGDashboard() {
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm')); 
+
     const iconStyle = {
         position: 'fixed',
         top: '10px',
@@ -50,6 +55,13 @@ function LGDashboard() {
 
         setIsFullscreen(false);
     };
+    const handleMenuClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
 
     useEffect(() => {
         const handleFullscreenChange = () => {
@@ -77,12 +89,30 @@ function LGDashboard() {
 
     return (
         <Box>
-            {!isFullscreen && (
+            {isMobile ? (
+                <Box style={iconStyle}>
+                    <IconButton onClick={handleMenuClick}>
+                        <MoreVertIcon />
+                    </IconButton>
+                    <Menu
+                        anchorEl={anchorEl}
+                        keepMounted
+                        open={Boolean(anchorEl)}
+                        onClose={handleMenuClose}
+                    >
+                        <MenuItem onClick={handleMenuClose}>Menu Item 1</MenuItem>
+                        <MenuItem onClick={handleMenuClose}>Menu Item 2</MenuItem>
+                        <MenuItem onClick={handleMenuClose}>Menu Item 3</MenuItem>
+                    </Menu>
+                </Box>
+            ) : (
+            !isFullscreen && (
                 <Box style={iconStyle}>
                     <IconButton onClick={toggleFullscreen}>
                         <img src={FullscreenIcon} alt="Fullscreen Icon" width="40px" />
                     </IconButton>
                 </Box>
+                )
             )}
             {isFullscreen ? <LGFullscreenContent /> : <LGNormalContent />}
         </Box>

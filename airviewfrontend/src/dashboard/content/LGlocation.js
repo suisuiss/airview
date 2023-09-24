@@ -3,16 +3,15 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import { Typography } from '@mui/material';
-import LGStation from '../emrontech/learningGarden/station';
-import FiboStation from '../emrontech/fibo/station';
-import FBFullscreenContent from '../dashboard/content/FBfull';
-import LGFullscreenContent from '../dashboard/content/LGfull';
 import { useNavigate } from 'react-router-dom';
+import LGStation from '../../emrontech/learningGarden/station';
+import FiboStation from '../../emrontech/fibo/station';
+import FBFullscreenContent from './FBfull';
+import LGFullscreenContent from './LGfull';
 
-function FBLocation() {
-    const [selectedStation, setSelectedStation] = useState('FiboStation');
+function LGLocation() {
+    const [selectedStation, setSelectedStation] = useState('LGStation');
     const [selectedTime, setSelectedTime] = useState('none');
     const [isFullScreen, setIsFullScreen] = useState(false);
     const [isSwitching, setIsSwitching] = useState(false);
@@ -20,10 +19,10 @@ function FBLocation() {
 
     const handleChangeStation = (event) => {
         setSelectedStation(event.target.value);
-        if (event.target.value === 'FiboStation') {
-            navigate('/fbdashboard');
-        } else if (event.target.value === 'LGStation') {
+        if (event.target.value === 'LGStation') {
             navigate('/');
+        } else if (event.target.value === 'FiboStation') {
+            navigate('/fbdashboard');
         }
     };
 
@@ -78,7 +77,7 @@ function FBLocation() {
         } else if (selectedTime === '20mins' && isFullScreen) {
             switchingIntervalId = setInterval(() => {
                 setIsSwitching((prevIsSwitching) => !prevIsSwitching);
-            }, 600000*2);
+            }, 600000 * 2);
 
             console.log("isSwitching toggled to:", isSwitching);
 
@@ -93,6 +92,7 @@ function FBLocation() {
             display="flex"
             flexDirection="column"
             alignItems="center"
+            justifyContent="center"
             width="270px"
         >
             <FormControl variant="outlined" fullWidth>
@@ -123,67 +123,6 @@ function FBLocation() {
                             <FiboStation />
                         </Typography>
                     </MenuItem>
-                    <Grid container alignItems="center">
-                        <Grid item>
-                            <MenuItem value="Switch">
-                                <Typography
-                                    variant="h7"
-                                    color="#363E64"
-                                    fontWeight="600"
-                                >
-                                    Switch Location
-                                </Typography>
-                            </MenuItem>
-                        </Grid>
-                        <Grid item>
-                            <FormControl>
-                                <Select
-                                    value={selectedTime}
-                                    onChange={handleChangeTime}
-                                    style={{
-                                        borderRadius: '25px',
-                                        backgroundColor: '#FFFFF',
-                                    }}
-                                    MenuProps={{
-                                        PaperProps: {
-                                            style: {
-                                                borderRadius: '15px',
-                                                backgroundColor: '#FFFFF',
-                                            },
-                                        },
-                                    }}
-                                >
-                                    <MenuItem value="none">
-                                        <Typography
-                                            variant="h7"
-                                            color="#363E64"
-                                            fontWeight="600"
-                                        >
-                                            None
-                                        </Typography>
-                                    </MenuItem>
-                                    <MenuItem value="10mins">
-                                        <Typography
-                                            variant="h7"
-                                            color="#363E64"
-                                            fontWeight="600"
-                                        >
-                                            every 10 mins
-                                        </Typography>
-                                    </MenuItem>
-                                    <MenuItem value="20mins">
-                                        <Typography
-                                            variant="h7"
-                                            color="#363E64"
-                                            fontWeight="600"
-                                        >
-                                            every 20 mins
-                                        </Typography>
-                                    </MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-                    </Grid>
                 </Select>
             </FormControl>
 
@@ -192,6 +131,7 @@ function FBLocation() {
                 paddingTop="10px"
                 paddingLeft="30px"
                 width="100%"
+                margin="0 auto"
             >
                 <Typography variant="h5" fontWeight="600" color="#363E64">
                     KMUTT, Bangkok
@@ -199,10 +139,10 @@ function FBLocation() {
                 <Box mt={2}></Box>
             </Box>
             {selectedTime === '10mins' ? (
-                isSwitching ? <FBFullscreenContent /> : <LGFullscreenContent />
+                isSwitching ? <LGFullscreenContent /> : <FBFullscreenContent />
             ) : null}
         </Box>
     );
 }
 
-export default FBLocation;
+export default LGLocation;

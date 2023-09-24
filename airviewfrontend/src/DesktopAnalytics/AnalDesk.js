@@ -30,15 +30,15 @@ const AnalDesk = () => {
 
       <div className='GraphAndInfoContainer'>
         <div className="grid-item item1"> {/*GRID NUMBER 1*/}
-          <div style={{fontSize: '40px', lineHeight: '1.4' }}>
+          <div className="aqiInfo">
             <AqiInfo/>
           </div>
-          <div style={{fontSize: '25px'}}>
+          <div className="pmInfo">
             <Pm25Info location={locations}/> <Pm10Info location={locations}/>
           </div>
         </div>
         <div className="grid-item item2">
-          <div style={{fontSize: '25px', textAlign: 'left'}}>
+          <div className="overAllInfo">
             <OverallInfo location={locations}/>
           </div>
         </div>

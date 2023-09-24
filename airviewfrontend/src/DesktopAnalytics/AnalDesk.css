@@ -167,7 +167,85 @@
 
 /* SMARTPHONES PORTRAIT */
 @media (min-width: 300px) and (max-width: 479px){
-
+    .MenuContainer{
+        display: flex;
+        justify-content: flex-end;
+        padding: 20px;
+    }
+    .StationButtonContainer{
+        position: relative;
+        z-index: 1;
+        background-color: rgb(255, 255, 255);
+        width: max-content;
+        padding: 8px;
+        border-radius: 50px;
+        margin: 0 auto 30px auto;
+    }
+    .MovingButton {
+        position: absolute;
+        z-index: 3;
+        width: 140px;
+        height: 41px;
+        border-radius: 50px;
+        background-color: rgba(0, 53, 134, 1);
+        transition: left 0.5s ease; /* Use 'left' property for the transition */
+        left: 8px; /* Initial position, modify as needed */
+      }
+      .GoRight {
+        left: 50%; /* Ending position, modify as needed */
+      }
+    .StationButton{
+        position: inherit;
+        background-color: rgba(255, 255, 255, 0);
+        z-index: 9999;
+        width: 140px;
+        height: 41px;
+        color: white;
+        border-radius: 50px;
+        border: none;
+        font-size: 13px;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+    .StationButtonContainerNA{
+        color: black;
+    }
+    .GraphAndInfoContainer{
+        display: grid;
+        gap: 20px;
+        margin: 0 auto 0 auto;
+        grid-template-columns: 85vw;
+        width: fit-content;
+        grid-template-rows: 210px 400px 200px;
+    }
+    .grid-item {
+        display:flex ;
+        flex-direction: column;
+        background-color: rgba(255, 255, 255, 1);
+        border: solid rgba(158, 158, 158, 1) 1px;
+        align-items: center;
+        justify-content: space-around;
+        text-align: center;
+        border-radius: 25px;
+        box-shadow: 1px 4px 4px #888888;
+    }
+    .item1 {
+    }
+    .pmInfo{
+        font-size: 20px;
+    }
+    .aqiInfo{
+        font-size: 32px;
+    }
+    .item2 {
+    }
+    .overAllInfo{
+        font-size: 16px;
+        text-align: left;
+        line-height: 2.7;
+    }
+    .item3 {
+    }
 }
 
 

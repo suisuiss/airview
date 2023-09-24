@@ -4,6 +4,7 @@ import AqiInfo from '../AQI/aqiInfo'
 import Pm25Info from '../emrontech/pm25';
 import Pm10Info from '../emrontech/pm10';
 import OverallInfo from '../emrontech/overallinfo';
+import threeDots from '../Assets/3DotsVertical.png'
 const AnalDesk = () => {
   const [locations, setLocation] = useState("LearningGarden");
   const setLearningGarden = () => {
@@ -12,14 +13,18 @@ const AnalDesk = () => {
   const setFibo = () => {
     setLocation("FIBO");
   }
+  const isMobile = window.innerWidth < 766;
 
   return (
     <div>
       <div className='NavBarContainer'> {/* NavBarContainer for Navbar */}
-        <div>PlaceHolder for Navbar</div>
+        {!isMobile ? (<div>PlaceHolder for Navbar</div>) : (<div className='MenuContainer'> <img src={threeDots} alt="threeDots" style={{width:"25px"}}/></div>)}
       </div>
 
       <div className='StationButtonContainer'> {/* Button for choosing station graph */}
+        {isMobile && 
+          <div className={locations === 'LearningGarden' ? 'MovingButton' : 'MovingButton GoRight'}></div>
+        }
         <button className={locations === 'LearningGarden' ? 'StationButton' : 'StationButton StationButtonContainerNA'} onClick={setLearningGarden}>
           Learning Garden
         </button>

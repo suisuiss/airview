@@ -35,27 +35,27 @@ function OverallInfo(props) {
             {overallData ? (
                 <div>
                     {props.location === 'LearningGarden' && 
-                    <div style={{display: 'flex'}}>
+                    <div>
                         <div>
                             Heat Index : {overallData[0].data.wbgt.value} &#176;C <br /> 
                             Tempurature : {overallData[0].data.temp.value} &#176;C <br /> 
                             Humidity : {overallData[0].data.humid.value} % <br /> 
                             Rainfall : {overallData[0].data.rain_fall.value} mm. 
                         </div> 
-                        <div style={{paddingLeft:'80px'}}>
+                        <div>
                             Wind Speed : {overallData[0].data.wind_speed.value} m/s <br /> 
                             Wind Direction : {overallData[0].data.wind_direction.value} degree <br /> 
                             WBGT : {overallData[0].data.wbgt.value} &#176;C
                         </div>
                     </div>}
-                    {props.location === 'FIBO' && <div style={{display: 'flex'}}>
+                    {props.location === 'FIBO' && <div>
                         <div>
                             Heat Index : {overallData[1].data.wbgt.value} &#176;C <br /> 
                             Tempurature : {overallData[1].data.temp.value} &#176;C <br /> 
                             Humidity : {overallData[1].data.humid.value} % <br /> 
                             Rainfall : {overallData[1].data.rain_fall.value} mm. 
                         </div> 
-                        <div style={{paddingLeft:'80px'}}>
+                        <div>
                             Wind Speed : {overallData[1].data.wind_speed.value} m/s <br /> 
                             Wind Direction : {overallData[1].data.wind_direction.value} degree <br /> 
                             WBGT : {overallData[1].data.wbgt.value} &#176;C

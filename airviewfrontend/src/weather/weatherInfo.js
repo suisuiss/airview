@@ -121,14 +121,21 @@ function WeatherForecastInfo() {
     };
 
     const renderHourlyWeatherRain = () => {
-        const rainData = weatherData?.hourly?.data.find(data => data.summary.includes("rain") || data.summary.includes("thunderstorm"));
+        const currentHourIndex = weatherData?.hourly?.data.findIndex((data) => {
+            const currentHour = new Date().getHours();
+            const dataHour = new Date(data.date).getHours();
+            return dataHour === currentHour + 1;
+        });
+        const startIndex = currentHourIndex !== -1 ? currentHourIndex : 0;
+
+        const rainData = weatherData?.hourly?.data.slice(startIndex, startIndex + 6).find(data => data.summary.includes("rain") || data.summary.includes("Thunderstorm") || data.summary.includes("Rain"));
 
         if (rainData) {
             return (
                 <Box display="flex" justifyContent="center" alignItems="center" marginBottom="10px">
                     <img src={warning} alt="Warning Icon" width="20px" style={{ marginRight: '5px', }} />
                     <Typography fontSize="14px">
-                        Raining expected around {formatTime(rainData.date)}
+                        {rainData.summary} is expected around {formatTime(rainData.date)}
                     </Typography>
                 </Box>
             );

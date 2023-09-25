@@ -1,12 +1,14 @@
-import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Typography, useMediaQuery, useTheme, Dialog, IconButton } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import wbgtIcon from '../../assetIcon/WBGT.png';
+import CloseIcon from '@mui/icons-material/Close';
 
 function LGWBGTInfo() {
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm')); 
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [wbgtData, setWbgtData] = useState(null);
     const [error, setError] = useState(null);
+    const [isPopupOpen, setPopupOpen] = useState(false);
 
     const fetchData = () => {
         const delayBetweenRequests = 300000;
@@ -52,30 +54,70 @@ function LGWBGTInfo() {
 
         return () => clearInterval(intervalId);
     }, []);
+    const handleOpenPopup = () => {
+        setPopupOpen(true);
+    };
+
+    const handleClosePopup = (event) => {
+        event.stopPropagation();
+        setPopupOpen(false);
+    };
+
 
     return (
         <Box
-            height={isMobile ? '110px' : '165px'} 
+            height={isMobile ? '110px' : '165px'}
             width={isMobile ? '170px' : '260px'}
             bgcolor="#FFFF"
             borderRadius="25px"
             marginTop={isMobile ? '5px' : '10px'}
-            marginLeft={isMobile ? '0px' : '20px'} 
+            marginLeft={isMobile ? '0px' : '20px'}
             display="flex"
             flexDirection="column"
             alignItems="center"
             justifyContent="center"
+            onClick={handleOpenPopup}
+            style={{ cursor: 'pointer' }}
+
         >
+            <Dialog
+                open={isPopupOpen}
+                onClose={handleClosePopup}
+                maxWidth="md"
+                fullWidth
+            >
+                <Box p={2}>
+                    <IconButton
+                        edge="end"
+                        color="inherit"
+                        onClick={handleClosePopup}
+                        aria-label="close"
+                        sx={{
+                            position: 'absolute',
+                            right: '8px',
+                            top: '8px',
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+
+                    <Typography variant="h6" align="center">
+                        AQI Details
+                    </Typography>
+
+                </Box>
+            </Dialog>
+
             <Box display="flex" flexDirection="column" alignItems="center" marginBottom={isMobile ? '5px' : '10px'} marginTop={isMobile ? '5px' : '10px'}>
                 <Box display="flex" flexDirection="row" >
                     <Typography variant={isMobile ? 'body2' : 'h6'} fontWeight="500">
                         WBGT
                     </Typography>
-                    <Box marginLeft={isMobile ? '20px' : '40px'}> 
-                        <img src={wbgtIcon} alt="Image2" width={isMobile ? '12px' : '30px'} /> 
+                    <Box marginLeft={isMobile ? '20px' : '40px'}>
+                        <img src={wbgtIcon} alt="Image2" width={isMobile ? '12px' : '30px'} />
                     </Box>
                 </Box>
-                <Typography variant={isMobile ? 'body1' : 'h4'} marginTop={isMobile ? '5px' : '10px'}> 
+                <Typography variant={isMobile ? 'body1' : 'h4'} marginTop={isMobile ? '5px' : '10px'}>
                     {wbgtData ? (
                         <div>
                             {wbgtData.map(function (a) {

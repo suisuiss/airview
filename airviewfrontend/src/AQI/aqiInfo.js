@@ -11,14 +11,15 @@ import unhealthy2002 from '../assetAQI/unhealthy2002.png';
 import uns1501 from '../assetAQI/uns1501.png';
 import uns1502 from '../assetAQI/uns1502.png';
 import LGPMInfo from '../emrontech/learningGarden/pm';
-import { useMediaQuery, useTheme } from '@mui/material';
+import { useMediaQuery, useTheme, Dialog, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close'; 
 
 function CurrentAqiInfo() {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [aqiData, setAqiData] = useState(null);
     const [error, setError] = useState(null);
-
+    const [isPopupOpen, setPopupOpen] = useState(false); 
     const mobileStyles = {
         width: '350px', 
         paddingTop: '20px',
@@ -161,13 +162,53 @@ useEffect(() => {
     return () => clearInterval(intervalId);
 }, []);
 
+    const handleOpenPopup = () => {
+        setPopupOpen(true); 
+    };
+
+    const handleClosePopup = (event) => {
+        event.stopPropagation(); 
+        setPopupOpen(false);
+    };
+
 return (
     <Box
         display="flex"
         flexDirection="column"
         alignItems="center"
         justifyContent="center"
+        onClick={handleOpenPopup}
+        style={{ cursor: 'pointer' }}
+
     >
+    <Dialog
+                open={isPopupOpen} 
+                onClose={handleClosePopup}
+                maxWidth="md"
+                fullWidth
+            >
+                <Box p={2}>
+                    <IconButton
+                        edge="end"
+                        color="inherit"
+                        onClick={handleClosePopup} 
+                        aria-label="close"
+                        sx={{
+                            position: 'absolute',
+                            right: '8px',
+                            top: '8px',
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+  
+                    <Typography variant="h6" align="center">
+                        AQI Details
+                    </Typography>
+
+                </Box>
+            </Dialog>
+
         <Box
             display="flex"
             flexDirection="row"
@@ -239,7 +280,7 @@ return (
                 <br />
                 <LGPMInfo />
                 <br />
-                <Box height={isMobile ? '15px' : '10px'} />
+                <Box height={isMobile ? '15px' : '25px'} />
                 <img src={imageSource2} alt="Image2" width={isMobile ? '60px' : '100px'} />
                 <Typography fontSize={isMobile ? '8px' : '12px'}>
                     {aqiData ? getDesImg2(aqiData.data.aqi) : 'Loading Image Description'}

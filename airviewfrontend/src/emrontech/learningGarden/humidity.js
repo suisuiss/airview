@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import humidityIcon from '../../assetIcon/humidity.png';
 import LinearProgress from '@mui/material/LinearProgress';
 import CloseIcon from '@mui/icons-material/Close';
-
+import humidity from '../../assetPopup/humidity.png';
 function LGHumidityInfo() {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -74,9 +74,19 @@ function LGHumidityInfo() {
                 onClose={handleClosePopup}
                 maxWidth="md"
                 fullWidth
+                PaperProps={{
+                    sx: {
+                        borderRadius: '25px',
+                        overflowX: 'hidden',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+
+                    },
+                }}
             >
                 <Box p={2}>
-                    {/* Close button */}
                     <IconButton
                         edge="end"
                         color="inherit"
@@ -91,10 +101,15 @@ function LGHumidityInfo() {
                         <CloseIcon />
                     </IconButton>
 
-                    <Typography variant="h6" align="center">
-                        AQI Details
-                    </Typography>
+                    <img
+                        src={humidity}
+                        alt="image"
+                        style={{
+                            maxWidth: '100%',
+                            height: 'auto',
 
+                        }}
+                    />
                 </Box>
             </Dialog>
 

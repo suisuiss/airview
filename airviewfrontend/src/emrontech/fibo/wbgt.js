@@ -2,6 +2,8 @@ import { Box, Typography, useMediaQuery, useTheme, Dialog, IconButton } from '@m
 import React, { useState, useEffect } from 'react';
 import wbgtIcon from '../../assetIcon/WBGT.png';
 import CloseIcon from '@mui/icons-material/Close';
+import wbgt from '../../assetPopup/WBGT.png';
+
 
 function FBWBGTInfo() {
     const theme = useTheme();
@@ -85,6 +87,17 @@ function FBWBGTInfo() {
                 onClose={handleClosePopup}
                 maxWidth="md"
                 fullWidth
+                PaperProps={{
+                    sx: {
+                        borderRadius: '25px',
+                        overflowX: 'hidden',
+                        overflowY: 'hidden',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    },
+                }}
             >
                 <Box p={2}>
                     <IconButton
@@ -101,9 +114,15 @@ function FBWBGTInfo() {
                         <CloseIcon />
                     </IconButton>
 
-                    <Typography variant="h6" align="center">
-                        AQI Details
-                    </Typography>
+                    <img
+                        src={wbgt}
+                        alt="image"
+                        style={{
+                            maxWidth: '100%',
+                            height: 'auto',
+
+                        }}
+                    />
 
                 </Box>
             </Dialog>

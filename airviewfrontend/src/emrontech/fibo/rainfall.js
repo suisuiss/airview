@@ -2,11 +2,11 @@ import { Box, Typography, useMediaQuery, useTheme, Dialog, IconButton } from '@m
 import React, { useState, useEffect } from 'react';
 import rainIcon from '../../assetIcon/rainfall.png';
 import CloseIcon from '@mui/icons-material/Close';
+import rain from '../../assetPopup/rain.png';
 
 function FBRainInfo() {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
     const [rainData, setRainData] = useState(null);
     const [error, setError] = useState(null);
     const [isPopupOpen, setPopupOpen] = useState(false); 
@@ -88,6 +88,16 @@ function FBRainInfo() {
                 onClose={handleClosePopup}
                 maxWidth="md"
                 fullWidth
+                PaperProps={{
+                    sx: {
+                        borderRadius: '25px',
+                        overflowX: 'hidden',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    },
+                }}
             >
                 <Box p={2}>
                     <IconButton
@@ -104,9 +114,16 @@ function FBRainInfo() {
                         <CloseIcon />
                     </IconButton>
 
-                    <Typography variant="h6" align="center">
-                        AQI Details
-                    </Typography>
+                    <img
+                        src={rain}
+                        alt="image"
+                        style={{
+                            maxWidth: '100%',
+                            height: 'auto',
+
+                        }}
+                    />
+
 
                 </Box>
             </Dialog>

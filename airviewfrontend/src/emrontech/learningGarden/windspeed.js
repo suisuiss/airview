@@ -2,6 +2,8 @@ import { Box, Typography, useMediaQuery, useTheme, Dialog, IconButton } from '@m
 import React, { useState, useEffect } from 'react';
 import windIcon from '../../assetIcon/wind.png';
 import CloseIcon from '@mui/icons-material/Close';
+import wind from '../../assetPopup/windspeed.png';
+
 
 function LGWindInfo() {
     const theme = useTheme();
@@ -70,6 +72,17 @@ function LGWindInfo() {
                 onClose={handleClosePopup}
                 maxWidth="md"
                 fullWidth
+                PaperProps={{
+                    sx: {
+                        borderRadius: '25px',
+                        overflowX: 'hidden',
+                        overflowY: 'hidden',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                    },
+                }}
             >
                 <Box p={2}>
                     <IconButton
@@ -85,10 +98,15 @@ function LGWindInfo() {
                     >
                         <CloseIcon />
                     </IconButton>
+                    <img
+                        src={wind}
+                        alt="image"
+                        style={{
+                            maxWidth: '100%',
+                            height: 'auto',
 
-                    <Typography variant="h6" align="center">
-                        AQI Details
-                    </Typography>
+                        }}
+                    />
 
                 </Box>
             </Dialog>

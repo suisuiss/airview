@@ -8,6 +8,7 @@ import LGWindInfo from './emrontech/learningGarden/windspeed';
 import LGDateTime from './Combined/LGDateTime';
 import Faq from './faq'
 import Noti from './noti';
+import Select from './select';
  
 
 
@@ -30,7 +31,7 @@ function App() {
       </Box> */}
       {/* <LGDateTime/> */}
 
-      <Faq/>
+      <Select/>
     </div>
 
 

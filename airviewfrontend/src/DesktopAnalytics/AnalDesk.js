@@ -4,16 +4,20 @@ import AqiInfo from '../AQI/aqiInfo'
 import Pm25Info from '../emrontech/pm25';
 import Pm10Info from '../emrontech/pm10';
 import OverallInfo from '../emrontech/overallinfo';
-import threeDots from '../Assets/3DotsVertical.png'
+import threeDots from '../Assets/3DotsVertical.png';
+import OverallInfo2 from '../emrontech/overallinfo2';
+import Graph from '../Graph/Graph';
+
 const AnalDesk = () => {
-  const [locations, setLocation] = useState("LearningGarden");
+    const [locations, setLocation] = useState("LearningGarden");
+    const isMobile = window.innerWidth < 766;
+
   const setLearningGarden = () => {
     setLocation("LearningGarden");
   }
   const setFibo = () => {
     setLocation("FIBO");
   }
-  const isMobile = window.innerWidth < 766;
 
   return (
     <div>
@@ -42,12 +46,15 @@ const AnalDesk = () => {
             <Pm25Info location={locations}/> <Pm10Info location={locations}/>
           </div>
         </div>
-        <div className="grid-item item2">
+        <div className="grid-item item2"> {/*GRID NUMBER 2*/}
           <div className="overAllInfo">
             <OverallInfo location={locations}/>
+            <OverallInfo2 location={locations}/>
           </div>
         </div>
-        <div className="grid-item item3">3</div>
+        <div className="grid-item item3">
+          <Graph />
+        </div> {/*GRID NUMBER 3*/}
       </div>
     </div>
   )

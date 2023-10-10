@@ -1,3 +1,7 @@
+:root{
+  --bgcolor:rgb(228, 242, 255);
+  --fontcolor:#363E64;
+}
 .App {
   text-align: center;
   background-color: rgb(228, 242, 255);
@@ -37,3 +41,4 @@
     transform: rotate(360deg);
   }
 }
+

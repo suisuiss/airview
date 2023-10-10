@@ -14,13 +14,19 @@ import LGDashboard from './dashboard/LGdashboard';
 import FBDashboard from './dashboard/FBdashboard';
 import FBFullscreenContent from './dashboard/content/FBfull';
 import LGFullscreenContent from './dashboard/content/LGfull';
+import Nav from './navbar';
 
 function App() {
   return (
+    
     <Router>
+      <Nav></Nav>
       <Routes>
         <Route path="/" element={<LGDashboard />} />
         <Route path="fbdashboard" element={<FBDashboard />} />
+        <Route path="/notification" element={<Noti/>} />
+        <Route path="/faq" element={<Faq />} />
+        
       </Routes>
     </Router>
   );

@@ -9,33 +9,20 @@ import LGDateTime from './Combined/LGDateTime';
 import Faq from './faq'
 import Noti from './noti';
 import Select from './select';
- 
-
-
-
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import LGDashboard from './dashboard/LGdashboard';
+import FBDashboard from './dashboard/FBdashboard';
+import FBFullscreenContent from './dashboard/content/FBfull';
+import LGFullscreenContent from './dashboard/content/LGfull';
 
 function App() {
   return (
-
-    <div className="App">
-      {/* <Box display="flex" flexDirection="column">
-        <AqiInfo />
-        <Box color="#363E64"> 
-          <LGHumidityInfo /> 
-          <LGRainInfo />
-        </Box>
-        <Box display="flex" flexDirection="row"> 
-          <LGWBGTInfo /> 
-          <LGWindInfo/> 
-        </Box>
-      </Box> */}
-      {/* <LGDateTime/> */}
-
-      <Select/>
-    </div>
-
-
-
+    <Router>
+      <Routes>
+        <Route path="/" element={<LGDashboard />} />
+        <Route path="fbdashboard" element={<FBDashboard />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -2,7 +2,6 @@ import requests
 import pandas as pd
 import numpy as np
 from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
 
 def fetch_aqi_data():
     # Define the API URL
@@ -80,7 +79,7 @@ def uploadToMongoDB(dataframe):
         db = client['AQIData']
 
         # Choose a collection (similar to a table) where you want to insert the data
-        collection = db['historicAqi']
+        collection = db['historicAqiHourly']
 
         # Convert the DataFrame to a list of dictionaries
         data = dataframe.to_dict(orient='records')
@@ -91,13 +90,6 @@ def uploadToMongoDB(dataframe):
         print("Success")
     except Exception as e:
         print(f"Error: {e}")
-
-
-def testNetwork():
-    uri = "mongodb+srv://meowo:xRDFRKwNexWznNQg@airview.wz6lfvt.mongodb.net/?retryWrites=true&w=majority"
-    # Create a new client and connect to the server
-    client = MongoClient(uri, server_api=ServerApi('1'))
-    
 
 
 if __name__ == "__main__":

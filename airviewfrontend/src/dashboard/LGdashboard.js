@@ -5,8 +5,8 @@ import LGFullscreenContent from './content/LGfull';
 import LGNormalContent from './content/LGnormal';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-function LGDashboard() {
-    const [isFullscreen, setIsFullscreen] = useState(false);
+function LGDashboard({isFullscreen,setIsFullscreen}) {
+    // const [isFullscreen, setIsFullscreen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm')); 
@@ -40,6 +40,7 @@ function LGDashboard() {
         }
 
         setIsFullscreen(true);
+
     };
 
     const exitFullscreen = () => {

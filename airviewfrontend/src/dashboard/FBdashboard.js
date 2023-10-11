@@ -5,8 +5,8 @@ import FullscreenContent from './content/FBfull';
 import NormalContent from './content/FBnormal';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-function FBDashboard() {
-    const [isFullscreen, setIsFullscreen] = useState(false);
+function FBDashboard({isFullscreen , setIsFullscreen}) {
+    // const [isFullscreen, setIsFullscreen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm')); 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AqiInfo from './AQI/aqiInfo';
 import LGHumidityInfo from './emrontech/learningGarden/humidity';
 import Box from '@mui/material/Box';
@@ -17,13 +17,14 @@ import LGFullscreenContent from './dashboard/content/LGfull';
 import Nav from './navbar';
 
 function App() {
+  const[ isFullscreen ,  setIsFullscreen] = useState(false);
   return (
     
     <Router>
-      <Nav></Nav>
+      {isFullscreen ? null : <Nav />}
       <Routes>
-        <Route path="/" element={<LGDashboard />} />
-        <Route path="fbdashboard" element={<FBDashboard />} />
+        <Route path="/" element={<LGDashboard isFullscreen={isFullscreen} setIsFullscreen={setIsFullscreen}/>} />
+        <Route path="fbdashboard" element={<FBDashboard isFullscreen={isFullscreen} setIsFullscreen={setIsFullscreen}/>} />
         <Route path="/notification" element={<Noti/>} />
         <Route path="/faq" element={<Faq />} />
         

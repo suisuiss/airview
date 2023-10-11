@@ -1,27 +1,69 @@
-import React from 'react';
-import Chart from 'chart.js/auto';
+import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
+import Chart from 'chart.js/auto';
+import { DateTime } from 'luxon';  // Import DateTime
+
+import 'chartjs-adapter-luxon';  // Import the Luxon date adapter
 
 const Graph = () => {
-  const mockupData = {
-    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'],
-    datasets: [
-      {
-        label: 'AQI',
-        data: [40, 45, 50, 42, 48],
-        borderColor: 'rgba(75, 192, 192, 1)',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        tension: 0.1,
-      },
-    ],
-  };
+  const [chartData, setChartData] = useState({});
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  useEffect(() => {
+    // Make an API request to fetch AQI data
+    fetch('http://localhost:5000/api/aqi-data') // Update with your backend API endpoint
+      .then((response) => response.json())
+      .then((aqiData) => {
+        // Process the data and format it for Chart.js
+        const last60DaysData = aqiData
+          .slice(0, 60)  // Get data for the last 60 days
+          .map((entry) => ({
+            x: DateTime.fromISO(entry.date),  // Convert dates to Luxon DateTime objects
+            y: entry.AQI,
+          }));
+
+        const chartDataReal = {
+          datasets: [
+            {
+              label: 'AQI',
+              data: last60DaysData,
+              borderColor: 'rgba(75, 192, 192, 1)',
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              tension: 0.1,
+            },
+          ],
+        };
+
+        setChartData(chartDataReal);
+        setDataLoaded(true);
+      })
+      .catch((error) => {
+        console.error('Error fetching AQI data:', error);
+      });
+  }, []);
+
   const chartOptions = {
-    maintainAspectRatio: false, // Set this to false to allow the chart to expand to the container size
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        type: 'time',
+        time: {
+          unit: 'day',
+        },
+      },
+      y: {
+        beginAtZero: true,
+      },
+    },
   };
 
   return (
-    <div style={{ width: '90%', height: '90%' }}> {/* Set width and height to 100% */}
-      <Line data={mockupData} options={chartOptions} />
+    <div style={{ width: '90%', height: '90%' }}>
+      {dataLoaded ? (
+        <Line data={chartData} options={chartOptions} />
+      ) : (
+        <p>Loading data...</p>
+      )}
     </div>
   );
 };

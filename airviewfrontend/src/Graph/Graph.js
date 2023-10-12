@@ -11,7 +11,7 @@ const Graph = () => {
 
   useEffect(() => {
     // Make an API request to fetch AQI data
-    fetch('http://localhost:5000/api/aqi-data') // Update with your backend API endpoint
+    fetch('http://localhost:4000/aqiChart') // Update with your backend API endpoint
       .then((response) => response.json())
       .then((aqiData) => {
         // Process the data and format it for Chart.js

@@ -59,6 +59,8 @@ function LGWindInfo() {
             bgcolor="#FFFF"
             borderRadius="25px"
             marginTop={isMobile ? '5px' : '10px'}
+            paddingTop={isMobile ? '0px' : '8px'}
+            paddingBottom={isMobile ? '0px' : '5px'}
             marginLeft={isMobile ? '10px' : '20px'}
             display="flex"
             flexDirection="column"

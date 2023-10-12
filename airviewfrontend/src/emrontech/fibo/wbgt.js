@@ -74,6 +74,8 @@ function FBWBGTInfo() {
             borderRadius="25px"
             marginTop={isMobile ? '5px' : '10px'}
             marginLeft={isMobile ? '0px' : '20px'}
+            paddingTop={isMobile ? '0px' : '8px'}
+            paddingBottom={isMobile ? '0px' : '5px'}
             display="flex"
             flexDirection="column"
             alignItems="center"

@@ -66,7 +66,8 @@ function FBFullscreenContent() {
                 <WeatherForecastInfo />
             </Box>
             <Box display="flex" flexDirection="column" marginLeft="100px">
-                <CurrentAqiInfo />
+                <Box marginLeft="25px">
+                <CurrentAqiInfo /></Box>
                 <Box display="flex" flexDirection="row" marginLeft="20px">
                     <FBHumidityInfo />
                     <FBRainInfo />

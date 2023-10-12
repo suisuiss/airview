@@ -34,7 +34,7 @@ function CurrentAqiInfo() {
         width: '540px',
         borderRadius: '25px',
         paddingLeft: '0px',
-        paddingTop: '15px',
+        paddingTop: '20px',
         marginLeft: '15px'
     };
 
@@ -233,7 +233,7 @@ function CurrentAqiInfo() {
                     display="flex"
                     flexDirection="column"
                     alignItems="center"
-                    marginBottom={isMobile ? '0px' : '10px'}
+                    marginBottom={isMobile ? '0px' : '20px'}
                     paddingLeft={isMobile ? '30px' : '80px'}
                 >
                     <Box

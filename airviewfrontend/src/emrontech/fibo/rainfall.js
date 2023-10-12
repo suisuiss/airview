@@ -75,6 +75,8 @@ function FBRainInfo() {
             bgcolor="#FFFF"
             borderRadius="25px"
             marginTop={isMobile ? '5px' : '10px'} 
+            paddingTop={isMobile ? '0px' : '8px'}
+            paddingBottom={isMobile ? '0px' : '5px'}
             marginLeft={isMobile ? '10px' : '20px'} 
             display="flex"
             flexDirection="column"
@@ -127,7 +129,7 @@ function FBRainInfo() {
 
                 </Box>
             </Dialog>
-            <Box display="flex" flexDirection="column" alignItems="center" marginBottom={isMobile ? '5px' : '0px'} marginTop={isMobile ? '5px' : '10px'}>
+            <Box display="flex" flexDirection="column" alignItems="center" marginBottom={isMobile ? '5px' : '0px'} marginTop={isMobile ? '5px' : '5px'}>
                 <Box display="flex" flexDirection="row" >
                     <Typography variant={isMobile ? 'body2' : 'h6'} fontWeight="500">
                         Rain Fall

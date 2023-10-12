@@ -90,9 +90,9 @@ function FBDashboard({isFullscreen , setIsFullscreen}) {
         <Box>
             {isMobile ? (
                 <Box style={iconStyle}>
-                    <IconButton onClick={handleMenuClick}>
+                    {/* <IconButton onClick={handleMenuClick}>
                         <MoreVertIcon />
-                    </IconButton>
+                    </IconButton> */}
                     <Menu
                         anchorEl={anchorEl}
                         keepMounted

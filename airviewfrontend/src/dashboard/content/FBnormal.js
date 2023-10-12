@@ -22,7 +22,7 @@ function NormalContent() {
     };
 
     const contentContainerStyle = {
-        marginTop: '80px',
+        marginTop: '10px',
         display: 'flex',
         flexDirection: isMobile ? 'column' : 'row', 
     };

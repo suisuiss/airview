@@ -15,6 +15,7 @@ import FBDashboard from './dashboard/FBdashboard';
 import FBFullscreenContent from './dashboard/content/FBfull';
 import LGFullscreenContent from './dashboard/content/LGfull';
 import Nav from './navbar';
+import AnalDesk from './DesktopAnalytics/AnalDesk';
 
 function App() {
   const[ isFullscreen ,  setIsFullscreen] = useState(false);
@@ -27,7 +28,7 @@ function App() {
         <Route path="fbdashboard" element={<FBDashboard isFullscreen={isFullscreen} setIsFullscreen={setIsFullscreen}/>} />
         <Route path="/notification" element={<Noti/>} />
         <Route path="/faq" element={<Faq />} />
-        
+        <Route path="/analytic" element={<AnalDesk/>} />
       </Routes>
     </Router>
   );

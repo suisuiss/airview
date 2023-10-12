@@ -27,8 +27,12 @@ function OverallInfo(props) {
     };
 
     useEffect(() => {
-        fetchDataWithRetry(); // Initial fetch
-    }, []);
+        fetchDataWithRetry();
+        const interval = setInterval(() => {
+            fetchDataWithRetry();
+        }, 180000);
+        return () => clearInterval(interval);
+      }, []);
 
     return (
         <div>

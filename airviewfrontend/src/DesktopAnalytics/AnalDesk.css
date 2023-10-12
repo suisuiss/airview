@@ -1,12 +1,7 @@
 /* HIGH-RESOLUTION DESKTOP */
 @media (min-width: 1200px) { /*For Desktop Users*/
-    .NavBarContainer{
-        display: flex;
-        height: 80px;
-        justify-content: center;
-        align-items: center;
-    }
     .StationButtonContainer{
+        margin-top: 20px;
         margin-left: 50px;
     }
     .StationButton{
@@ -39,7 +34,7 @@
 
     .GraphAndInfoContainer{
         display: grid;
-        padding: 50px 50px 10px 50px;
+        padding: 40px 50px 10px 50px;
         gap: 20px;
         grid-template-rows: 260px 700px;
     }
@@ -70,7 +65,7 @@
         grid-row: 1;
     }
     .overAllInfo{
-        font-size: 25px;
+        font-size: 1.5rem;
         text-align: left;
         display: flex;
     }
@@ -85,13 +80,8 @@
 
 /* TABLET LANDSCAPE / DESKTOP */
 @media (min-width: 766px) and (max-width: 1199px) {
-    .NavBarContainer{
-        display: flex;
-        height: 80px;
-        justify-content: center;
-        align-items: center;
-    }
     .StationButtonContainer{
+        margin-top: 30px;
         margin-left: 50px;
     }
     .StationButton{
@@ -124,7 +114,7 @@
 
     .GraphAndInfoContainer{
         display: grid;
-        padding: 50px 50px 10px 50px;
+        padding: 40px 50px 10px 50px;
         gap: 20px;
         grid-template-rows: 260px 700px;
     }
@@ -150,7 +140,7 @@
         font-size: 35px;
     }
     .overAllInfo{
-        font-size: 20px;
+        font-size: 1.2em;
         text-align: left;
         display: flex;
     }
@@ -169,11 +159,6 @@
 
 /* SMARTPHONES PORTRAIT */
 @media (min-width: 300px) and (max-width: 765px){
-    .MenuContainer{
-        display: flex;
-        justify-content: flex-end;
-        padding: 20px;
-    }
     .StationButtonContainer{
         position: relative;
         z-index: 1;
@@ -181,7 +166,7 @@
         width: max-content;
         padding: 8px;
         border-radius: 50px;
-        margin: 0 auto 30px auto;
+        margin: 20px auto 30px auto;
     }
     .MovingButton {
         position: absolute;
@@ -241,7 +226,5 @@
         font-size: 16px;
         text-align: left;
         line-height: 2.7;
-    }
-    .item3 {
     }
 }

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import './AnalDesk.css'
-import AqiInfo from '../AQI/aqiInfo'
+import AqiInfoAnal from '../AQI/aqiInfoAnal';
 import Pm25Info from '../emrontech/pm25';
 import Pm10Info from '../emrontech/pm10';
 import OverallInfo from '../emrontech/overallinfo';
-import threeDots from '../Assets/3DotsVertical.png';
 import OverallInfo2 from '../emrontech/overallinfo2';
 import Graph from '../Graph/Graph';
 
@@ -21,10 +20,6 @@ const AnalDesk = () => {
 
   return (
     <div>
-      <div className='NavBarContainer'> {/* NavBarContainer for Navbar */}
-        {!isMobile ? (<div>PlaceHolder for Navbar</div>) : (<div className='MenuContainer'> <img src={threeDots} alt="threeDots" style={{width:"25px"}}/></div>)}
-      </div>
-
       <div className='StationButtonContainer'> {/* Button for choosing station graph */}
         {isMobile && 
           <div className={locations === 'LearningGarden' ? 'MovingButton' : 'MovingButton GoRight'}></div>
@@ -40,7 +35,7 @@ const AnalDesk = () => {
       <div className='GraphAndInfoContainer'>
         <div className="grid-item item1"> {/*GRID NUMBER 1*/}
           <div className="aqiInfo">
-            <AqiInfo/>
+            <AqiInfoAnal />
           </div>
           <div className="pmInfo">
             <Pm25Info location={locations}/> <Pm10Info location={locations}/>
@@ -49,6 +44,7 @@ const AnalDesk = () => {
         <div className="grid-item item2"> {/*GRID NUMBER 2*/}
           <div className="overAllInfo">
             <OverallInfo location={locations}/>
+            <div style={{width:"10%"}}></div>
             <OverallInfo2 location={locations}/>
           </div>
         </div>

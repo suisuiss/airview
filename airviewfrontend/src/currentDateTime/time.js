@@ -11,7 +11,7 @@ function CurrentTime() {
             const options = {
                 hour: 'numeric',
                 minute: '2-digit',
-                hour12: true,
+                hour12: false,
                 timeZone: 'Asia/Bangkok',
             };
             const formattedBangkokTime = bangkokTime.toLocaleString('en-US', options);

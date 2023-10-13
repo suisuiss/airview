@@ -7,10 +7,10 @@ const noti =()=>{
     return(
         <div >
         <div className="noti"> 
-            <span style={{ fontWeight:'600'}}>Let us notify you </span>
+            <span style={{ fontWeight:'600', fontSize:'2rem' , letterSpacing:'0.7px'}}>Let us notify you </span><br/>
             <span> <CheckCircleIcon style={{ color:"6599E8",fontSize:'30px'}}/> When There’s chance of raining </span>
-            <span> <CheckCircleIcon style={{ color:"6599E8",fontSize:'30px'}}/>  When AQI levels reach the unhealty level</span>
-            <button onClick={notify} className='noti-btn'> notify me </button>
+            <span> <CheckCircleIcon style={{ color:"6599E8",fontSize:'30px'}}/>  When AQI levels reach the unhealty level</span> <br/>
+            <button onClick={notify} className='noti-btn'><span>  notify me </span> </button>
         </div>
         </div>
     )

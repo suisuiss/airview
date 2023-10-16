@@ -121,7 +121,7 @@ function LGWindInfo() {
                         <img src={windIcon} alt="Image2" width={isMobile ? '12px' : '30px'} />
                     </Box>
                 </Box>
-                <Typography variant={isMobile ? 'body2' : '18px'} marginTop={isMobile ? '0px' : '10px'}>
+                <Typography variant={isMobile ? 'body2' : 'h6'} marginTop={isMobile ? '0px' : '10px'}>
                     {windData ? (
                         <div>
                             {windData.map(function (a) {

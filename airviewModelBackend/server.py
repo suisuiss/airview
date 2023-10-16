@@ -8,10 +8,9 @@ from statsmodels.tsa.seasonal import seasonal_decompose
 from darts import TimeSeries
 from darts.models import ARIMA, AutoARIMA, ExponentialSmoothing, Prophet, FFT
 from sklearn.preprocessing import MinMaxScaler
-from darts.metrics import mse
 from sklearn.preprocessing import StandardScaler
 # Deep learning models
-from darts.models import NHiTSModel, NBEATSModel, TFTModel, RNNModel, TiDEModel
+from darts.models import TiDEModel
 # Regression models
 from darts.models import XGBModel, CatBoostModel, RandomForest
 
@@ -218,8 +217,8 @@ def makePrediction(days):
     temp_df = temp_df.merge(preds_df[['date', 'AQI']], on='date', how='left')
     temp_df.rename(columns={'AQI': 'average_aqi'}, inplace=True)
     temp_df['hourly_AQI'] = temp_df.apply(lambda row: adjust_aqi_based_on_temperature(row['average_aqi'], row['temperature']), axis=1)
+    temp_df = temp_df.drop(['date','temperature','average_aqi'], axis=1)
     print(temp_df)
-
 
 
 if __name__ == "__main__":

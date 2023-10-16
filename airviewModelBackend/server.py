@@ -41,7 +41,6 @@ def fetch_aqi_data():
     except Exception as e:
         print(f"An error occurred: {e}")
 
-
 def csvAugmentation():
     # Replace with the path to your CSV file
     csv_file = './input/bangkok-air-quality.csv'
@@ -103,7 +102,6 @@ def uploadToMongoDB(dataframe):
     except Exception as e:
         print(f"Error: {e}")
 
-
 def get_data():
     print('Starting dataframe initialization')
     client = MongoClient('mongodb+srv://meowo:xRDFRKwNexWznNQg@airview.wz6lfvt.mongodb.net/?retryWrites=true&w=majority')
@@ -142,62 +140,117 @@ def datascaling(df):
 
     scaled_data = std_scaler.fit_transform(df)
     scaled_data = scaler.fit_transform(scaled_data)
-    scaled_df = pd.DataFrame(scaled_data, columns=df.columns)
+    scaled_data = pd.DataFrame(scaled_data, columns=df.columns)
 
-    scaled_df.insert(0, 'date', date_column)
-    return scaled_df
+    scaled_data.insert(0, 'date', date_column)
+    return scaled_data
 
-if __name__ == "__main__":
+def fetchTempData():
+    api_url = "https://www.meteosource.com/api/v1/free/point?place_id=postal-th-10140&sections=current%2Chourly&language=en&units=auto&key=t66kz0c4o4d1oi27t84scaz7kiiof5id124hfdx9"
+    
+    try:
+        # Send a GET request to the API URL
+        response = requests.get(api_url)
+        
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            # Parse the JSON response
+            data = response.json()
+            
+            # Extract hourly temperature data
+            hourly_data = data.get("hourly", {}).get("data", [])
+            
+            if hourly_data:
+                # Extract date and temperature values
+                hourly_temp_data = [
+                    {
+                        "date": entry.get("date", ""),
+                        "temperature": entry.get("temperature", 0)
+                    }
+                    for entry in hourly_data
+                ]
+                df = pd.DataFrame(hourly_temp_data)
+                df['date'] = pd.to_datetime(df['date'])
+                return df
+            else:
+                print("Hourly data not found in the response.")
+        else:
+            print(f"Failed to fetch data. Status code: {response.status_code}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    return "null"
+
+
+def adjust_aqi_based_on_temperature(aqi, temperature_celsius):
+    # Define the relationship between temperature and AQI
+    # You can adjust the coefficients based on your specific needs
+    aqi_adjusted = aqi - (temperature_celsius - 25) * 2
+
+    # Ensure that the adjusted AQI remains within a certain range (e.g., 0 to 500)
+    aqi_adjusted = max(0, min(aqi_adjusted, 500))
+
+    return aqi_adjusted
+
+
+def makePrediction(days):
+    """
     # Call the function to get the data
     result = get_data()
-    result = datascaling(result)
     mean_AQI = result['AQI'].mean()
     train, test = result.iloc[:int(len(result) * 0.8)], result.iloc[int(len(result) * 0.8):]
-    print (train)
-    print("---------------------")
-    print (test)
     unidf = TimeSeries.from_dataframe(train, "date", "AQI",fill_missing_dates=True, fillna_value=mean_AQI)
     test = TimeSeries.from_dataframe(test, 'date', 'AQI',fill_missing_dates=True, fillna_value=mean_AQI)
-    results = {}
-    uni_models = {
-        "Arima": ARIMA(),
-        "AutoARIMA": AutoARIMA(),
-        "ESN": ExponentialSmoothing(),
-        "Prophet": Prophet(),
-        "FFT": FFT()
-    }
-    for n, m in uni_models.items():
-        model = m.fit(unidf)
-        preds = m.predict(len(test))
-        loss = mse(test, preds)
-        results[n] = [preds, loss]
-        preds.plot(label=n + f" {loss:.2f}")
+    model = TiDEModel(input_chunk_length=100, output_chunk_length=7, n_epochs = 150)
+    model_fit = model.fit(unidf)
+    preds = model_fit.predict(days)
+    preds_df = preds.pd_dataframe()
+    preds_df.reset_index(inplace=True)
+    """
+    data1 = {'date': ['2023-10-16', '2023-10-17', '2023-10-18', '2023-10-19'],
+         'AQI': [80.331149, 79.273790, 72.715031, 87.025199]}
+    preds_df = pd.DataFrame(data1)
 
-    regression_models = {
-        'XGB': XGBModel(lags=350),
-        'CatBoost': CatBoostModel(lags=350),
-        'Forest': RandomForest(lags=350),
-    }
-    for n, m in regression_models.items():
-        model = m.fit(unidf)
-        preds = m.predict(len(test))
-        loss = mse(test, preds)
-        results[n] = [preds, loss]
-        preds.plot(label=n + f" {loss:.2f}")
+    temp_df = fetchTempData()
+    temp_df['hourly_date'] = temp_df['date']
+    temp_df['date'] = pd.to_datetime(temp_df['date']).dt.strftime('%Y-%m-%d')
+    temp_df['date'] = pd.to_datetime(temp_df['date'])
+    preds_df['date'] = pd.to_datetime(preds_df['date'])
+    temp_df = temp_df.merge(preds_df[['date', 'AQI']], on='date', how='left')
+    temp_df.rename(columns={'AQI': 'average_aqi'}, inplace=True)
+    temp_df['hourly_AQI'] = temp_df.apply(lambda row: adjust_aqi_based_on_temperature(row['average_aqi'], row['temperature']), axis=1)
+    print(temp_df)
 
-    dl_models = {
-        "TiDE": TiDEModel(input_chunk_length=100, output_chunk_length=7, n_epochs = 150),
-        "RNNModel": RNNModel(model="LSTM", input_chunk_length=100, output_chunk_length=7,n_epochs = 150),
-        "NHiTS": NHiTSModel(input_chunk_length=100, output_chunk_length=7, n_epochs = 150),
-        "NBEATS": NBEATSModel(input_chunk_length=100, output_chunk_length=7, n_epochs = 150),
-        "TFT": TFTModel(input_chunk_length=100, output_chunk_length=7, add_relative_index=True, n_epochs = 150),
-    }
-    test.plot()
-    for n, m in dl_models.items():
-        model = m.fit(unidf)
-        preds = m.predict(len(test))
-        loss = mse(test, preds)
-        results[n] = [preds, loss]
-        preds.plot(label=n + f" {loss:.2f}")
 
-    plt.show()
+
+if __name__ == "__main__":
+    makePrediction(10)
+# Use TIDE
+
+
+    """
+        uni_models = {
+            "Arima": ARIMA(),
+            "AutoARIMA": AutoARIMA(),
+            "ESN": ExponentialSmoothing(),
+            "Prophet": Prophet(),
+            "FFT": FFT()
+        }
+        for n, m in uni_models.items():
+            model = m.fit(unidf)
+            preds = m.predict(len(test))
+            loss = mse(test, preds)
+            results[n] = [preds, loss]
+            preds.plot(label=n + f" {loss:.2f}")
+
+        regression_models = {
+            'XGB': XGBModel(lags=350),
+            'CatBoost': CatBoostModel(lags=350),
+            'Forest': RandomForest(lags=350),
+        }
+        for n, m in regression_models.items():
+            model = m.fit(unidf)
+            preds = m.predict(len(test))
+            loss = mse(test, preds)
+            results[n] = [preds, loss]
+            preds.plot(label=n + f" {loss:.2f}")
+    """

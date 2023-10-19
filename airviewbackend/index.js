@@ -1,15 +1,43 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cronJob = require('./fetch-aqi-data');
+const subscriptionRoute = require('./routes/subscription'); 
+const cors = require('cors'); 
+const webpush = require('web-push');
+
 
 const app = express();
-
+app.use(cors());
 mongoose.connect('mongodb+srv://airview:Airview1234@airview.wz6lfvt.mongodb.net/', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
+app.use(express.json());
 
 app.use('/aqi', require('./routes/aqi'));
+app.get('/test',async (req, res) => {
+  res.send('server is running ')
+})
+app.post('/subscribe', subscriptionRoute );
+
+
+app.post('/sub', async (req,res)=>{
+    res.send('subbed')
+    const subscription = req.body;
+    console.log("sub",subscription);
+    const payload = JSON.stringify({ title: "Weather alerts", body : "Air Quality Exceeds the limit, Please wear masks" });
+  webpush
+    .sendNotification(subscription, "Air Quality Exceeds the limit, Please wear masks" )
+    .then(() => {
+      console.log('Push notification sent successfully');
+    })
+    .catch(err => {
+      console.error('Failed to send push notification:', err);
+    });
+
+});
+app.get('/send', subscriptionRoute );
+
 
 app.get('/aqiChart', async (req, res) => {
     try {

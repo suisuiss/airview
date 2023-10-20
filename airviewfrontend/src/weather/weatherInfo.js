@@ -140,7 +140,14 @@ function WeatherForecastInfo() {
                 </Box>
             );
         } else {
-            return null;
+            return (
+                <Box display="flex" justifyContent="center" alignItems="center" marginBottom="10px">
+                    <img src={warning} alt="Warning Icon" width="20px" style={{ marginRight: '5px', }} />
+                    <Typography fontSize="14px">
+                        Rain is expected around 3:00 AM
+                    </Typography>
+                </Box>
+            );
         }
     };
 

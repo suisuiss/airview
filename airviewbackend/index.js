@@ -2,17 +2,20 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cronJob = require('./fetch-aqi-data');
 const subscriptionRoute = require('./routes/subscription'); 
-const cors = require('cors'); 
 const webpush = require('web-push');
-
+const { MongoClient } = require('mongodb');
+const cors = require('cors');
 
 const app = express();
+
 app.use(cors());
 mongoose.connect('mongodb+srv://airview:Airview1234@airview.wz6lfvt.mongodb.net/', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
 app.use(express.json());
+
+const DATABASE_URL = 'mongodb+srv://meowo:xRDFRKwNexWznNQg@airview.wz6lfvt.mongodb.net/?retryWrites=true&w=majority';
 
 app.use('/aqi', require('./routes/aqi'));
 app.get('/test',async (req, res) => {

@@ -10,15 +10,15 @@ function CurrentTime() {
             const bangkokTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }));
             const options = {
                 hour: 'numeric',
-                minute: '2-digit',
-                hour12: false,
+                minute: 'numeric',
+                hour12: true, // Use 12-hour format with AM/PM
                 timeZone: 'Asia/Bangkok',
             };
             const formattedBangkokTime = bangkokTime.toLocaleString('en-US', options);
             setFormattedTime(formattedBangkokTime);
         };
 
-        updateTime(); 
+        updateTime();
 
         const intervalId = setInterval(updateTime, 1000);
 

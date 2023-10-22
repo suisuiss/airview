@@ -127,7 +127,7 @@ function LGLocation() {
                         <Grid item>
                             <MenuItem value="Switch">
                                 <Typography
-                                    variant="h7"
+                                    variant="h6"
                                     color="#363E64"
                                     fontWeight="600"
                                 >
@@ -155,7 +155,7 @@ function LGLocation() {
                                 >
                                     <MenuItem value="none">
                                         <Typography
-                                            variant="h7"
+                                            variant="h6"
                                             color="#363E64"
                                             fontWeight="600"
                                         >
@@ -164,7 +164,7 @@ function LGLocation() {
                                     </MenuItem>
                                     <MenuItem value="10mins">
                                         <Typography
-                                            variant="h7"
+                                            variant="h6"
                                             color="#363E64"
                                             fontWeight="600"
                                         >
@@ -173,7 +173,7 @@ function LGLocation() {
                                     </MenuItem>
                                     <MenuItem value="20mins">
                                         <Typography
-                                            variant="h7"
+                                            variant="h6"
                                             color="#363E64"
                                             fontWeight="600"
                                         >

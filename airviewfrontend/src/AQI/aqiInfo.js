@@ -48,6 +48,7 @@ function CurrentAqiInfo() {
             })
             .then((data) => {
                 setAqiData(data);
+                checkAQI();   
             })
             .catch((error) => {
                 console.error('Error fetching AQI data:', error);
@@ -57,7 +58,30 @@ function CurrentAqiInfo() {
                 }, 60000);
             });
     };
+    
+    const checkAQI =()=>{
+      
+        const currentTime = new Date();
+        const hours = currentTime.getHours().toString().padStart(2, '0');
+        const minutes = currentTime.getMinutes().toString().padStart(2, '0');
+        const seconds = currentTime.getSeconds().toString().padStart(2, '0');
 
+const formattedTime = `${hours}:${minutes}:${seconds}`;
+        console.log(formattedTime +"current AQI is" + aqiData.data.aqi)
+        if (aqiData.data.aqi > 50) {
+            sendNoti();
+        }
+    }
+    const sendNoti =()=>{
+        if ('serviceWorker' in navigator && 'PushManager' in window) {
+            navigator.serviccheceWorker.ready.then((registration) => {
+              registration.showNotification('Your App Name', {
+                body: 'You will be notified!',
+                icon: 'notification-icon.png', // Set the path to your notification icon
+              });
+            });
+          }
+    }
     const calculateAqiWord = (aqiValue) => {
         if (aqiValue >= 0 && aqiValue <= 50) {
             return "Good";

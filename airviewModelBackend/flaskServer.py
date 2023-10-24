@@ -6,7 +6,7 @@ from darts import TimeSeries
 from sklearn.preprocessing import MinMaxScaler
 import numpy as np
 from sklearn.preprocessing import StandardScaler
-from darts.models import TiDEModel
+from darts.models import NBEATSModel
 from pymongo.mongo_client import MongoClient
 from datetime import datetime
 
@@ -187,7 +187,7 @@ def makePrediction():
     train, test = result.iloc[:int(len(result) * 0.8)], result.iloc[int(len(result) * 0.8):]
     unidf = TimeSeries.from_dataframe(train, "date", "AQI",fill_missing_dates=True, fillna_value=mean_AQI)
     test = TimeSeries.from_dataframe(test, 'date', 'AQI',fill_missing_dates=True, fillna_value=mean_AQI)
-    model = TiDEModel(input_chunk_length=100, output_chunk_length=7, n_epochs = 150)
+    model = NBEATSModel(input_chunk_length=100, output_chunk_length=7, n_epochs = 150)
     model_fit = model.fit(unidf)
     preds = model_fit.predict(10)
     preds_df = preds.pd_dataframe()

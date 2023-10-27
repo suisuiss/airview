@@ -219,6 +219,7 @@ sched = BackgroundScheduler(daemon=True)
 sched.add_job(uploadHourlyData,'interval',minutes=60)
 sched.add_job(uploadDailyData,'cron', hour=23, minute=30)
 sched.add_job(makePrediction,'interval',minutes=720)
+sched.add_job(makePrediction,'cron', hour=14, minute=14)
 sched.start()
 
 app = Flask(__name__)

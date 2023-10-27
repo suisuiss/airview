@@ -42,8 +42,20 @@ function WeatherForecastInfo() {
             });
     };
 
+    const fetchAqiData = () => {
+        fetch('http://localhost:5000/get-forecasted-aqi') // Update with your backend API endpoint
+        .then((response) => response.json())
+        .then((data) => {
+            console.log("data")
+        })
+        .catch((error) => {
+            console.error('Error fetching AQI forecasted data:', error);
+        });
+    };
+
     useEffect(() => {
         fetchData();
+        fetchAqiData();
         const intervalId = setInterval(fetchData, 5 * 60 * 1000);
         return () => clearInterval(intervalId);
     }, []);

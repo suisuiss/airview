@@ -1,5 +1,6 @@
 from flask import Flask
 import pandas as pd
+from flask_cors import CORS
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from darts import TimeSeries
@@ -9,6 +10,12 @@ from sklearn.preprocessing import StandardScaler
 from darts.models import NBEATSModel
 from pymongo.mongo_client import MongoClient
 from datetime import datetime
+
+def get_current_date():
+    # Get the current date in the same format as your MongoDB date strings
+    current_date = datetime.now().strftime("%a, %d %b %Y %H:%M:%S %Z")
+    return current_date
+
 
 def uploadHourlyData():
     client = MongoClient('mongodb+srv://meowo:xRDFRKwNexWznNQg@airview.wz6lfvt.mongodb.net/?retryWrites=true&w=majority')
@@ -184,10 +191,8 @@ def makePrediction():
     # Call the function to get the data
     result = get_data()
     mean_AQI = result['AQI'].mean()
-    train, test = result.iloc[:int(len(result) * 0.8)], result.iloc[int(len(result) * 0.8):]
-    unidf = TimeSeries.from_dataframe(train, "date", "AQI",fill_missing_dates=True, fillna_value=mean_AQI)
-    test = TimeSeries.from_dataframe(test, 'date', 'AQI',fill_missing_dates=True, fillna_value=mean_AQI)
-    model = NBEATSModel(input_chunk_length=100, output_chunk_length=7, n_epochs = 150)
+    unidf = TimeSeries.from_dataframe(result, "date", "AQI",fill_missing_dates=True, fillna_value=mean_AQI)
+    model = NBEATSModel(input_chunk_length=10, output_chunk_length=7, n_epochs = 100)
     model_fit = model.fit(unidf)
     preds = model_fit.predict(10)
     preds_df = preds.pd_dataframe()
@@ -206,7 +211,7 @@ def makePrediction():
     records = temp_df.to_dict(orient="records")
     for record in records:
         # Use the 'date' field as the filter
-        filter = {"date": record["date"]}
+        filter = {"hourly_date": record["hourly_date"]}
         
         # Try to update an existing document or insert a new one if not found
         collection.update_one(filter, {"$set": record}, upsert=True)
@@ -219,10 +224,12 @@ sched = BackgroundScheduler(daemon=True)
 sched.add_job(uploadHourlyData,'interval',minutes=60)
 sched.add_job(uploadDailyData,'cron', hour=23, minute=30)
 sched.add_job(makePrediction,'interval',minutes=720)
-sched.add_job(makePrediction,'cron', hour=14, minute=14)
 sched.start()
 
 app = Flask(__name__)
+originList = ['http://10.1.81.11:3000', 'http://localhost:3000', 'http://127.0.0.1:3000']
+CORS(app, supports_credentials=True, origins=originList)
+
 
 @app.route("/")
 def hello_world():
@@ -237,6 +244,6 @@ def getForecastAqi():
     client = MongoClient('mongodb+srv://meowo:xRDFRKwNexWznNQg@airview.wz6lfvt.mongodb.net/?retryWrites=true&w=majority')
     db = client['AQIData']
     collection = db['forecastedAqi']
-    data = list(collection.find())  # Fetch all data from the collection
-
+    data = list(collection.find({},{'_id': 0}).sort('hourly_date', -1).limit(25))
+    data.reverse()
     return(data)

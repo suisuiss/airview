@@ -11,6 +11,7 @@ function WeatherForecastInfo() {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [weatherData, setWeatherData] = useState(null);
+    const [aqiData, setAqiData] = useState(null);
     const [iconImages, setIconImages] = useState([]);
     const mobileStyles = {
         width: '350px',
@@ -46,7 +47,7 @@ function WeatherForecastInfo() {
         fetch('http://localhost:5000/get-forecasted-aqi') // Update with your backend API endpoint
         .then((response) => response.json())
         .then((data) => {
-            console.log("data")
+            setAqiData(data);
         })
         .catch((error) => {
             console.error('Error fetching AQI forecasted data:', error);
@@ -57,7 +58,9 @@ function WeatherForecastInfo() {
         fetchData();
         fetchAqiData();
         const intervalId = setInterval(fetchData, 5 * 60 * 1000);
-        return () => clearInterval(intervalId);
+        const intervalId2 = setInterval(fetchAqiData, 1000*60*60)
+        return () => {clearInterval(intervalId);
+        clearInterval(intervalId2);}
     }, []);
 
     useEffect(() => {
@@ -69,17 +72,22 @@ function WeatherForecastInfo() {
             }
             setIconImages(imports);
         };
-
         importIconImages();
     }, []);
 
     const renderHourlyWeather1 = () => {
         const currentHourIndex = weatherData?.hourly?.data.findIndex((data) => {
+            // Get the current hour of the day (e.g., 3:30 PM would be hour 15)
             const currentHour = new Date().getHours();
+
+            // Get the hour from the 'date' field of the weather data
             const dataHour = new Date(data.date).getHours();
+
+            // Check if the data corresponds to the next hour
+            // (e.g., if it's currently 3:30 PM, it checks if the data is for 4:00 PM)
             return dataHour === currentHour + 1;
         });
-        const startIndex = currentHourIndex !== -1 ? currentHourIndex : 0;
+        const startIndex = currentHourIndex !== -1 ? currentHourIndex : 0; // make a starting index which is 1 hour ahead
 
         return (
             <Box style={{ display: "flex", flexDirection: "row" }}>

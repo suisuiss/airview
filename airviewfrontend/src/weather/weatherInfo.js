@@ -11,7 +11,7 @@ function WeatherForecastInfo() {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [weatherData, setWeatherData] = useState(null);
-    const [aqiData, setAqiData] = useState(null);
+    const [aqiData, setAqiData] = useState([]);
     const [iconImages, setIconImages] = useState([]);
     const mobileStyles = {
         width: '350px',
@@ -20,8 +20,6 @@ function WeatherForecastInfo() {
         fontSize: '12px', 
         borderRadius: '25px',
         marginBottom: '10px',
-        
-        
     };
 
     const desktopStyles = {
@@ -58,10 +56,10 @@ function WeatherForecastInfo() {
         fetchData();
         fetchAqiData();
         const intervalId = setInterval(fetchData, 5 * 60 * 1000);
-        const intervalId2 = setInterval(fetchAqiData, 1000*60*60)
+        const intervalId2 = setInterval(fetchAqiData, 5 * 60 * 1000)
         return () => {clearInterval(intervalId);
-        clearInterval(intervalId2);}
-    }, []);
+            clearInterval(intervalId2);}
+    }, [aqiData]);
 
     useEffect(() => {
         const importIconImages = async () => {
@@ -122,8 +120,6 @@ function WeatherForecastInfo() {
           
             return closestColor;
         };
-        
-                
 
         return (
             <Box style={{ display: "flex", flexDirection: "row" }}>
@@ -135,7 +131,7 @@ function WeatherForecastInfo() {
                         {formatTime(data.date)}<br />
                         <img src={iconImages[data.icon - 1]} alt="Weather Icon" width='70px' />
                         {data.temperature}°C
-
+                        
                         <Box borderRadius="10px" bgcolor={getAqiColor(slicedAqiData[index]?.hourly_AQI)} width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
                             <Typography fontSize='11px' color='#FFFF' style={{ textAlign: 'center' }}>AQI<br />
                                 {slicedAqiData[index]?.hourly_AQI}</Typography>
@@ -191,7 +187,7 @@ function WeatherForecastInfo() {
             <Box style={{ display: "flex", flexDirection: "row" }}>
                 {weatherData?.hourly?.data?.slice(startIndex + 3, startIndex + 6).map((data, index) => (
                     <Box key={index} display="flex" flexDirection="column" alignItems="center" {...(isMobile
-                        ? { paddingLeft: '25px', paddingRight: '20px' } 
+                        ? { paddingLeft: '25px', paddingRight: '20px' }
                         : { paddingLeft: '60px', paddingRight: '40px' } 
                     )} >
                         {formatTime(data.date)}<br />
@@ -227,14 +223,14 @@ function WeatherForecastInfo() {
                 </Box>
             );
         } else {
-            return null/*(
+            return (
                 <Box display="flex" justifyContent="center" alignItems="center" marginBottom="10px">
-                    <img src={warning} alt="Warning Icon" width="20px" style={{ marginRight: '5px', }} />
+                    {/* <img src={warning} alt="Warning Icon" width="20px" style={{ marginRight: '5px', }} /> */}
                     <Typography fontSize="14px">
-                        Rain is expected around 3:00 AM
+                        No Rain Expected
                     </Typography>
                 </Box>
-            );*/
+            );
         }
     };
 

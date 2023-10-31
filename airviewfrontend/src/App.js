@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Faq from './faq'
 import Noti from './noti';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';

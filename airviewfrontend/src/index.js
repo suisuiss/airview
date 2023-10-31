@@ -7,12 +7,12 @@ import { createRoot } from 'react-dom/client';
 
 const root = createRoot(document.getElementById('root'));
 // if ('serviceWorker' in navigator) {
-//   navigator.serviceWorker.register('/sw.js')
+//   navigator.serviceWorker.register('./sw.js')
 //     .then((registration) => {
-//       console.log('Service Worker registered with scope:', registration.scope);
+//       console.log('(from index.js)Service Worker registered with scope:', registration.scope);
 //     })
 //     .catch((error) => {
-//       console.error('Service Worker registration failed:', error);
+//       console.warn('(from index.js)Service Worker registration failed:', error);
 //     });
 // }
 root.render(

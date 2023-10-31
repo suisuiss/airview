@@ -59,7 +59,7 @@ function WeatherForecastInfo() {
         const intervalId2 = setInterval(fetchAqiData, 5 * 60 * 1000)
         return () => {clearInterval(intervalId);
             clearInterval(intervalId2);}
-    }, []);
+    }, [aqiData]);
 
     useEffect(() => {
         const importIconImages = async () => {
@@ -105,7 +105,6 @@ function WeatherForecastInfo() {
             200: "#99004C", // Very Unhealthy
             300: "#7E0023", // Hazardous
         };
-        console.log("hi")
         const getAqiColor = (aqi) => {
             // Initialize variables to track the closest level and color
             let closestLevel = 0;

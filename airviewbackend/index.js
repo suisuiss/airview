@@ -5,6 +5,7 @@ const subscriptionRoute = require('./routes/subscription');
 const webpush = require('web-push');
 const { MongoClient } = require('mongodb');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 
@@ -14,6 +15,9 @@ mongoose.connect('mongodb+srv://airview:Airview1234@airview.wz6lfvt.mongodb.net/
     useUnifiedTopology: true,
 });
 app.use(express.json());
+const publicDirectory = path.join(__dirname, 'public');
+app.use(express.static(publicDirectory));
+
 
 const DATABASE_URL = 'mongodb+srv://meowo:xRDFRKwNexWznNQg@airview.wz6lfvt.mongodb.net/?retryWrites=true&w=majority';
 
@@ -26,17 +30,41 @@ app.post('/subscribe', subscriptionRoute );
 
 app.post('/sub', async (req,res)=>{
     res.send('subbed')
-    const subscription = req.body;
-    console.log("sub",subscription);
-    const payload = JSON.stringify({ title: "Weather alerts", body : "Air Quality Exceeds the limit, Please wear masks" });
+    const data = req.body;
+    console.log("sub",data);
+    const aqi = data.aqi
+    // res.send(subscription)
+    // const payload = JSON.stringify({ title: "Weather alerts", body : "Air Quality Exceeds the limit, Please wear masks" });
   webpush
-    .sendNotification(subscription, "Air Quality Exceeds the limit, Please wear masks" )
+    .sendNotification(data.subscription, "Current AQI is "+ aqi + ", Please wear masks" )
     .then(() => {
       console.log('Push notification sent successfully');
     })
     .catch(err => {
       console.error('Failed to send push notification:', err);
     });
+
+});
+
+app.post('/rainnoti', async (req,res)=>{
+  res.send('sent rainnoti')
+  const rqData = req.body;
+  console.log("rain ",rqData.time)
+  const expectedTime = rqData.time
+  const subData = rqData.subscription
+  // console.log("endpoint is " + subData.endpoint)
+  
+  webpush
+  .sendNotification(rqData, "Rain is expected around "+ expectedTime )
+  .then(() => {
+    console.log('Push notification sent successfully');
+  })
+  .catch(err => {
+    console.error('Failed to send push notification:', err);
+  });
+    
+ 
+
 
 });
 app.get('/send', subscriptionRoute );

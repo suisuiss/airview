@@ -1,9 +1,8 @@
 self.addEventListener('push', (event) => {
-    const options = {
-      body: event.data.text(),
-    };
-  
-    event.waitUntil(
-      self.registration.showNotification('abcd', options)
-    );
-  });
+  const options = {
+    body: event.data.text(),
+  };
+  event.waitUntil(
+    self.registration.showNotification('Airview', options)
+  );
+});

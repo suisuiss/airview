@@ -12,6 +12,7 @@ function WeatherForecastInfo() {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [weatherData, setWeatherData] = useState(null);
+    const [aqiData, setAqiData] = useState(null);
     const [iconImages, setIconImages] = useState([]);
     const mobileStyles = {
         width: '350px',
@@ -44,10 +45,24 @@ function WeatherForecastInfo() {
             });
     };
 
+    const fetchAqiData = () => {
+        fetch('http://localhost:5000/get-forecasted-aqi') // Update with your backend API endpoint
+        .then((response) => response.json())
+        .then((data) => {
+            setAqiData(data);
+        })
+        .catch((error) => {
+            console.error('Error fetching AQI forecasted data:', error);
+        });
+    };
+
     useEffect(() => {
         fetchData();
+        fetchAqiData();
         const intervalId = setInterval(fetchData, 5 * 60 * 1000);
-        return () => clearInterval(intervalId);
+        const intervalId2 = setInterval(fetchAqiData, 1000*60*60)
+        return () => {clearInterval(intervalId);
+        clearInterval(intervalId2);}
     }, []);
 
     useEffect(() => {
@@ -59,17 +74,58 @@ function WeatherForecastInfo() {
             }
             setIconImages(imports);
         };
-
         importIconImages();
     }, []);
 
     const renderHourlyWeather1 = () => {
         const currentHourIndex = weatherData?.hourly?.data.findIndex((data) => {
+            // Get the current hour of the day (e.g., 3:30 PM would be hour 15)
             const currentHour = new Date().getHours();
+
+            // Get the hour from the 'date' field of the weather data
             const dataHour = new Date(data.date).getHours();
+
+            // Check if the data corresponds to the next hour
+            // (e.g., if it's currently 3:30 PM, it checks if the data is for 4:00 PM)
             return dataHour === currentHour + 1;
         });
-        const startIndex = currentHourIndex !== -1 ? currentHourIndex : 0;
+        const startIndex = currentHourIndex !== -1 ? currentHourIndex : 0; // make a starting index which is 1 hour ahead
+        const now = new Date();
+        const localTimeZone = 'Asia/Bangkok';
+
+        const formatter = new Intl.DateTimeFormat('en-US', { timeZone: localTimeZone, hour12: false });
+        const filteredData = aqiData?.filter((item) => {
+            const date = new Date(item.hourly_date);
+            const formattedDate = formatter.format(date);
+
+            return new Date(formattedDate) > now;
+        });
+        const slicedAqiData = filteredData?.slice(3, 3 + 3);
+        const aqiToColor = {
+            0: "#00E400",  // Good
+            50: "#FFFF00", // Moderate
+            100: "#FF7E00", // Unhealthy for Sensitive Groups
+            150: "#FF0000", // Unhealthy
+            200: "#99004C", // Very Unhealthy
+            300: "#7E0023", // Hazardous
+        };
+        const getAqiColor = (aqi) => {
+            // Initialize variables to track the closest level and color
+            let closestLevel = 0;
+            let closestColor = "#00E400"; // Default to "Good" level
+          
+            // Find the appropriate color based on AQI
+            for (const level in aqiToColor) {
+              if (aqi >= level && level >= closestLevel) {
+                closestLevel = level;
+                closestColor = aqiToColor[level];
+              }
+            }
+          
+            return closestColor;
+        };
+        
+                
 
         return (
             <Box style={{ display: "flex", flexDirection: "row" }}>
@@ -78,15 +134,14 @@ function WeatherForecastInfo() {
                         ? { paddingLeft: '25px', paddingRight: '20px' }
                         : { paddingLeft: '60px', paddingRight: '40px' }
                     )}>
-
                         {formatTime(data.date)}<br />
                         <img src={iconImages[data.icon - 1]} alt="Weather Icon" width='70px' />
                         {data.temperature}°C
-                        <Box borderRadius="10px" bgcolor="#90D02F" width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
-                            <Typography fontSize='11px' color='#FFFF' style={{ textAlign: 'center' }}>AQI<br />
-                                0-50</Typography>
-                        </Box>
 
+                        <Box borderRadius="10px" bgcolor={getAqiColor(slicedAqiData[index]?.hourly_AQI)} width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
+                            <Typography fontSize='11px' color='#FFFF' style={{ textAlign: 'center' }}>AQI<br />
+                                {slicedAqiData[index]?.hourly_AQI}</Typography>
+                        </Box>
                     </Box>
                 ))}
             </Box>
@@ -99,6 +154,40 @@ function WeatherForecastInfo() {
             return dataHour === currentHour + 1;
         });
         const startIndex = currentHourIndex !== -1 ? currentHourIndex : 0;
+        const now = new Date();
+        const localTimeZone = 'Asia/Bangkok';
+
+        const formatter = new Intl.DateTimeFormat('en-US', { timeZone: localTimeZone, hour12: false });
+        const filteredData = aqiData?.filter((item) => {
+            const date = new Date(item.hourly_date);
+            const formattedDate = formatter.format(date);
+
+            return new Date(formattedDate) > now;
+        });
+        const slicedAqiData = filteredData?.slice(6, 6 + 3);
+        const aqiToColor = {
+            0: "#00E400",  // Good
+            50: "#FFFF00", // Moderate
+            100: "#FF7E00", // Unhealthy for Sensitive Groups
+            150: "#FF0000", // Unhealthy
+            200: "#99004C", // Very Unhealthy
+            300: "#7E0023", // Hazardous
+        };
+        const getAqiColor = (aqi) => {
+            // Initialize variables to track the closest level and color
+            let closestLevel = 0;
+            let closestColor = "#00E400"; // Default to "Good" level
+          
+            // Find the appropriate color based on AQI
+            for (const level in aqiToColor) {
+              if (aqi >= level && level >= closestLevel) {
+                closestLevel = level;
+                closestColor = aqiToColor[level];
+              }
+            }
+            return closestColor;
+        };
+        
 
         return (
             <Box style={{ display: "flex", flexDirection: "row" }}>
@@ -110,11 +199,9 @@ function WeatherForecastInfo() {
                         {formatTime(data.date)}<br />
                         <img src={iconImages[data.icon - 1]} alt="Weather Icon" width='70px' />
                         {data.temperature}°C
-                        <Box borderRadius="10px" bgcolor="#90D02F" width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
-                            <Typography fontSize='11px' color='#FFFF' style={{ textAlign: 'center' }}>
-                                AQI<br />
-                                0-50
-                            </Typography>
+                        <Box borderRadius="10px" bgcolor={getAqiColor(slicedAqiData[index]?.hourly_AQI)} width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
+                            <Typography fontSize='11px' color='#FFFF' style={{ textAlign: 'center' }}>AQI<br />
+                                {slicedAqiData[index]?.hourly_AQI}</Typography>
                         </Box>
                     </Box>
                 ))}
@@ -211,14 +298,14 @@ function WeatherForecastInfo() {
                 </Box>
             );
         } else {
-            return (
+            return null/*(
                 <Box display="flex" justifyContent="center" alignItems="center" marginBottom="10px">
                     <img src={warning} alt="Warning Icon" width="20px" style={{ marginRight: '5px', }} />
                     <Typography fontSize="14px">
                         Rain is expected around 3:00 AM
                     </Typography>
                 </Box>
-            );
+            );*/
         }
     };
 

@@ -1,8 +1,21 @@
 from flask import Flask
+import pandas as pd
+from flask_cors import CORS
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
+from darts import TimeSeries
+from sklearn.preprocessing import MinMaxScaler
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from darts.models import NBEATSModel
 from pymongo.mongo_client import MongoClient
 from datetime import datetime
+
+def get_current_date():
+    # Get the current date in the same format as your MongoDB date strings
+    current_date = datetime.now().strftime("%a, %d %b %Y %H:%M:%S %Z")
+    return current_date
+
 
 def uploadHourlyData():
     client = MongoClient('mongodb+srv://meowo:xRDFRKwNexWznNQg@airview.wz6lfvt.mongodb.net/?retryWrites=true&w=majority')
@@ -112,12 +125,112 @@ def fetchTotalDayData():
         # No data was found
         print("No data found for the local date.")
 
+def get_data():
+    print('Starting dataframe initialization')
+    client = MongoClient('mongodb+srv://meowo:xRDFRKwNexWznNQg@airview.wz6lfvt.mongodb.net/?retryWrites=true&w=majority')
+    db = client['AQIData']
+    collection = db['historicAqi']
+    data = list(collection.find())  # Fetch all data from the collection
+
+    df = pd.DataFrame(data) # Data Augmentation
+    df = df.drop('_id', axis=1)
+    df['date'] = pd.to_datetime(df['date'])
+    df = df.sort_values(by='date', ascending=True)
+    df = df.reset_index(drop=True)
+    return df;
+
+def fetchTempData():
+    api_url = "https://www.meteosource.com/api/v1/free/point?place_id=postal-th-10140&sections=current%2Chourly&language=en&units=auto&key=t66kz0c4o4d1oi27t84scaz7kiiof5id124hfdx9"
+    
+    try:
+        # Send a GET request to the API URL
+        response = requests.get(api_url)
+        
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            # Parse the JSON response
+            data = response.json()
+            
+            # Extract hourly temperature data
+            hourly_data = data.get("hourly", {}).get("data", [])
+            
+            if hourly_data:
+                # Extract date and temperature values
+                hourly_temp_data = [
+                    {
+                        "date": entry.get("date", ""),
+                        "temperature": entry.get("temperature", 0)
+                    }
+                    for entry in hourly_data
+                ]
+                df = pd.DataFrame(hourly_temp_data)
+                df['date'] = pd.to_datetime(df['date'])
+                return df
+            else:
+                print("Hourly data not found in the response.")
+        else:
+            print(f"Failed to fetch data. Status code: {response.status_code}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    return "null"
+
+def adjust_aqi_based_on_temperature(aqi, temperature_celsius):
+    # Define the relationship between temperature and AQI
+    # You can adjust the coefficients based on your specific needs
+    aqi_adjusted = aqi - (temperature_celsius - 25) * 2
+
+    # Ensure that the adjusted AQI remains within a certain range (e.g., 0 to 500)
+    aqi_adjusted = max(0, min(aqi_adjusted, 500))
+
+    return aqi_adjusted
+
+def makePrediction():
+    client = MongoClient('mongodb+srv://meowo:xRDFRKwNexWznNQg@airview.wz6lfvt.mongodb.net/?retryWrites=true&w=majority')
+    db = client['AQIData']
+    collection = db['forecastedAqi']
+    # Call the function to get the data
+    result = get_data()
+    mean_AQI = result['AQI'].mean()
+    unidf = TimeSeries.from_dataframe(result, "date", "AQI",fill_missing_dates=True, fillna_value=mean_AQI)
+    model = NBEATSModel(input_chunk_length=10, output_chunk_length=7, n_epochs = 100)
+    model_fit = model.fit(unidf)
+    preds = model_fit.predict(10)
+    preds_df = preds.pd_dataframe()
+    preds_df.reset_index(inplace=True)
+
+    temp_df = fetchTempData()
+    temp_df['hourly_date'] = temp_df['date']
+    temp_df['date'] = pd.to_datetime(temp_df['date']).dt.strftime('%Y-%m-%d')
+    temp_df['date'] = pd.to_datetime(temp_df['date'])
+    preds_df['date'] = pd.to_datetime(preds_df['date'])
+    temp_df = temp_df.merge(preds_df[['date', 'AQI']], on='date', how='left')
+    temp_df.rename(columns={'AQI': 'average_aqi'}, inplace=True)
+    temp_df['hourly_AQI'] = temp_df.apply(lambda row: adjust_aqi_based_on_temperature(row['average_aqi'], row['temperature']), axis=1)
+    temp_df['hourly_AQI'] = np.ceil(temp_df['hourly_AQI'])
+    temp_df = temp_df.drop(['date','temperature','average_aqi'], axis=1)
+    records = temp_df.to_dict(orient="records")
+    for record in records:
+        # Use the 'date' field as the filter
+        filter = {"hourly_date": record["hourly_date"]}
+        
+        # Try to update an existing document or insert a new one if not found
+        collection.update_one(filter, {"$set": record}, upsert=True)
+
+    # Close the MongoDB client when done
+    client.close()
+    return ("Function Done")
+
 sched = BackgroundScheduler(daemon=True)
 sched.add_job(uploadHourlyData,'interval',minutes=60)
 sched.add_job(uploadDailyData,'cron', hour=23, minute=30)
+sched.add_job(makePrediction,'cron', hour=13, minute=32)
+sched.add_job(makePrediction,'interval',minutes=720)
 sched.start()
 
 app = Flask(__name__)
+originList = ['http://10.1.81.11:3000', 'http://localhost:3000', 'http://127.0.0.1:3000']
+CORS(app, supports_credentials=True, origins=originList)
+
 
 @app.route("/")
 def hello_world():
@@ -126,3 +239,12 @@ def hello_world():
 @app.route("/sucky")
 def hello_mom():
     return "<p>Hello, Mother!</p>"
+
+@app.route("/get-forecasted-aqi")
+def getForecastAqi():
+    client = MongoClient('mongodb+srv://meowo:xRDFRKwNexWznNQg@airview.wz6lfvt.mongodb.net/?retryWrites=true&w=majority')
+    db = client['AQIData']
+    collection = db['forecastedAqi']
+    data = list(collection.find({},{'_id': 0}).sort('hourly_date', -1).limit(25))
+    data.reverse()
+    return(data)

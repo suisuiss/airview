@@ -89,13 +89,41 @@ function WeatherForecastInfo() {
         });
         const startIndex = currentHourIndex !== -1 ? currentHourIndex : 0; // make a starting index which is 1 hour ahead
         const now = new Date();
-        const filteredData = aqiData?.filter((item) => {  
+        const localTimeZone = 'Asia/Bangkok';
+
+        const formatter = new Intl.DateTimeFormat('en-US', { timeZone: localTimeZone, hour12: false });
+        const filteredData = aqiData?.filter((item) => {
             const date = new Date(item.hourly_date);
-            // Check if the item's date is in the future
-            return date.getTime() > now.getTime();
+            const formattedDate = formatter.format(date);
+
+            return new Date(formattedDate) > now;
         });
-        console.log(filteredData)
+        const slicedAqiData = filteredData?.slice(3, 3 + 3);
+        const aqiToColor = {
+            0: "#00E400",  // Good
+            50: "#FFFF00", // Moderate
+            100: "#FF7E00", // Unhealthy for Sensitive Groups
+            150: "#FF0000", // Unhealthy
+            200: "#99004C", // Very Unhealthy
+            300: "#7E0023", // Hazardous
+        };
+        const getAqiColor = (aqi) => {
+            // Initialize variables to track the closest level and color
+            let closestLevel = 0;
+            let closestColor = "#00E400"; // Default to "Good" level
+          
+            // Find the appropriate color based on AQI
+            for (const level in aqiToColor) {
+              if (aqi >= level && level >= closestLevel) {
+                closestLevel = level;
+                closestColor = aqiToColor[level];
+              }
+            }
+          
+            return closestColor;
+        };
         
+                
 
         return (
             <Box style={{ display: "flex", flexDirection: "row" }}>
@@ -104,17 +132,14 @@ function WeatherForecastInfo() {
                         ? { paddingLeft: '25px', paddingRight: '20px' }
                         : { paddingLeft: '60px', paddingRight: '40px' }
                     )}>
-
                         {formatTime(data.date)}<br />
                         <img src={iconImages[data.icon - 1]} alt="Weather Icon" width='70px' />
                         {data.temperature}°C
 
-
-                        <Box borderRadius="10px" bgcolor="#90D02F" width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
+                        <Box borderRadius="10px" bgcolor={getAqiColor(slicedAqiData[index]?.hourly_AQI)} width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
                             <Typography fontSize='11px' color='#FFFF' style={{ textAlign: 'center' }}>AQI<br />
-                                0-50</Typography>
+                                {slicedAqiData[index]?.hourly_AQI}</Typography>
                         </Box>
-
                     </Box>
                 ))}
             </Box>
@@ -127,6 +152,40 @@ function WeatherForecastInfo() {
             return dataHour === currentHour + 1;
         });
         const startIndex = currentHourIndex !== -1 ? currentHourIndex : 0;
+        const now = new Date();
+        const localTimeZone = 'Asia/Bangkok';
+
+        const formatter = new Intl.DateTimeFormat('en-US', { timeZone: localTimeZone, hour12: false });
+        const filteredData = aqiData?.filter((item) => {
+            const date = new Date(item.hourly_date);
+            const formattedDate = formatter.format(date);
+
+            return new Date(formattedDate) > now;
+        });
+        const slicedAqiData = filteredData?.slice(6, 6 + 3);
+        const aqiToColor = {
+            0: "#00E400",  // Good
+            50: "#FFFF00", // Moderate
+            100: "#FF7E00", // Unhealthy for Sensitive Groups
+            150: "#FF0000", // Unhealthy
+            200: "#99004C", // Very Unhealthy
+            300: "#7E0023", // Hazardous
+        };
+        const getAqiColor = (aqi) => {
+            // Initialize variables to track the closest level and color
+            let closestLevel = 0;
+            let closestColor = "#00E400"; // Default to "Good" level
+          
+            // Find the appropriate color based on AQI
+            for (const level in aqiToColor) {
+              if (aqi >= level && level >= closestLevel) {
+                closestLevel = level;
+                closestColor = aqiToColor[level];
+              }
+            }
+            return closestColor;
+        };
+        
 
         return (
             <Box style={{ display: "flex", flexDirection: "row" }}>
@@ -138,11 +197,9 @@ function WeatherForecastInfo() {
                         {formatTime(data.date)}<br />
                         <img src={iconImages[data.icon - 1]} alt="Weather Icon" width='70px' />
                         {data.temperature}°C
-                        <Box borderRadius="10px" bgcolor="#90D02F" width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
-                            <Typography fontSize='11px' color='#FFFF' style={{ textAlign: 'center' }}>
-                                AQI<br />
-                                0-50
-                            </Typography>
+                        <Box borderRadius="10px" bgcolor={getAqiColor(slicedAqiData[index]?.hourly_AQI)} width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
+                            <Typography fontSize='11px' color='#FFFF' style={{ textAlign: 'center' }}>AQI<br />
+                                {slicedAqiData[index]?.hourly_AQI}</Typography>
                         </Box>
                     </Box>
                 ))}

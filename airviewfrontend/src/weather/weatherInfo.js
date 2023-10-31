@@ -12,7 +12,7 @@ function WeatherForecastInfo() {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [weatherData, setWeatherData] = useState(null);
-    const [aqiData, setAqiData] = useState(null);
+    const [aqiData, setAqiData] = useState([]);
     const [iconImages, setIconImages] = useState([]);
     const mobileStyles = {
         width: '350px',

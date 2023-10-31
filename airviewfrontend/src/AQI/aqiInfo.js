@@ -15,12 +15,16 @@ import { useMediaQuery, useTheme, Dialog, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import AQI from '../assetPopup/AQI.png';
 
-function CurrentAqiInfo() {
+
+
+function CurrentAqiInfo({isSub, setIsSub}) {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [aqiData, setAqiData] = useState(null);
     const [error, setError] = useState(null);
     const [isPopupOpen, setPopupOpen] = useState(false);
+    const [currentAqi, setCurrentAqi] = useState(0.123);
+    const [loading, setLoading] = useState(true)
     const mobileStyles = {
         width: '350px',
         paddingTop: '20px',
@@ -37,7 +41,7 @@ function CurrentAqiInfo() {
         paddingTop: '20px',
         marginLeft: '15px'
     };
-
+  
     const fetchDataWithRetry = () => {
         fetch('http://api.waqi.info/feed/bangkok/?token=93251e1c93612cabd3b0bd3214148bb64039c4ec')
             .then((response) => {
@@ -47,8 +51,9 @@ function CurrentAqiInfo() {
                 return response.json();
             })
             .then((data) => {
-                setAqiData(data);
-                checkAQI();   
+                setAqiData(data); 
+                setCurrentAqi(data.data.aqi)
+                setLoading(false)
             })
             .catch((error) => {
                 console.error('Error fetching AQI data:', error);
@@ -59,29 +64,93 @@ function CurrentAqiInfo() {
             });
     };
     
-    const checkAQI =()=>{
-      
-        const currentTime = new Date();
-        const hours = currentTime.getHours().toString().padStart(2, '0');
-        const minutes = currentTime.getMinutes().toString().padStart(2, '0');
-        const seconds = currentTime.getSeconds().toString().padStart(2, '0');
-
-const formattedTime = `${hours}:${minutes}:${seconds}`;
-        console.log(formattedTime +"current AQI is" + aqiData.data.aqi)
-        if (aqiData.data.aqi > 50) {
+    const storedIsSub = localStorage.getItem('isSub');
+    // const checkAQI =()=>{
+    //     if(aqiData.data.aqi !== null){
+    //         console.log('is not null')
+    //         setCurrentAqi(aqiData.data.aqi);
+    //         console.log(currentAqi);
+    //         console.log("global isSub = ",storedIsSub)
+    //         if( storedIsSub && currentAqi > 20){
+    //             sendNoti();
+    //         }
+    //     }else{
+    //         return;
+    //     }
+       
+    // }
+    // const updateAQi =()=>{
+    //     if(aqiData){
+            
+    //     }
+    // };
+    useEffect(() => {
+    const interval = setInterval(() => {
+        console.log('checking')
+        console.log(loading)
+        console.log(currentAqi);
+        if(storedIsSub && currentAqi > 30)  {
             sendNoti();
+        }             
+    }, 60*1000);
+        return () => clearInterval(interval);
+      }, [currentAqi]);
+
+    // if(aqiData !== null){
+    //     alert('not null')
+    // }else{
+    //     alert('null')
+    // }
+    // const sendNoti = async ()=>{
+    //   const publicKey = 'BCS5nEpceVPUCj2GyPSEL0rOmhi4dfE_dYxTOY3pIm_C_o3NdE4_zLk7_7aAooWKCgEes9oAWmlTUcwb_t6Kfvo'
+    //   const registration = await navigator.serviceWorker.ready;
+    //   const subscription = await registration.pushManager.subscribe({
+    //   userVisibleOnly: true,
+    //   applicationServerKey: publicKey
+    // });
+    //     const response = await fetch('http://localhost:4000/sub', {
+    //         method: 'POST',
+    //         body: JSON.stringify(subscription),
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //         },
+    //       });
+    //       console.log('sent from checkAqi fx')
+    // }
+    const sendNoti = async () => {
+        const publicKey = 'BCS5nEpceVPUCj2GyPSEL0rOmhi4dfE_dYxTOY3pIm_C_o3NdE4_zLk7_7aAooWKCgEes9oAWmlTUcwb_t6Kfvo';
+        // Check when the last notification was sent
+        const lastNotificationTime = localStorage.getItem('lastNotificationTime');
+      // 2 * 60 * 60 *
+        if (!lastNotificationTime || Date.now() - parseInt(lastNotificationTime) >= 2 * 60 * 60 * 1000) {
+          const registration = await navigator.serviceWorker.ready;
+          const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: publicKey,
+          });
+          const requestData = {
+              subscription: subscription,
+              aqi: currentAqi.toString()
+              };
+      
+          const response = await fetch('http://localhost:4000/sub', {
+            method: 'POST',
+            body: JSON.stringify(requestData),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          if (response.ok) {
+            console.log('Request was successfullllllll.');
+              }
+          // Store the current time as the last notification time
+          localStorage.setItem('lastNotificationTime', Date.now().toString());
+        } else {
+          console.log('Notification is on cooldown');
+          console.log("last",lastNotificationTime)
         }
-    }
-    const sendNoti =()=>{
-        if ('serviceWorker' in navigator && 'PushManager' in window) {
-            navigator.serviccheceWorker.ready.then((registration) => {
-              registration.showNotification('Your App Name', {
-                body: 'You will be notified!',
-                icon: 'notification-icon.png', // Set the path to your notification icon
-              });
-            });
-          }
-    }
+      };
+      
     const calculateAqiWord = (aqiValue) => {
         if (aqiValue >= 0 && aqiValue <= 50) {
             return "Good";
@@ -180,7 +249,7 @@ const formattedTime = `${hours}:${minutes}:${seconds}`;
 
     const imageSource1 = getImageSource1(aqiData ? aqiData.data.aqi : null);
     const imageSource2 = getImageSource2(aqiData ? aqiData.data.aqi : null);
-
+    
     useEffect(() => {
         fetchDataWithRetry();
         const intervalId = setInterval(fetchDataWithRetry, 60000);

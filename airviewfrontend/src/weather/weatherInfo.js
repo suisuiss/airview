@@ -2,6 +2,7 @@ import { Box, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import warning from '../assetIcon/warning.png';
 
+
 function formatTime(dateString) {
     const options = { hour: 'numeric', minute: 'numeric', hour12: true };
     return new Date(dateString).toLocaleTimeString('en-US', options);
@@ -11,23 +12,23 @@ function WeatherForecastInfo() {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const [weatherData, setWeatherData] = useState(null);
-    const [aqiData, setAqiData] = useState(null);
+    const [aqiData, setAqiData] = useState([]);
     const [iconImages, setIconImages] = useState([]);
     const mobileStyles = {
         width: '350px',
-        paddingTop: '10px', 
-        paddingBottom: '10px', 
-        fontSize: '12px', 
+        paddingTop: '10px',
+        paddingBottom: '10px',
+        fontSize: '12px',
         borderRadius: '25px',
         marginBottom: '10px',
-        
-        
+
+
     };
 
     const desktopStyles = {
-        width: '540px', 
+        width: '540px',
         borderRadius: '25px',
-        
+
         paddingTop: '10px',
         paddingBottom: '10px',
     };
@@ -37,6 +38,7 @@ function WeatherForecastInfo() {
             .then((response) => response.json())
             .then((data) => {
                 setWeatherData(data);
+
             })
             .catch((error) => {
                 console.error('Error fetching Meteosource data:', error);
@@ -191,8 +193,8 @@ function WeatherForecastInfo() {
             <Box style={{ display: "flex", flexDirection: "row" }}>
                 {weatherData?.hourly?.data?.slice(startIndex + 3, startIndex + 6).map((data, index) => (
                     <Box key={index} display="flex" flexDirection="column" alignItems="center" {...(isMobile
-                        ? { paddingLeft: '25px', paddingRight: '20px' } 
-                        : { paddingLeft: '60px', paddingRight: '40px' } 
+                        ? { paddingLeft: '25px', paddingRight: '20px' }
+                        : { paddingLeft: '60px', paddingRight: '40px' }
                     )} >
                         {formatTime(data.date)}<br />
                         <img src={iconImages[data.icon - 1]} alt="Weather Icon" width='70px' />
@@ -217,6 +219,75 @@ function WeatherForecastInfo() {
 
         const rainData = weatherData?.hourly?.data.slice(startIndex, startIndex + 6).find(data => data.summary.includes("rain") || data.summary.includes("Thunderstorm") || data.summary.includes("Rain"));
 
+        //gonna send noti if rain data is avail
+        
+        // const sendRainNoti = async () => {
+        //     const publicKey = 'BCS5nEpceVPUCj2GyPSEL0rOmhi4dfE_dYxTOY3pIm_C_o3NdE4_zLk7_7aAooWKCgEes9oAWmlTUcwb_t6Kfvo';
+        //     const registration = await navigator.serviceWorker.ready;
+        //     const subscription = await registration.pushManager.subscribe({
+        //         userVisibleOnly: true,
+        //         applicationServerKey: publicKey
+        //     });
+
+        //     // const requestData = {
+        //     //     subscription: subscription,
+        //     //     time: formatTime(rainData.date),
+        //     // };
+        //     const response = await fetch('http://localhost:4000/rainnoti', {
+        //         method: 'POST',
+        //         body: JSON.stringify(subscription),
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //     });
+        //     console.log('rain noti sent!!!')
+        // }
+        const storedIsSub = localStorage.getItem('isSub');
+        const sendRainNoti = async () => {
+            const publicKey = 'BCS5nEpceVPUCj2GyPSEL0rOmhi4dfE_dYxTOY3pIm_C_o3NdE4_zLk7_7aAooWKCgEes9oAWmlTUcwb_t6Kfvo';
+            // Check when the last notification was sent
+            await navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/service-worker.js`)
+      .then((registration) => {
+        console.log('(from noti.js)Service Worker registered with scope:', registration.scope);
+      })
+      .catch((error) => {
+        console.warn('(from noti.js)Service Worker registration failed:', error);
+      });
+            const lastWNotificationTime = localStorage.getItem('lastWNotificationTime');
+            if (!lastWNotificationTime || Date.now() - parseInt(lastWNotificationTime) >= 2*60*60* 1000) {
+              const registration = await navigator.serviceWorker.ready;
+              const subscription = await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: publicKey,
+              });
+          
+              const response = await fetch('http://localhost:4000/rainnoti', {
+                method: 'POST',
+                body: JSON.stringify(subscription),
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              });
+              if (response.ok) {
+                console.log('rain Request was sucessfully sent.');
+                  }
+          
+              console.log('Notification sent');
+              // Store the current time as the last notification time
+              localStorage.setItem('lastWNotificationTime', Date.now().toString());
+            } else {
+              console.log('Notification is on cooldown');
+              console.log("last weather noti is",lastWNotificationTime)
+            }
+          };
+ 
+        const checkRain =()=>{
+            if ( storedIsSub && rainData != null) {
+                console.log(rainData.date);
+                sendRainNoti();
+            }else return;
+        }
+        // checkRain();
         if (rainData) {
             return (
                 <Box display="flex" justifyContent="center" alignItems="center" marginBottom="10px">
@@ -245,7 +316,7 @@ function WeatherForecastInfo() {
         <Box
             bgcolor='#FFFF'
             marginTop="10px"
-            {...(isMobile ? mobileStyles : desktopStyles)} 
+            {...(isMobile ? mobileStyles : desktopStyles)}
         >
             {weatherData ? (
                 <Box>

@@ -9,19 +9,28 @@ import AnalDesk from './DesktopAnalytics/AnalDesk';
 
 function App() {
   const[ isFullscreen ,  setIsFullscreen] = useState(false);
-  // useEffect(() => {
-  //   if ('serviceWorker' in navigator) {
-  //     navigator.serviceWorker
-  //       .register('/public/sw.js')
-  //       .then((registration) => {
-  //         console.log('Service Worker registered with scope:', registration.scope);
-  //       })
-  //       .catch((error) => {
-  //         // console.log('Service Worker registration failed:', error);
-  //       });
-  //   }
-  // }, []);
-  
+  const [isSub, setIsSub] = useState(() => {
+    const storedIsSub = localStorage.getItem('isSub');
+    return storedIsSub !== null ? JSON.parse(storedIsSub) : false;
+  });
+
+  // Handle changes to isSub
+  useEffect(() => {
+    localStorage.setItem('isSub', JSON.stringify(isSub));
+  }, [isSub]);
+
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/service-worker.js`)
+      .then((registration) => {
+        console.log('(from App.js)Service Worker registered with scope:', registration.scope);
+      })
+      .catch((error) => {
+        console.warn('(from App.js)Service Worker registration failed:', error);
+      });
+    }
+  }, []);
+  console.log("Global isSub = " + isSub)
   return (
     
     <Router>
@@ -29,7 +38,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LGDashboard isFullscreen={isFullscreen} setIsFullscreen={setIsFullscreen}/>} />
         <Route path="fbdashboard" element={<FBDashboard isFullscreen={isFullscreen} setIsFullscreen={setIsFullscreen}/>} />
-        <Route path="/notification" element={<Noti/>} />
+        <Route path="/notification" element={<Noti isSub={isSub} setIsSub={setIsSub}/>} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/analytic" element={<AnalDesk/>} />
       </Routes>

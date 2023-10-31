@@ -88,6 +88,14 @@ function WeatherForecastInfo() {
             return dataHour === currentHour + 1;
         });
         const startIndex = currentHourIndex !== -1 ? currentHourIndex : 0; // make a starting index which is 1 hour ahead
+        const now = new Date();
+        const filteredData = aqiData?.filter((item) => {  
+            const date = new Date(item.hourly_date);
+            // Check if the item's date is in the future
+            return date.getTime() > now.getTime();
+        });
+        console.log(filteredData)
+        
 
         return (
             <Box style={{ display: "flex", flexDirection: "row" }}>
@@ -100,6 +108,8 @@ function WeatherForecastInfo() {
                         {formatTime(data.date)}<br />
                         <img src={iconImages[data.icon - 1]} alt="Weather Icon" width='70px' />
                         {data.temperature}°C
+
+
                         <Box borderRadius="10px" bgcolor="#90D02F" width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
                             <Typography fontSize='11px' color='#FFFF' style={{ textAlign: 'center' }}>AQI<br />
                                 0-50</Typography>

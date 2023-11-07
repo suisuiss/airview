@@ -2,28 +2,27 @@ import React, { useState, useEffect } from 'react';
 
 export const AqiInfoAnal = () => {
     const [aqiData, setAqiData] = useState(null);
+    const [currentAqi, setCurrentAqi] = useState(0.123);
     const [error, setError] = useState(null);
 
     const fetchDataWithRetry = () => {
-        // Fetch data from the airvisual API
-        fetch('http://api.airvisual.com/v2/nearest_city?lat=13.651502404577384&lon=100.49644279537901&key=c931c788-4515-48dc-8c74-1fd47b9817f7')
+        fetch('http://api.waqi.info/feed/bangkok/?token=93251e1c93612cabd3b0bd3214148bb64039c4ec')
             .then((response) => {
                 if (!response.ok) {
-                    throw new Error('Failed to fetch data');
+                    throw new Error('Failed to fetch AQI');
                 }
                 return response.json();
             })
             .then((data) => {
-                setAqiData(data);
+                setAqiData(data); 
+                setCurrentAqi(data.data.aqi)
             })
             .catch((error) => {
                 console.error('Error fetching AQI data:', error);
                 setError(error);
-
-                // Retry the request after a delay (e.g., 5 seconds)
                 setTimeout(() => {
                     fetchDataWithRetry();
-                }, 5000); // 5 seconds
+                }, 60000);
             });
     };
 
@@ -40,7 +39,7 @@ export const AqiInfoAnal = () => {
             {aqiData ? (
                 <div>
                     AQI<br />
-                    {aqiData.data.current.pollution.aqius}
+                    {currentAqi}
                 </div>
             ) : error ? (
                 <p>Loading AQI data...</p>

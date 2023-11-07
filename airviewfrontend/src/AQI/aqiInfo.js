@@ -122,7 +122,7 @@ function CurrentAqiInfo({isSub, setIsSub}) {
         // Check when the last notification was sent
         const lastNotificationTime = localStorage.getItem('lastNotificationTime');
       // 2 * 60 * 60 *
-        if (!lastNotificationTime || Date.now() - parseInt(lastNotificationTime) >= 2 * 60 * 60 * 1000) {
+        if (!lastNotificationTime || Date.now() - parseInt(lastNotificationTime) >= 10 * 60 * 1000) {
           const registration = await navigator.serviceWorker.ready;
           const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,

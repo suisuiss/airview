@@ -48,7 +48,7 @@ function WeatherInfo() {
                 <Box>
                     <img src={iconImages[weatherData.current.icon_num - 1]} alt="Weather Icon" width='95px' />
                     <br />
-                    <Typography variant='h5'>   {capitalizeFirstLetter(weatherData.current.icon)}</Typography>
+                    <Typography variant='h6'>   {capitalizeFirstLetter(weatherData.current.summary)}</Typography>
 
                 </Box>
             ) : (

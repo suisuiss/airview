@@ -139,7 +139,7 @@ function WeatherForecastInfo() {
                         {data.temperature}°C
 
                         <Box borderRadius="10px" bgcolor={getAqiColor(slicedAqiData[index]?.hourly_AQI)} width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
-                            <Typography fontSize='11px' color='#FFFF' style={{ textAlign: 'center' }}>AQI<br />
+                            <Typography fontSize='11px' color='black' style={{ textAlign: 'center' }}>AQI<br />
                                 {slicedAqiData[index]?.hourly_AQI}</Typography>
                         </Box>
                     </Box>
@@ -200,7 +200,7 @@ function WeatherForecastInfo() {
                         <img src={iconImages[data.icon - 1]} alt="Weather Icon" width='70px' />
                         {data.temperature}°C
                         <Box borderRadius="10px" bgcolor={getAqiColor(slicedAqiData[index]?.hourly_AQI)} width="70px" height="35px" display="flex" justifyContent="center" alignItems="center">
-                            <Typography fontSize='11px' color='#FFFF' style={{ textAlign: 'center' }}>AQI<br />
+                            <Typography fontSize='11px' color='black' style={{ textAlign: 'center' }}>AQI<br />
                                 {slicedAqiData[index]?.hourly_AQI}</Typography>
                         </Box>
                     </Box>

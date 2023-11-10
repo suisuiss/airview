@@ -223,7 +223,7 @@ def makePrediction():
 sched = BackgroundScheduler(daemon=True)
 sched.add_job(uploadHourlyData,'interval',minutes=60)
 sched.add_job(uploadDailyData,'cron', hour=23, minute=30)
-sched.add_job(makePrediction,'cron', hour=13, minute=32)
+sched.add_job(makePrediction,'cron', hour=10, minute=2)
 sched.add_job(makePrediction,'interval',minutes=720)
 sched.start()
 

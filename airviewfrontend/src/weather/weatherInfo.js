@@ -91,16 +91,19 @@ function WeatherForecastInfo() {
         });
         const startIndex = currentHourIndex !== -1 ? currentHourIndex : 0; // make a starting index which is 1 hour ahead
         const now = new Date();
-        const localTimeZone = 'Asia/Bangkok';
+        // Create a new Date object with the current date in Bangkok time
+        const bangkokTimeOptions = { timeZone: 'Asia/Bangkok' };
+        const nowInBangkok = new Date(now.toLocaleString('en-US', bangkokTimeOptions));
 
-        const formatter = new Intl.DateTimeFormat('en-US', { timeZone: localTimeZone, hour12: false });
-        const filteredData = aqiData?.filter((item) => {
+        const filteredData = aqiData?.filter((item) => {  
             const date = new Date(item.hourly_date);
-            const formattedDate = formatter.format(date);
 
-            return new Date(formattedDate) > now;
+            // Check if the item's date is in the future
+            return date > nowInBangkok;
         });
-        const slicedAqiData = filteredData?.slice(3, 3 + 3);
+
+        const slicedAqiData = filteredData?.slice(1, 1 + 3);
+        console.log(slicedAqiData);
         const aqiToColor = {
             0: "#00E400",  // Good
             50: "#FFFF00", // Moderate
@@ -161,10 +164,10 @@ function WeatherForecastInfo() {
         const filteredData = aqiData?.filter((item) => {
             const date = new Date(item.hourly_date);
             const formattedDate = formatter.format(date);
-
+            
             return new Date(formattedDate) > now;
         });
-        const slicedAqiData = filteredData?.slice(6, 6 + 3);
+        const slicedAqiData = filteredData?.slice(4, 4 + 3);
         const aqiToColor = {
             0: "#00E400",  // Good
             50: "#FFFF00", // Moderate

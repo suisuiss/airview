@@ -223,7 +223,7 @@ def makePrediction():
 sched = BackgroundScheduler(daemon=True)
 sched.add_job(uploadHourlyData,'interval',minutes=60)
 sched.add_job(uploadDailyData,'cron', hour=23, minute=30)
-sched.add_job(makePrediction,'cron', hour=10, minute=2)
+sched.add_job(makePrediction,'cron', hour=0, minute=25)
 sched.add_job(makePrediction,'interval',minutes=720)
 sched.start()
 
@@ -234,7 +234,7 @@ CORS(app, supports_credentials=True, origins=originList)
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return "<p>Hello, World!asd</p>"
 
 @app.route("/sucky")
 def hello_mom():
@@ -248,3 +248,5 @@ def getForecastAqi():
     data = list(collection.find({},{'_id': 0}).sort('hourly_date', -1).limit(25))
     data.reverse()
     return(data)
+
+app.run(debug=True)

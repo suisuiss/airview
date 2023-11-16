@@ -78,7 +78,7 @@ app.get('/aqiChart', async (req, res) => {
       const db = client.db('AQIData'); // Your database name
       const collection = db.collection('historicAqi'); // Your collection name
       
-      const data = await collection.find({}).toArray();
+      const data = await collection.find({}).sort({ date: -1 }).toArray();
       
       client.close();
       res.json(data);

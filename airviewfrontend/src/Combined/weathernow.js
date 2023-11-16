@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import HeatIndex from '../emrontech/learningGarden/heatIndex';
 import CurrentTemp from '../emrontech/learningGarden/temp';
 import WeatherInfo from '../weather/currentInfo';
@@ -29,10 +29,34 @@ function WeatherNow() {
         paddingTop: '10px',
         paddingBottom: '10px',
     };
+    const [backgroundColor, setBackgroundColor] = useState(getBackgroundColor());
+
+    useEffect(() => {
+        const intervalId = setInterval(() => {
+        setBackgroundColor(getBackgroundColor());
+        }, 100); // Update every minute
+
+        return () => clearInterval(intervalId); // Cleanup on component unmount
+    }, []);
+
+    function getBackgroundColor() {
+        const currentHour = new Date().getHours();
+
+        if (currentHour >= 6 && currentHour < 16) {
+        // Day
+        return `#6F9FFF`; // Yellow
+        } else if (currentHour >= 16 && currentHour < 19) {
+        // Evening
+        return `rgba(217, 122, 35, 1)`; // Sky Blue
+        } else {
+        // Night (Gradient)
+        return `rgba(32, 80, 151, 1)`;
+        }
+    }
 
     return (
         <Box
-            bgcolor='#6F9FFF'
+            bgcolor={backgroundColor}
             {...(isMobile ? mobileStyles : desktopStyles)} 
         >
             <Typography color='#FFFF'>

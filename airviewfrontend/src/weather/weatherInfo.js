@@ -60,7 +60,7 @@ function WeatherForecastInfo() {
         fetchData();
         fetchAqiData();
         const intervalId = setInterval(fetchData, 5 * 60 * 1000);
-        const intervalId2 = setInterval(fetchAqiData, 1000*60*60)
+        const intervalId2 = setInterval(fetchAqiData, 1000*60*5)
         return () => {clearInterval(intervalId);
         clearInterval(intervalId2);}
     }, []);
@@ -97,13 +97,11 @@ function WeatherForecastInfo() {
 
         const filteredData = aqiData?.filter((item) => {  
             const date = new Date(item.hourly_date);
-
             // Check if the item's date is in the future
             return date > nowInBangkok;
         });
-
-        const slicedAqiData = filteredData?.slice(1, 1 + 3);
-        console.log(slicedAqiData);
+        console.log(filteredData)
+        const slicedAqiData = aqiData?.slice(1, 1 + 3);
         const aqiToColor = {
             0: "#00E400",  // Good
             50: "#FFFF00", // Moderate
@@ -167,7 +165,8 @@ function WeatherForecastInfo() {
             
             return new Date(formattedDate) > now;
         });
-        const slicedAqiData = filteredData?.slice(4, 4 + 3);
+        console.log(aqiData)
+        const slicedAqiData = aqiData?.slice(4, 4 + 3);
         const aqiToColor = {
             0: "#00E400",  // Good
             50: "#FFFF00", // Moderate

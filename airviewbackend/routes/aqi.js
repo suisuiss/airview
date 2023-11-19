@@ -10,7 +10,7 @@ const retryDelay = 5000; // 5 seconds
 const fetchAndStoreAQI = async (retryCount = 0) => {
     try {
         const response = await axios.get(
-            'http://api.waqi.info/feed/bangkok/?token=93251e1c93612cabd3b0bd3214148bb64039c4ec'
+            'https://api.waqi.info/feed/bangkok/?token=93251e1c93612cabd3b0bd3214148bb64039c4ec'
         );
 
         const aqiData = {

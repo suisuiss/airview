@@ -6,7 +6,7 @@ export const AqiInfoAnal = () => {
     const [error, setError] = useState(null);
 
     const fetchDataWithRetry = () => {
-        fetch('http://api.waqi.info/feed/bangkok/?token=93251e1c93612cabd3b0bd3214148bb64039c4ec')
+        fetch('https://api.waqi.info/feed/bangkok/?token=93251e1c93612cabd3b0bd3214148bb64039c4ec')
             .then((response) => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch AQI');

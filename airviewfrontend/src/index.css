@@ -1,7 +1,13 @@
+html{
+  width: 100vw;
+  min-height: 100vh;
+  background: linear-gradient(#DDEBFF, #E4F8E4);
+  /* background-color: rgb(228, 242, 255); */
+}
 body {
   margin: 0;
   font-family: 'Poppins', sans-serif;
-  background-color: rgb(228, 242, 255);
+  /* background-color: rgb(228, 242, 255); */ 
   box-sizing: border-box;
   
 }

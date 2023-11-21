@@ -41,7 +41,7 @@ const noti = ({ isSub, setIsSub }) => {
 
   const sendNoti = () => {
     console.log('sending noti');
-    fetch('http://localhost:4000/send', {
+    fetch(`${serverUrl}/send`, {
       method: 'GET',
     })
       .then((response) => {
@@ -60,73 +60,114 @@ const noti = ({ isSub, setIsSub }) => {
 
   // subscribe
   const subscribe = async () => {
-    console.log('start subscribe function')
-    console.log('this current browser supports');
-    console.log("Registering service worker...");
     // register sw
-    await navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/service-worker.js`)
-      .then((registration) => {
-        console.log('(from noti.js)Service Worker registered with scope:', registration.scope);
-      })
-      .catch((error) => {
-        console.warn('(from noti.js)Service Worker registration failed:', error);
-      });
-    //sending payload to server  
-    const registration = await navigator.serviceWorker.ready;
-    const subscription = await registration.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: publicKey,
-    });
-    const response = await fetch('http://localhost:4000/subscribe', {
-      method: 'POST',
-      body: JSON.stringify(subscription),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    if (response.ok) {
-      console.log('Request was successful.');
+    if ('serviceWorker' in navigator) {
+      console.log('browser support')
+      try {
+        await navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/service-worker.js`)
+          .then((registration) => {
+            console.log('(from noti.js)Service Worker registered with scope:', registration.scope);
+          })
+          .catch((error) => {
+            console.warn('(from noti.js)Service Worker registration failed:', error);
+          });
+        //sending payload to server
+        const registration = await navigator.serviceWorker.ready;
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: publicKey,
+        });
+        console.log(subscription)
+        const response = await fetch(`${serverUrl}/subscribe`, {
+          method: 'POST',
+          body: JSON.stringify(subscription),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          console.log('Request was successful.');
+        }
+        setIsSub(true);
+        console.log('%c subscription saved', 'color:white;background :brown')
+      } catch (e) {
+        console.error('[subscribe]', e)
+      }
+    } else {
+      console.log('browser does not support')
     }
-
-
-    setIsSub(true);
-    console.log('%c Below is subscription payload', 'color:white;background :brown')
-    // console.log(subscription);
-    console.log("Done sent!!!");
   };
+
+  //subscribe2
+  const subscribe2 = async () =>{
+    // setIsSub(true);
+    // console.log('start subscribe function')
+    // console.log('this current browser supports');
+    // console.log("Registering service worker...");
+    // // register sw
+    // await navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/service-worker.js`)
+    //   .then((registration) => {
+    //     console.log('(from noti.js)Service Worker registered with scope:', registration.scope);
+    //   })
+    //   .catch((error) => {
+    //     console.warn('(from noti.js)Service Worker registration failed:', error);
+    //   });
+    // //sending payload to server  
+    // const registration = await navigator.serviceWorker.ready;
+    // const subscription = await registration.pushManager.subscribe({
+    //   userVisibleOnly: true,
+    //   applicationServerKey: publicKey,
+    // });
+    // const response = await fetch('http://localhost:4000/subscribe', {
+    //   method: 'POST',
+    //   body: JSON.stringify(subscription),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    // });
+    // if (response.ok) {
+    //   console.log('Request was successful.');}
+   
+  }
 
   const unsub = async () => {
     console.log('unsubscribing...');
     try {
       const registration = await navigator.serviceWorker.ready;
-      const subscription = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: publicKey,
-      });
-      const response = await fetch('http://localhost:4000/unsubscribe', {
-        method: 'POST',
-        body: JSON.stringify(subscription),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      //remove service worker
-      await navigator.serviceWorker.getRegistrations().then(function (registrations) {
-        for (let registration of registrations) {
-          registration.unregister();
+      if (registration) {
+        const subscription = await registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: publicKey,
+        });
+        const response = await fetch(`${serverUrl}/unsubscribe`, {
+          method: 'POST',
+          body: JSON.stringify(subscription),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        //remove service worker
+        await navigator.serviceWorker.getRegistrations().then(function (registrations) {
+          for (let registration of registrations) {
+            registration.unregister();
+          }
+        });
+        if (response.ok) {
+          console.log('Request was successful.');
         }
-      });
-      if (response.ok) {
-        console.log('Request was successful.');
+        setIsSub(false);
+        console.log('%c unsubscribed', 'background-color:green;color:white');
+
+
+
+      } else {
+        console.log('sw is not registered')
       }
+
 
     } catch (e) {
       console.error('[unsub] ', e)
     }
-
-    setIsSub(false);
-    console.log('unsubscribed');
-
   }
   return (
     <div>

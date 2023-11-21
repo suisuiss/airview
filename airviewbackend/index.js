@@ -149,17 +149,17 @@ app.get('/aqiChart', async (req, res) => {
 /*cron to run every 30 minutes*/
 
 // Create a cron job that runs every minute//
-const cronJob = new cron('*/60 * * * *', async () => {
+const cronJob = new cron('*/90 * * * *', async () => {
   console.log('fectching AQI');
   getAQI();
-  const unhealthyLv = 60 ;
+  const unhealthyLv = 100 ;
   console.log('checking');
   const aqi = await getAQI();
   console.log("AQI is", aqi)
   if (aqi > unhealthyLv ) {
     console.log(aqi, '>', unhealthyLv,  'Noti')
     aqiNoti(aqi);
-  } else if (aqi < 50) {
+  } else if (aqi < unhealthyLv) {
     console.log(aqi, '<', unhealthyLv , 'Not Noti')
   }
   console.log('checked')
@@ -183,6 +183,47 @@ const getAQI = async () => {
   }
 };
 
+//cronjob for rain
+const rainCron = new cron('*/120 * * * *', async () => {
+  console.log('fetching rain data');
+  getRain();
+});
+
+rainCron.start();
+
+function formatTime(dateString) {
+  const options = { hour: 'numeric', minute: 'numeric', hour12: false };
+  return new Date(dateString).toLocaleTimeString('en-US', options);
+}
+getRain = async()=>{
+  try{
+    const url = 'https://www.meteosource.com/api/v1/free/point?place_id=postal-th-10140&sections=current%2Chourly&language=en&units=auto&key=t66kz0c4o4d1oi27t84scaz7kiiof5id124hfdx9'
+    const response = await fetch(url);
+    const weatherData = await response.json();
+    console.log("weather data",weatherData);
+    console.log("weather data hourly",weatherData.hourly.data.slice(0,3))
+    // const rainData = data?.hourly?.data.slice(startIndex, startIndex + 6).find(data => data.summary.includes("rain") || data.summary.includes("Thunderstorm") || data.summary.includes("Rain"));
+    // console.log('rain data');
+
+    const rainData = weatherData?.hourly?.data.slice(1, 4).find(data => data.summary.includes("rain") || data.summary.includes("Thunderstorm") || data.summary.includes("Rain"));
+    
+    console.log('rainData', rainData);
+    
+    if(rainData){
+      console.log('rain is expected around', formatTime(rainData.date));
+      const expected = formatTime(rainData.date);
+      console.log('expected',expected);
+      rainNoti(expected);
+    }else if(!rainData){
+      console.log('dont have')
+      console.log('no rain expected');
+    }
+  }catch (error) {
+    console.error('Error fetching Rain data:', error);
+    throw error; // Propagate the error to the calling function
+  }
+}
+
 const aqiNoti = async (aqi) => {
   try {
     // Retrieve all subscriptions from MongoDB
@@ -199,6 +240,31 @@ const aqiNoti = async (aqi) => {
 
   await webpush
         .sendNotification(subscription, "Current AQI is " + aqi +  ", Please wear mask")
+        .then(() => {
+          console.log('Push notification sent successfully');
+        })
+        .catch(err => {
+          console.error('Failed to send push notification:', err);
+        });
+    }
+
+    console.log('Notifications sent to all subscribers.');
+  } catch (error) {
+    console.error('Error sending notifications to subscribers:', error);
+  }
+}
+
+//Rain for noti
+const rainNoti = async (expectedTime) => {
+  try {
+    // Retrieve all subscriptions from MongoDB
+    const subscriptions = await SubscriptionModel.find();
+    console.log(subscriptions)
+    // Loop through subscriptions and send notifications
+    for (const subscription of subscriptions) {
+
+  await webpush
+        .sendNotification(subscription, "Rain is expected around " + expectedTime)
         .then(() => {
           console.log('Push notification sent successfully');
         })

@@ -13,25 +13,32 @@ function App() {
     const storedIsSub = localStorage.getItem('isSub');
     return storedIsSub !== null ? JSON.parse(storedIsSub) : false;
   });
-
   // Handle changes to isSub
   useEffect(() => {
     localStorage.setItem('isSub', JSON.stringify(isSub));
   }, [isSub]);
 
 
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/service-worker.js`)
-      .then((registration) => {
-        console.log('(from App.js)Service Worker registered with scope:', registration.scope);
-      })
-      .catch((error) => {
-        console.warn('(from App.js)Service Worker registration failed:', error);
-      });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if ('serviceWorker' in navigator) {
+  //     navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/service-worker.js`)
+  //     .then((registration) => {
+  //       console.log('(from App.js)Service Worker registered with scope:', registration.scope);
+  //     })
+  //     .catch((error) => {
+  //       console.warn('(from App.js)Service Worker registration failed:', error);
+  //     });
+  //   }
+  // }, []);
   console.log("Global isSub = " + isSub)
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     console.log('Logging every 2 seconds');
+  //   }, 2000);
+
+  //   // Cleanup function to clear the interval when the component unmounts
+  //   return () => clearInterval(interval);
+  // }, []);
   return (
     
     <Router>

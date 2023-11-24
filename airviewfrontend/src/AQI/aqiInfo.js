@@ -53,7 +53,6 @@ function CurrentAqiInfo({isSub, setIsSub}) {
             .then((data) => {
                 setAqiData(data); 
                 setCurrentAqi(data.data.aqi)
-                setLoading(false)
             })
             .catch((error) => {
                 console.error('Error fetching AQI data:', error);
@@ -63,93 +62,75 @@ function CurrentAqiInfo({isSub, setIsSub}) {
                 }, 60000);
             });
     };
-    
-    const storedIsSub = localStorage.getItem('isSub');
-    // const checkAQI =()=>{
-    //     if(aqiData.data.aqi !== null){
-    //         console.log('is not null')
-    //         setCurrentAqi(aqiData.data.aqi);
-    //         console.log(currentAqi);
-    //         console.log("global isSub = ",storedIsSub)
-    //         if( storedIsSub && currentAqi > 20){
-    //             sendNoti();
+    //Check Aqi function
+    // useEffect(() => {
+    // const interval = setInterval(() => {
+    //     console.clear();
+    //     const storedIsSub = localStorage.getItem('isSub');
+    //     var IsSubBoolean = JSON.parse(storedIsSub);
+    //     console.log('checking')
+    //     console.log('storedIssub', IsSubBoolean)
+    //     console.log(typeof IsSubBoolean)
+    //     if(IsSubBoolean == true){
+    //       console.warn("subbed, should notify")   
+    //     }else if(IsSubBoolean == false){
+    //         console.warn('unsub, should not notify')
+    //     }
+    //     console.log('currentAQI = ',currentAqi);
+    //     if(IsSubBoolean && currentAqi > 20 )  {
+    //         console.log('AQI is more than 50 and User isSub')
+    //         if('Notification' in window){
+    //             if(Notification.permission === 'granted'){
+    //                 sendNoti(); 
+    //                 console.log('%c sentNoti fx was done!!',"color:white;  background-color:blue")
+    //             }else if(Notification.permission === 'denied'){
+    //                 console.log('permission is blocked')
+    //             }else if(Notification.permission !== 'denied'){
+    //                 console.log('permission is default')
+    //             }
     //         }
-    //     }else{
-    //         return;
-    //     }
-       
-    // }
-    // const updateAQi =()=>{
-    //     if(aqiData){
-            
-    //     }
-    // };
-    useEffect(() => {
-    const interval = setInterval(() => {
-        console.log('checking')
-        console.log(loading)
-        console.log(currentAqi);
-        if(storedIsSub && currentAqi > 30)  {
-            sendNoti();
-        }             
-    }, 60*1000);
-        return () => clearInterval(interval);
-      }, [currentAqi]);
-
-    // if(aqiData !== null){
-    //     alert('not null')
-    // }else{
-    //     alert('null')
-    // }
-    // const sendNoti = async ()=>{
-    //   const publicKey = 'BCS5nEpceVPUCj2GyPSEL0rOmhi4dfE_dYxTOY3pIm_C_o3NdE4_zLk7_7aAooWKCgEes9oAWmlTUcwb_t6Kfvo'
-    //   const registration = await navigator.serviceWorker.ready;
-    //   const subscription = await registration.pushManager.subscribe({
-    //   userVisibleOnly: true,
-    //   applicationServerKey: publicKey
-    // });
-    //     const response = await fetch('http://localhost:4000/sub', {
+    //     }           
+    // },5* 1000);
+    //     return () => clearInterval(interval);
+    //   }, [currentAqi]);
+    // const sendNoti = async () => {
+    // try{
+    //     const publicKey = 'BCS5nEpceVPUCj2GyPSEL0rOmhi4dfE_dYxTOY3pIm_C_o3NdE4_zLk7_7aAooWKCgEes9oAWmlTUcwb_t6Kfvo';
+    //     // Check when the last notification was sent
+    //     const lastNotificationTime = localStorage.getItem('lastNotificationTime');
+    //     // 2 * 60 * 60 *
+    //     if (!lastNotificationTime || Date.now() - parseInt(lastNotificationTime) >= 10 * 60 * 1000) {
+    //       const registration = await navigator.serviceWorker.ready;
+    //       const subscription = await registration.pushManager.subscribe({
+    //         userVisibleOnly: true,
+    //         applicationServerKey: publicKey,
+    //       });
+    //       const requestData = {
+    //           subscription: subscription,
+    //           aqi: currentAqi.toString()
+    //           };
+      
+    //       const response = await fetch('http://localhost:4000/sub', {
     //         method: 'POST',
-    //         body: JSON.stringify(subscription),
+    //         body: JSON.stringify(requestData),
     //         headers: {
     //           'Content-Type': 'application/json',
     //         },
     //       });
-    //       console.log('sent from checkAqi fx')
-    // }
-    const sendNoti = async () => {
-        const publicKey = 'BCS5nEpceVPUCj2GyPSEL0rOmhi4dfE_dYxTOY3pIm_C_o3NdE4_zLk7_7aAooWKCgEes9oAWmlTUcwb_t6Kfvo';
-        // Check when the last notification was sent
-        const lastNotificationTime = localStorage.getItem('lastNotificationTime');
-      // 2 * 60 * 60 *
-        if (!lastNotificationTime || Date.now() - parseInt(lastNotificationTime) >= 10 * 60 * 1000) {
-          const registration = await navigator.serviceWorker.ready;
-          const subscription = await registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: publicKey,
-          });
-          const requestData = {
-              subscription: subscription,
-              aqi: currentAqi.toString()
-              };
-      
-          const response = await fetch('http://localhost:4000/sub', {
-            method: 'POST',
-            body: JSON.stringify(requestData),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-          if (response.ok) {
-            console.log('Request was successfullllllll.');
-              }
-          // Store the current time as the last notification time
-          localStorage.setItem('lastNotificationTime', Date.now().toString());
-        } else {
-          console.log('Notification is on cooldown');
-          console.log("last",lastNotificationTime)
-        }
-      };
+    //       if (response.ok) {
+    //         console.log('Request was successful.');
+    //           }
+    //       // Store the current time as the last notification time
+    //       localStorage.setItem('lastNotificationTime', Date.now().toString());
+    //       console.log('%c notification sent successfully!!',"color:white;  background-color:green")
+    //     } else {
+    //         console.log('%c Cooldown',"color:white;  background-color:orange")
+    //         const readableTime = new Date(parseInt(lastNotificationTime, 10)).toLocaleString();
+    //         console.log("last",readableTime)
+    //     }} catch (error) {
+    //         console.error('(aqiInfo.js)SendNoti' , error);
+    //     }
+    //   };
       
     const calculateAqiWord = (aqiValue) => {
         if (aqiValue >= 0 && aqiValue <= 50) {

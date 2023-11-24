@@ -1,12 +1,23 @@
+html{
+  /* width: 100vw;
+  min-height: 100vh;
+  background: linear-gradient(#DDEBFF, #E4F8E4); */
+  /* background-color: rgb(228, 242, 255); */
+}
 body {
   margin: 0;
   height: 100vh;
   font-family: 'Poppins', sans-serif;
+  /* font-family: Helvetica Neue,Helvetica,Arial,sans-serif;  */
+  /* background-color: rgb(228, 242, 255); */
+  /* background-color: rgb(228, 242, 255);  */
   box-sizing: border-box;
   background-size:cover;
 }
 .MuiTypography-root {
   font-family: 'Poppins, sans-serif';
+  /* font-family: Helvetica Neue,Helvetica,Arial,sans-serif;  */
+  
 }
 
 code {

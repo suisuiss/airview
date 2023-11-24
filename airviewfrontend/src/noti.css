@@ -71,6 +71,9 @@
     .noti{
         padding: 0 40px;
     }
+    .q-item{
+       font-size: 18px;
+    }
   }
   
 /* select-css */

@@ -22,7 +22,7 @@
     }
     .StationButtonContainerNA{
         background-color: white;
-        color:rgba(0, 53, 134, 1);
+        color: #363E64;
         border: solid rgba(0, 53, 134, 1) 1px;
     }
     .StationButtonContainerNA:hover{
@@ -37,6 +37,7 @@
         padding: 40px 50px 10px 50px;
         gap: 20px;
         grid-template-rows: 260px 700px;
+        color: #363E64;
     }
     .grid-item {
         display:flex ;
@@ -68,6 +69,8 @@
         font-size: 1.5rem;
         text-align: left;
         display: flex;
+        gap: 20px;
+        line-height: 1.5;
     }
     .item3 {
         grid-column: 1 / span 4;
@@ -223,8 +226,8 @@
         font-size: 32px;
     }
     .overAllInfo{
-        font-size: 16px;
+        font-size: 20px;
         text-align: left;
-        line-height: 2.7;
+        line-height: 2.0;
     }
 }

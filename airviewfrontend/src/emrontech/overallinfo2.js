@@ -42,14 +42,14 @@ function OverallInfo2(props) {
                     <div>
                         <div>
                             Wind Speed : {overallData[0].data.wind_speed.value} m/s <br /> 
-                            Wind Direction : {overallData[0].data.wind_direction.value} degree <br /> 
+                            <nobr>  Wind Direction : {overallData[0].data.wind_direction.value} degree <br />  </nobr> 
                             WBGT : {overallData[0].data.wbgt.value} &#176;C
                         </div>
                     </div>}
                     {props.location === 'FIBO' && <div>
                         <div>
                             Wind Speed : {overallData[1].data.wind_speed.value} m/s <br /> 
-                            Wind Direction : {overallData[1].data.wind_direction.value} degree <br /> 
+                            <nobr>  Wind Direction : {overallData[1].data.wind_direction.value} degree <br />  </nobr>
                             WBGT : {overallData[1].data.wbgt.value} &#176;C
                         </div>
                     </div>}

@@ -60,7 +60,7 @@ function WeatherForecastInfo() {
         fetchData();
         fetchAqiData();
         const intervalId = setInterval(fetchData, 5 * 60 * 1000);
-        const intervalId2 = setInterval(fetchAqiData, 1000*60*60)
+        const intervalId2 = setInterval(fetchAqiData, 1000*60*5)
         return () => {clearInterval(intervalId);
         clearInterval(intervalId2);}
     }, []);
@@ -91,16 +91,17 @@ function WeatherForecastInfo() {
         });
         const startIndex = currentHourIndex !== -1 ? currentHourIndex : 0; // make a starting index which is 1 hour ahead
         const now = new Date();
-        const localTimeZone = 'Asia/Bangkok';
+        // Create a new Date object with the current date in Bangkok time
+        const bangkokTimeOptions = { timeZone: 'Asia/Bangkok' };
+        const nowInBangkok = new Date(now.toLocaleString('en-US', bangkokTimeOptions));
 
-        const formatter = new Intl.DateTimeFormat('en-US', { timeZone: localTimeZone, hour12: false });
-        const filteredData = aqiData?.filter((item) => {
+        const filteredData = aqiData?.filter((item) => {  
             const date = new Date(item.hourly_date);
-            const formattedDate = formatter.format(date);
-
-            return new Date(formattedDate) > now;
+            // Check if the item's date is in the future
+            return date > nowInBangkok;
         });
-        const slicedAqiData = filteredData?.slice(3, 3 + 3);
+        console.log(filteredData)
+        const slicedAqiData = aqiData?.slice(1, 1 + 3);
         const aqiToColor = {
             0: "#00E400",  // Good
             50: "#FFFF00", // Moderate
@@ -161,10 +162,11 @@ function WeatherForecastInfo() {
         const filteredData = aqiData?.filter((item) => {
             const date = new Date(item.hourly_date);
             const formattedDate = formatter.format(date);
-
+            
             return new Date(formattedDate) > now;
         });
-        const slicedAqiData = filteredData?.slice(6, 6 + 3);
+        console.log(aqiData)
+        const slicedAqiData = aqiData?.slice(4, 4 + 3);
         const aqiToColor = {
             0: "#00E400",  // Good
             50: "#FFFF00", // Moderate

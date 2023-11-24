@@ -19,6 +19,7 @@ function App() {
     localStorage.setItem('isSub', JSON.stringify(isSub));
   }, [isSub]);
 
+
   useEffect(() => {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register(`${process.env.PUBLIC_URL}/service-worker.js`)

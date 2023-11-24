@@ -129,21 +129,21 @@ app.get('/send', subscriptionRoute);
 
 
 app.get('/aqiChart', async (req, res) => {
-  try {
-    const client = new MongoClient(DATABASE_URL, { useUnifiedTopology: true });
-    await client.connect();
-
-    const db = client.db('AQIData'); // Your database name
-    const collection = db.collection('historicAqi'); // Your collection name
-
-    const data = await collection.find({}).toArray();
-
-    client.close();
-    res.json(data);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'An error occurred' });
-  }
+    try {
+      const client = new MongoClient(DATABASE_URL, { useUnifiedTopology: true });
+      await client.connect();
+      
+      const db = client.db('AQIData'); // Your database name
+      const collection = db.collection('historicAqi'); // Your collection name
+      
+      const data = await collection.find({}).sort({ date: -1 }).toArray();
+      
+      client.close();
+      res.json(data);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'An error occurred' });
+    }
 });
 
 /*cron to run every 30 minutes*/

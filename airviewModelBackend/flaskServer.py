@@ -223,8 +223,8 @@ def makePrediction():
 sched = BackgroundScheduler(daemon=True)
 sched.add_job(uploadHourlyData,'interval',minutes=60)
 sched.add_job(uploadDailyData,'cron', hour=23, minute=30)
-sched.add_job(makePrediction,'cron', hour=10, minute=2)
-sched.add_job(makePrediction,'interval',minutes=720)
+#sched.add_job(makePrediction,'cron', hour=0, minute=25) # For initiated the data
+sched.add_job(makePrediction,'interval',minutes=50)
 sched.start()
 
 app = Flask(__name__)
@@ -234,7 +234,7 @@ CORS(app, supports_credentials=True, origins=originList)
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return "<p>Hello, World!asd</p>"
 
 @app.route("/sucky")
 def hello_mom():
@@ -245,6 +245,8 @@ def getForecastAqi():
     client = MongoClient('mongodb+srv://meowo:xRDFRKwNexWznNQg@airview.wz6lfvt.mongodb.net/?retryWrites=true&w=majority')
     db = client['AQIData']
     collection = db['forecastedAqi']
-    data = list(collection.find({},{'_id': 0}).sort('hourly_date', -1).limit(25))
+    data = list(collection.find({},{'_id': 0}).sort('hourly_date', -1).limit(24))
     data.reverse()
     return(data)
+
+app.run(debug=True)

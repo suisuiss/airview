@@ -19,14 +19,18 @@ function LGNormalContent() {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        
+        width:'100%',
+        justifyContent:'center',
     };
 
     const contentContainerStyle = {
         marginTop: '10px',
         display: 'flex',
         flexDirection: isMobile ? 'column' : 'row',
-
+        maxWidth:'100%',
+        justifyContent:'start',
+        alignItems:'center'
+        
     };
 
     const columnStyle = {

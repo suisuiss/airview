@@ -31,17 +31,17 @@ const AppContainer = () => {
 
     if (currentHour >= 6 && currentHour < 16) {
       // Day
-      return 'linear-gradient(rgba(236, 189, 168, 1), rgba(191, 187, 239, 1))'; // Yellow
+      return 'rgba(201, 218, 243, 1)'; // Blue
     } else if (currentHour >= 16 && currentHour < 19) {
       // Evening
-      return `linear-gradient(rgba(236, 189, 168, 1), rgba(191, 187, 239, 1))`; // Sky Blue
+      return `rgba(255, 237, 223, 1)`; // Sky Blue
     } else {
       // Night (Gradient)
       return `linear-gradient(rgba(132, 169, 224, 1), rgba(53, 47, 71, 1))`;
     }
   }
 
-  document.body.style.backgroundImage = backgroundColor;
+  document.body.style.backgroundColor = backgroundColor;
 
   return (
     <React.StrictMode>

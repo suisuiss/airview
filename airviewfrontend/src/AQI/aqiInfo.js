@@ -183,15 +183,15 @@ function CurrentAqiInfo({isSub, setIsSub}) {
         if (aqiValue >= 0 && aqiValue <= 50) {
             return "Enjoy outdoor activities";
         } else if (aqiValue <= 100) {
-            return "Avoid outdoor acitivities";
+            return "Reduce outdoor acitivities";
         } else if (aqiValue <= 150) {
             return "Reduce outdoor activities";
         } else if (aqiValue <= 200) {
-            return "Wear Mask";
+            return "Avoid outdoor acitivities";
         } else if (aqiValue <= 300) {
-            return "Wear Mask";
+            return "Avoid outdoor acitivities";
         } else {
-            return "Wear Mask";
+            return "Avoid outdoor acitivities";
         }
     };
 

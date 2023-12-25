@@ -6,6 +6,7 @@ import LGDashboard from './dashboard/LGdashboard';
 import FBDashboard from './dashboard/FBdashboard';
 import Nav from './navbar';
 import AnalDesk from './DesktopAnalytics/AnalDesk';
+import Logo from './Assets/SITKMUTT.png'
 
 function App() {
   const[ isFullscreen ,  setIsFullscreen] = useState(false);
@@ -43,6 +44,17 @@ function App() {
     
     <Router>
       {isFullscreen ? null : <Nav />}
+      {!isFullscreen ? null : <img
+          src={Logo}
+          alt="Fixed Image"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            zIndex: 999, // Adjust the z-index to make sure it's above other elements
+            width: '500px', // Set the width to 500px
+          }}
+        />}
       <Routes>
         <Route path="/" element={<LGDashboard isFullscreen={isFullscreen} setIsFullscreen={setIsFullscreen}/>} />
         <Route path="fbdashboard" element={<FBDashboard isFullscreen={isFullscreen} setIsFullscreen={setIsFullscreen}/>} />
